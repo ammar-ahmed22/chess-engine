@@ -1,12 +1,12 @@
 import { createPiece } from "./utils";
-import { 
+import {
   Pawn,
   Rook,
   Knight,
   Bishop,
   King,
-  Queen
-} from "./pieceMap"
+  Queen,
+} from "./pieceMap";
 import { SquareID } from "../move";
 
 describe("createPiece", () => {
@@ -18,7 +18,7 @@ describe("createPiece", () => {
       Knight,
       Bishop,
       King,
-      Queen
+      Queen,
     ];
 
     for (let i = 0; i < 6; i++) {
@@ -27,10 +27,14 @@ describe("createPiece", () => {
       const whiteTest = tests[i + 6];
       const blackCreated = createPiece(blackTest, id);
       const whiteCreated = createPiece(whiteTest, id);
-      expect(blackCreated).toBeInstanceOf(expectedInstances[i]);
+      expect(blackCreated).toBeInstanceOf(
+        expectedInstances[i],
+      );
       expect(blackCreated.color).toEqual("black");
-      expect(whiteCreated).toBeInstanceOf(expectedInstances[i]);
+      expect(whiteCreated).toBeInstanceOf(
+        expectedInstances[i],
+      );
       expect(whiteCreated.color).toEqual("white");
     }
-  })
-})
+  });
+});

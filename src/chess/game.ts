@@ -14,7 +14,7 @@ class GameBoard {
       const [row, col] = id.boardIdx;
       return this.matrix[row][col];
     },
-  }
+  };
 }
 
 type GameStateParams = {

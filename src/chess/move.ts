@@ -15,7 +15,7 @@ export class SquareID {
     }
     this.validate();
   }
-  
+
   get boardIdx(): [number, number] {
     const row = 8 - this.rank;
     const col = this.file - 1;
@@ -24,10 +24,14 @@ export class SquareID {
 
   private validate() {
     if (this.file < 1 || this.file > 8) {
-      throw new RangeError(`File = '${this.file}' is out of range!`)
+      throw new RangeError(
+        `File = '${this.file}' is out of range!`,
+      );
     }
     if (this.rank < 1 || this.rank > 8) {
-      throw new RangeError(`Rank = '${this.rank}' is out of range!`)
+      throw new RangeError(
+        `Rank = '${this.rank}' is out of range!`,
+      );
     }
   }
 
@@ -105,13 +109,13 @@ export class SquareID {
 }
 
 type MoveConstructorParams = {
-  white?: boolean,
-  from: SquareID,
-  to: SquareID,
-  castle?: boolean,
-  take?: Piece,
-  piece: Piece
-}
+  white?: boolean;
+  from: SquareID;
+  to: SquareID;
+  castle?: boolean;
+  take?: Piece;
+  piece: Piece;
+};
 
 class Move {
   public white: boolean = true;

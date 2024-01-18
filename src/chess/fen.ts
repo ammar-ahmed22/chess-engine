@@ -212,7 +212,9 @@ export const parseFEN = (fenString: string): GameState => {
     const file = enPassantStr[0];
     // const rank = enPassantStr[1];
     if (isNaN(parseInt(enPassantStr[1]))) {
-      throw new Error(`enPassant is invalid: '${enPassantStr}'`);
+      throw new Error(
+        `enPassant is invalid: '${enPassantStr}'`,
+      );
     }
     const rank = parseInt(enPassantStr[1]);
     enPassant = new SquareID(file, rank);
@@ -229,13 +231,13 @@ export const parseFEN = (fenString: string): GameState => {
 };
 
 export const createFEN = (gameState: GameState): string => {
-  const { 
+  const {
     gameBoard,
     whiteToMove,
     castling,
     enPassant,
     halfMoveCount,
-    fullMoveCount
+    fullMoveCount,
   } = gameState;
 
   // Game board
@@ -272,15 +274,13 @@ export const createFEN = (gameState: GameState): string => {
     }
   }
   if (noCastle) {
-    castleStr = "-"
+    castleStr = "-";
   } else {
     if (castling.white[0]) castleStr += "K";
     if (castling.white[1]) castleStr += "Q";
     if (castling.black[0]) castleStr += "k";
     if (castling.black[1]) castleStr += "q";
   }
-
-
 
   return `${rows.join("/")} ${whiteToMove ? "w" : "b"} ${castleStr} ${enPassant ? enPassant.toString() : "-"} ${halfMoveCount} ${fullMoveCount}`;
 };

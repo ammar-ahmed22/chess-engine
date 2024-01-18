@@ -1,12 +1,12 @@
 import { SquareID } from "../move";
-import { 
+import {
   Pawn,
   Rook,
   Knight,
   Bishop,
   King,
-  Queen
-} from "./pieceMap"
+  Queen,
+} from "./pieceMap";
 
 /**
  * Creates a Piece object given the FEN character
@@ -45,7 +45,5 @@ const createPiece = (char: string, position: SquareID) => {
       throw new Error(`Cannot parse character: '${char}'`);
   }
 };
-
-
 
 export { createPiece };
