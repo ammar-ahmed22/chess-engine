@@ -8,6 +8,13 @@ class GameBoard {
   constructor(matrix: (Piece | undefined)[][]) {
     this.matrix = matrix;
   }
+
+  public get = {
+    atID: (id: SquareID): Piece | undefined => {
+      const [row, col] = id.boardIdx;
+      return this.matrix[row][col];
+    },
+  }
 }
 
 type GameStateParams = {

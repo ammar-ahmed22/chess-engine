@@ -1,4 +1,4 @@
-import { parseFEN } from "./fen";
+import { parseFEN, createFEN } from "./fen";
 
 describe("parseFEN", () => {
   const starting =
@@ -65,6 +65,17 @@ describe("parseFEN", () => {
         "rook",
       ],
     ];
+    const files = "abcdefgh";
+    const ranks = "87654321";
+    const expectedPositions = [];
+    for (let i = 0; i < ranks.length; i++) {
+      let temp = []
+      for (let j = 0; j < files.length; j++) {
+        const id = `${files[j]}${ranks[i]}`
+        temp.push(id);
+      }
+      expectedPositions.push(temp);
+    }
 
     expect(gameBoard.matrix.length).toBe(8);
     expect(gameBoard.matrix[0].length).toBe(8);
@@ -75,6 +86,10 @@ describe("parseFEN", () => {
         expect(gameBoard.matrix[i][j]?.type).toEqual(
           expectedType,
         );
+        // CHECK IF PIECE POSITIONS ARE CORRECT
+        if (gameBoard.matrix[i][j]) {
+          expect(gameBoard.matrix[i][j]?.position.toString()).toEqual(expectedPositions[i][j]);
+        } 
         if (i < 2) {
           expect(gameBoard.matrix[i][j]?.color).toEqual(
             "black",
@@ -116,4 +131,31 @@ describe("parseFEN", () => {
       black: [false, false],
     });
   });
+
+  it("should parse enPassant correctly", () => {
+    const { enPassant } = startingState;
+    expect(enPassant).not.toBeDefined();
+    const a5 =
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a5 0 1"; 
+    const a5State = parseFEN(a5);
+    expect(a5State.enPassant).toBeDefined();
+    expect(a5State.enPassant?.file).toEqual(1);
+    expect(a5State.enPassant?.rank).toEqual(5);
+  })
+
+  it("should parse full and half moves correctly", () => {
+    const { fullMoveCount, halfMoveCount } = startingState;
+    expect(fullMoveCount).toEqual(1);
+    expect(halfMoveCount).toEqual(0);
+  })
 });
+
+describe("createFEN", () => {
+  const starting =
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const startingState = parseFEN(starting);
+  it("should create the fen string correctly", () => {
+    const created = createFEN(startingState);
+    expect(created).toEqual(starting);
+  })
+})

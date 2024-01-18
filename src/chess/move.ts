@@ -13,13 +13,44 @@ export class SquareID {
     } else {
       this.file = file;
     }
+    this.validate();
   }
-  // constructor(
-  //   public file: number,
-  //   public rank: number,
-  // ) {}
+  
+  get boardIdx(): [number, number] {
+    const row = 8 - this.rank;
+    const col = this.file - 1;
+    return [row, col];
+  }
 
-  // Implement getting the string id => a4, e5, etc.
+  private validate() {
+    if (this.file < 1 || this.file > 8) {
+      throw new RangeError(`File = '${this.file}' is out of range!`)
+    }
+    if (this.rank < 1 || this.rank > 8) {
+      throw new RangeError(`Rank = '${this.rank}' is out of range!`)
+    }
+  }
+
+  public copy(): SquareID {
+    return new SquareID(this.file, this.rank);
+  }
+
+  public addFile(add: number = 1): SquareID {
+    this.file += add;
+    this.validate();
+    return this;
+  }
+
+  public addRank(add: number = 1): SquareID {
+    this.rank += add;
+    this.validate();
+    return this;
+  }
+
+  /**
+   * Creates square id string
+   * @returns square id string (e.g a6)
+   */
   public toString() {
     return `${SquareID.file2str(this.file)}${this.rank}`;
   }
@@ -73,13 +104,25 @@ export class SquareID {
   }
 }
 
+type MoveConstructorParams = {
+  white?: boolean,
+  from: SquareID,
+  to: SquareID,
+  castle?: boolean,
+  take?: Piece,
+  piece: Piece
+}
+
 class Move {
   public white: boolean = true;
-  public from: SquareID = new SquareID(0, 0);
-  public to: SquareID = new SquareID(0, 0);
+  public from: SquareID = new SquareID(1, 1);
+  public to: SquareID = new SquareID(1, 1);
   public castle: boolean = false;
   public take?: Piece;
-  public piece: Piece = new Pawn();
+  public piece: Piece = new Pawn(this.white, this.from);
+  constructor(params: MoveConstructorParams) {
+    Object.assign(this, params);
+  }
 }
 
 export default Move;
