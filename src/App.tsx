@@ -1,10 +1,5 @@
-import {
-  Box,
-  Text,
-  VStack,
-  Grid,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
+import { Box, Text, VStack, Grid } from "@chakra-ui/react";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
 export const App = () => (
   <Box textAlign="center" fontSize="xl">
@@ -15,4 +10,4 @@ export const App = () => (
       </VStack>
     </Grid>
   </Box>
-)
+);
