@@ -1,6 +1,6 @@
 import Piece from "./index";
 import { GameState } from "../game";
-import Move, { SquareID } from "../move";
+import Move from "../move";
 
 class Pawn extends Piece {
   public type: string = "pawn";
