@@ -19,10 +19,9 @@ export class SquareID {
   //   public rank: number,
   // ) {}
 
-  
   // Implement getting the string id => a4, e5, etc.
   public toString() {
-    return `${SquareID.file2str(this.file)}${this.rank}`
+    return `${SquareID.file2str(this.file)}${this.rank}`;
   }
 
   /**
@@ -32,9 +31,9 @@ export class SquareID {
    */
   static file2str(file: number): string {
     if (file < 1 || file > 8) {
-      throw new Error("File must be between 1-8!")
+      throw new Error("File must be between 1-8!");
     }
-    
+
     return String.fromCharCode(96 + file);
   }
 
@@ -46,11 +45,11 @@ export class SquareID {
   static str2file(file: string): number {
     const allowed = "abcdefgh";
     if (file.length !== 1) {
-      throw new Error("File must be a single character!")
+      throw new Error("File must be a single character!");
     }
 
     if (!allowed.includes(file)) {
-      throw new Error(`File: '${file}' is invalid!`)
+      throw new Error(`File: '${file}' is invalid!`);
     }
 
     return file.charCodeAt(0) - 96;
@@ -67,7 +66,7 @@ export class SquareID {
 
     const file = id[0];
     if (isNaN(parseInt(id[1]))) {
-      throw new Error(`Invalid id: '${id}'`)
+      throw new Error(`Invalid id: '${id}'`);
     }
     const rank = parseInt(id[1]);
     return new SquareID(file, rank);

@@ -26,7 +26,7 @@ class GameState {
   public halfMoveCount: number;
   public fullMoveCount: number;
   public moves: Move[] = [];
-  public enPassant?: SquareID
+  public enPassant?: SquareID;
   constructor({
     gameBoard,
     whiteToMove,

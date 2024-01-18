@@ -155,7 +155,8 @@ export const parseFEN = (fenString: string): GameState => {
   for (const rank of board) {
     let temp: (Piece | undefined)[] = [];
     for (const char of rank) {
-      if (!isNaN(parseInt(char))) { // number --> this many empty squares!
+      if (!isNaN(parseInt(char))) {
+        // number --> this many empty squares!
         const emptyCount = parseInt(char);
         for (let i = 0; i < emptyCount; i++) {
           temp.push(undefined);
@@ -171,16 +172,17 @@ export const parseFEN = (fenString: string): GameState => {
   // Parse castling
   const castling: Chess.Castling = {
     black: [false, false],
-    white: [false, false]
-  }
+    white: [false, false],
+  };
 
   if (castlingStr !== "-") {
     for (const char of castlingStr) {
-      const mapKey: "black" | "white" = char.toLowerCase() === char ? "black" : "white";
+      const mapKey: "black" | "white" =
+        char.toLowerCase() === char ? "black" : "white";
       const index = char.toLowerCase() === "k" ? 0 : 1;
       castling[mapKey][index] = true;
     }
-  } 
+  }
 
   // Parse en passant
   if (enPassantStr !== "-") {
@@ -200,4 +202,3 @@ export const parseFEN = (fenString: string): GameState => {
 export const createFEN = (gameState: GameState): string => {
   return "";
 };
-
