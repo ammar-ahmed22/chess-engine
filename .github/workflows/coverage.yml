@@ -1,12 +1,12 @@
-name: Run Tests
+name: Check Test Coverage
 on:
   push:
     branches:
       - main
 
 jobs:
-  test:
-    name: Run Tests
+  coverage:
+    name: Check coverage
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -18,5 +18,10 @@ jobs:
           node_version: 20
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Run tests
-        run: yarn test
+      - name: Generate coverage report
+        run: yarn json-coverage
+      - name: Generate coverage percentage
+        run: echo "COV=$(yarn --silent coverage)" >> $GITHUB_ENV
+      - name: Check the coverage value
+        run: echo "$COV"
+      

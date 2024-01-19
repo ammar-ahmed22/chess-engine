@@ -2,6 +2,10 @@
   <span>♟️</span>
   <h2>react-chess</h2>
   <p>Building my own, complete chess GUI to analyze games with Stockfish!</p>
+  <div>
+    <a href="https://github.com/ammar-ahmed22/react-chess/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/ammar-ahmed22/react-chess/tests.yml?label=tests"/></a>
+    
+  </div>
 </div>
 
 ### ✨ Features

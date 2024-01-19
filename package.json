@@ -12,7 +12,7 @@
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^14.1.0",
     "@types/jest": "^28.1.1",
-    "@types/node": "^12.0.0",
+    "@types/node": "^20.11.5",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "babel-plugin-transform-export-extensions": "^6.22.0",
@@ -32,7 +32,9 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "format": "prettier . --write --log-level silent"
+    "format": "prettier . --write --log-level silent",
+    "json-coverage": "jest --coverage --coverageReporters=\"json-summary\"",
+    "coverage": "ts-node coverage.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
