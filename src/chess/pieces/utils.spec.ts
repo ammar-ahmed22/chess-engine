@@ -23,7 +23,6 @@ describe("createPiece", () => {
     ];
 
     for (let i = 0; i < 6; i++) {
-      
       const blackTest = tests[i];
       const whiteTest = tests[i + 6];
       const blackCreated = createPiece(blackTest, id);
@@ -44,5 +43,5 @@ describe("createPiece", () => {
     for (let invalid of invalidInputs) {
       expect(() => createPiece(invalid, id)).toThrow();
     }
-  })
+  });
 });

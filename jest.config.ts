@@ -6,8 +6,8 @@ const config: Config = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["./src/setupTests.ts"]
-}
+  setupFilesAfterEnv: ["./src/setupTests.ts"],
+};
 
 export default config;
 
@@ -18,4 +18,3 @@ export default config;
 //   collectCoverage: true,
 //   coverageDirectory: "coverage",
 // }
-

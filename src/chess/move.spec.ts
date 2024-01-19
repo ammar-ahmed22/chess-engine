@@ -14,7 +14,7 @@ describe("SquareID", () => {
   it("throws error when parsing invalid file number to string", () => {
     expect(() => SquareID.file2str(10)).toThrow();
     expect(() => SquareID.file2str(1.2)).toThrow();
-  })
+  });
 
   it("parses string file to integer correctly", () => {
     const files = "abcdefgh";
@@ -28,7 +28,7 @@ describe("SquareID", () => {
     for (let invalid of invalidInputs) {
       expect(() => SquareID.str2file(invalid)).toThrow();
     }
-  })
+  });
 
   it("converts to string correclty", () => {
     const a6 = new SquareID(1, 6);
@@ -40,11 +40,19 @@ describe("SquareID", () => {
   });
 
   it("throws error for invalid input", () => {
-    const invalidInputs = [[10, 11], [-1, -3], [1, -1], [100, 200], [1.2, 1.3]];
+    const invalidInputs = [
+      [10, 11],
+      [-1, -3],
+      [1, -1],
+      [100, 200],
+      [1.2, 1.3],
+    ];
     for (let invalid of invalidInputs) {
-      expect(() => new SquareID(invalid[0], invalid[1])).toThrow();
+      expect(
+        () => new SquareID(invalid[0], invalid[1]),
+      ).toThrow();
     }
-  })
+  });
 
   it("creates SquareID from id", () => {
     const tests = ["a6", "b5", "c3", "d1", "e8"];
@@ -70,20 +78,19 @@ describe("SquareID", () => {
     for (let invalid of invalidInputs) {
       expect(() => SquareID.str2id(invalid)).toThrow();
     }
-  })
-
+  });
 
   it("adds rank correctly", () => {
     const id = new SquareID(1, 1);
     id.addRank(1);
     expect(id.rank).toBe(2);
     expect(() => id.addRank(400)).toThrow();
-  })
+  });
 
   it("adds file correctly", () => {
     const id = new SquareID(1, 1);
     id.addFile(1);
     expect(id.file).toBe(2);
     expect(() => id.addFile(-100)).toThrow();
-  })
+  });
 });

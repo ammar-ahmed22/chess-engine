@@ -23,8 +23,13 @@ export class SquareID {
   }
 
   private validate() {
-    if (!Number.isInteger(this.rank) || !Number.isInteger(this.file)) {
-      throw new TypeError("File and rank must be integers!");
+    if (
+      !Number.isInteger(this.rank) ||
+      !Number.isInteger(this.file)
+    ) {
+      throw new TypeError(
+        "File and rank must be integers!",
+      );
     }
     if (this.file < 1 || this.file > 8) {
       throw new RangeError(
@@ -71,7 +76,8 @@ export class SquareID {
     if (file < 1 || file > 8) {
       throw new Error("File must be between 1-8!");
     }
-    if (!Number.isInteger(file)) throw new Error("Must be an integer!")
+    if (!Number.isInteger(file))
+      throw new Error("Must be an integer!");
 
     return String.fromCharCode(96 + file);
   }
