@@ -29,9 +29,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
-    "format": "prettier --write ."
+    "format": "prettier . --write --log-level silent"
   },
   "eslintConfig": {
     "extends": "react-app"
