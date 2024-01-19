@@ -14,12 +14,8 @@ import {
  * @returns
  */
 const createPiece = (char: string, position: SquareID) => {
-  const allowedRegex = /^[rnbqkpRNBQKP]+$/;
   if (char.length !== 1) {
     throw new Error("Only characters allowed!");
-  }
-  if (!allowedRegex.test(char)) {
-    throw new Error("Invalid character!");
   }
 
   const isWhite = char.toLowerCase() !== char;

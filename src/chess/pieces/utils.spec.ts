@@ -10,6 +10,7 @@ import {
 import { SquareID } from "../move";
 
 describe("createPiece", () => {
+  const id = new SquareID("a", 1);
   it("should create pieces correctly", () => {
     const tests = "prnbkqPRNBKQ";
     const expectedInstances = [
@@ -22,7 +23,7 @@ describe("createPiece", () => {
     ];
 
     for (let i = 0; i < 6; i++) {
-      const id = new SquareID("a", 1);
+      
       const blackTest = tests[i];
       const whiteTest = tests[i + 6];
       const blackCreated = createPiece(blackTest, id);
@@ -37,4 +38,11 @@ describe("createPiece", () => {
       expect(whiteCreated.color).toEqual("white");
     }
   });
+
+  it("should throw errors for invalid inputs", () => {
+    const invalidInputs = ["ammar", "L"];
+    for (let invalid of invalidInputs) {
+      expect(() => createPiece(invalid, id)).toThrow();
+    }
+  })
 });
