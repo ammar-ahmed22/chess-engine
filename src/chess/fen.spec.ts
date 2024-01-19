@@ -20,6 +20,7 @@ describe("parseFEN", () => {
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/ RNBQKBNR w KQkq - 0 1", // extra space added
       "rnbqkbnr,pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", // invalid separator,
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR W KQkq - 0 1", // color to move is capital
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR Wass KQkq - 0 1", // color to move is too long
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR a KQkq - 0 1", // color to move is incorrect
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkqk - 0 1", // castling is too long
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQka - 0 1", // castling contains incorrect character
@@ -86,7 +87,7 @@ describe("parseFEN", () => {
         expect(gameBoard.matrix[i][j]?.type).toEqual(
           expectedType,
         );
-        // CHECK IF PIECE POSITIONS ARE CORRECT
+
         if (gameBoard.matrix[i][j]) {
           expect(
             gameBoard.matrix[i][j]?.position.toString(),
