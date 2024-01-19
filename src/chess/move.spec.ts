@@ -46,7 +46,6 @@ describe("SquareID", () => {
     id.file = 1;
     expect(() => id.addFile(100)).toThrow();
   });
-
 });
 
 describe("SquareID.file2str", () => {
@@ -82,7 +81,6 @@ describe("SquareID.str2file", () => {
   });
 });
 
-
 describe("SquareID.str2id", () => {
   it("creates SquareID from id", () => {
     const tests = ["a6", "b5", "c3", "d1", "e8"];
@@ -108,6 +106,11 @@ describe("SquareID.str2id", () => {
     for (let invalid of invalidInputs) {
       expect(() => SquareID.str2id(invalid)).toThrow();
     }
-  })
+  });
+});
 
+describe("test", () => {
+  it("should fail", () => {
+    expect(true).toBe(false);
+  })
 })
