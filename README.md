@@ -4,7 +4,7 @@
   <p>Building my own, complete chess GUI to analyze games with Stockfish!</p>
   <div>
     <a href="https://github.com/ammar-ahmed22/react-chess/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/ammar-ahmed22/react-chess/tests.yml?label=tests"/></a>
-    
+    <a href="https://github.com/ammar-ahmed22/react-chess/actions/workflows/coverage.yml"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fammar-ahmed22%2F5be62d24f79f6b23e286d6cd355004f6%2Fraw%2F3cff552495b305e131bbf84bd6a3c60aea8b53cd%2Fcoverage.json"/></a>
   </div>
 </div>
 
