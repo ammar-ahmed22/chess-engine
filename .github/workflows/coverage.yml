@@ -22,6 +22,14 @@ jobs:
         run: yarn json-coverage
       - name: Generate coverage percentage
         run: echo "COV=$(yarn --silent coverage)" >> $GITHUB_ENV
-      - name: Check the coverage value
-        run: echo "$COV"
-      
+      - name: Create coverage badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 5be62d24f79f6b23e286d6cd355004f6
+          filename: coverage.json
+          label: coverage
+          message: "${{ env.COV }}%"
+          valColorRange: ${{ env.COV }}
+          minColorRange: 0
+          maxColorRange: 100
