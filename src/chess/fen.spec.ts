@@ -25,9 +25,13 @@ describe("parseFEN", () => {
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkqk - 0 1", // castling is too long
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQka - 0 1", // castling contains incorrect character
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - a 1", // half move count is not number
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -1 1", // half move count is less than 0
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 a", // full move count is not number
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0", // full move count is less than 1
-      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a 0 1", // en passant incorrect
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a 0 1", // en passant is single char
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq aa 0 1", // en passant rank is not number
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a9 0 1", // en passant rank too large
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq z1 0 1", // en passant file incorrect
     ];
 
     for (const fen of invalidFENs) {
@@ -154,11 +158,20 @@ describe("parseFEN", () => {
 });
 
 describe("createFEN", () => {
-  const starting =
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-  const startingState = parseFEN(starting);
+  const testCases = [
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b - e2 0 1"
+  ];
+  const testStates = testCases.map(test => parseFEN(test));
+  // const starting =
+  //   ;
+  // const startingState = parseFEN(starting);
+  
   it("should create the fen string correctly", () => {
-    const created = createFEN(startingState);
-    expect(created).toEqual(starting);
+    for (let i = 0; i < testStates.length; i++) {
+      const state = testStates[i];
+      const created = createFEN(state);
+      expect(created).toEqual(testCases[i]);
+    }
   });
 });

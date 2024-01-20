@@ -14,6 +14,12 @@ class GameBoard {
       const [row, col] = id.boardIdx;
       return this.matrix[row][col];
     },
+    flattenedMatrix: (reverse: boolean = false) => {
+      if (reverse) { // Render black on the bottom
+        return this.matrix.flatMap(row => row).reverse();
+      }
+      return this.matrix.flatMap(row => row)
+    }
   };
 }
 

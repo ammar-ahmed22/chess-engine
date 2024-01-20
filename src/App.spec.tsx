@@ -5,8 +5,8 @@ import { App } from "./App";
 
 /** @jest-environment jsdom */
 
-test("renders Hello world!", () => {
+test("renders Chess", () => {
   render(<App />);
-  const linkElement = screen.getByText(/Hello World/i);
-  expect(linkElement).toBeInTheDocument();
+  const textElement = screen.getByText(/Chess/i);
+  expect(textElement).toBeInTheDocument();
 });

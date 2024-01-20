@@ -108,9 +108,3 @@ describe("SquareID.str2id", () => {
     }
   });
 });
-
-// describe("test", () => {
-//   it("should fail", () => {
-//     expect(true).toBe(false);
-//   });
-// });

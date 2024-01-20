@@ -1,10 +1,11 @@
 import { GameState } from "../game";
 import Move, { SquareID } from "../move";
+import type { Chess } from "../types";
 
 abstract class Piece {
   private isWhite: boolean;
   public position: SquareID;
-  public abstract type: string;
+  public abstract type: Chess.PieceType;
   constructor(isWhite: boolean, position: SquareID) {
     this.isWhite = isWhite;
     this.position = position;

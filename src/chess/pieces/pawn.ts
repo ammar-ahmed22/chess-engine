@@ -1,12 +1,10 @@
 import Piece from "./index";
 import { GameState } from "../game";
 import Move from "../move";
+import type { Chess } from "../types";
 
 class Pawn extends Piece {
-  public type: string = "pawn";
-  // constructor(white: boolean = true) {
-  //   super(white);
-  // }
+  public type: Chess.PieceType = "pawn";
 
   public validMoves(gameState: GameState): Move[] {
     let firstMove = false;

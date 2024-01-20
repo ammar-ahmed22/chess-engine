@@ -174,22 +174,6 @@ export const parseFEN = (fenString: string): GameState => {
     }
     matrix.push(temp);
   }
-  // for (const rank of board) {
-  //   let temp: (Piece | undefined)[] = [];
-  //   for (const char of rank) {
-  //     if (!isNaN(parseInt(char))) {
-  //       // number --> this many empty squares!
-  //       const emptyCount = parseInt(char);
-  //       for (let i = 0; i < emptyCount; i++) {
-  //         temp.push(undefined);
-  //       }
-  //     } else {
-  //       const piece = createPiece(char);
-  //       temp.push(piece);
-  //     }
-  //   }
-  //   matrix.push(temp);
-  // }
 
   // Parse castling
   const castling: Chess.Castling = {
@@ -210,12 +194,6 @@ export const parseFEN = (fenString: string): GameState => {
   let enPassant: SquareID | undefined;
   if (enPassantStr !== "-") {
     const file = enPassantStr[0];
-    // const rank = enPassantStr[1];
-    if (isNaN(parseInt(enPassantStr[1]))) {
-      throw new Error(
-        `enPassant is invalid: '${enPassantStr}'`,
-      );
-    }
     const rank = parseInt(enPassantStr[1]);
     enPassant = new SquareID(file, rank);
   }

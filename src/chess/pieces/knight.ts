@@ -1,12 +1,10 @@
 import Piece from ".";
 import { GameState } from "../game";
 import Move from "../move";
+import type { Chess } from "../types";
 
 class Knight extends Piece {
-  public type: string = "knight";
-  // constructor(white: boolean = true) {
-  //   super(white);
-  // }
+  public type: Chess.PieceType = "knight";
 
   public validMoves(gameState: GameState): Move[] {
     return [];
