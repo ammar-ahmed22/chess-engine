@@ -10,7 +10,7 @@ describe("Pawn", () => {
     const e2Pawn = startingState.gameBoard.get.atID(
       new SquareID("e", 2),
     ) as Pawn;
-    
+
     expect(e2Pawn).toBeDefined();
     const e2moves = e2Pawn.validMoves(startingState);
     expect(e2moves.length).toBe(2);
@@ -22,11 +22,11 @@ describe("Pawn", () => {
     }
 
     const e7Pawn = startingState.gameBoard.get.atID(
-      new SquareID("e", 7)
+      new SquareID("e", 7),
     ) as Pawn;
     expect(e7Pawn).toBeDefined();
     const e7Moves = e7Pawn.validMoves(startingState);
-    
+
     const e7expectedMoves = ["e6", "e5"];
     for (let i = 0; i < e7Moves.length; i++) {
       const move = e7Moves[i];

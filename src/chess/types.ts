@@ -3,5 +3,11 @@ export namespace Chess {
     black: [boolean, boolean];
     white: [boolean, boolean];
   };
-  export type PieceType = "pawn" | "rook" | "knight" | "bishop" | "king" | "queen";
+  export type PieceType =
+    | "pawn"
+    | "rook"
+    | "knight"
+    | "bishop"
+    | "king"
+    | "queen";
 }

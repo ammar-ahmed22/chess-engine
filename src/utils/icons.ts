@@ -1,36 +1,36 @@
-import { 
+import {
   FaChessPawn as Fa6Pawn,
   FaChessRook as Fa6Rook,
   FaChessKnight as Fa6Knight,
   FaChessBishop as Fa6Bishop,
   FaChessKing as Fa6King,
   FaChessQueen as Fa6Queen,
-  FaRegChessPawn, 
+  FaRegChessPawn,
   FaRegChessRook,
   FaRegChessKnight,
   FaRegChessBishop,
   FaRegChessKing,
-  FaRegChessQueen
-} from "react-icons/fa6"
-import { 
+  FaRegChessQueen,
+} from "react-icons/fa6";
+import {
   FaChessPawn,
   FaChessRook,
   FaChessKnight,
   FaChessKing,
   FaChessBishop,
-  FaChessQueen 
-} from "react-icons/fa"
-import type { Chess } from "../chess/types"
-import type { IconType } from "react-icons"
+  FaChessQueen,
+} from "react-icons/fa";
+import type { Chess } from "../chess/types";
+import type { IconType } from "react-icons";
 
-type IconSets = "fa" |  "fa6" | "fa6reg";
+type IconSets = "fa" | "fa6" | "fa6reg";
 export type IconSetMap = {
-  [K in IconSets]: IconMap
-}
+  [K in IconSets]: IconMap;
+};
 
 export type IconMap = {
-  [K in Chess.PieceType]: IconType
-}
+  [K in Chess.PieceType]: IconType;
+};
 
 const fa6: IconMap = {
   pawn: Fa6Pawn,
@@ -38,8 +38,8 @@ const fa6: IconMap = {
   knight: Fa6Knight,
   bishop: Fa6Bishop,
   king: Fa6King,
-  queen: Fa6Queen
-}
+  queen: Fa6Queen,
+};
 
 const fa: IconMap = {
   pawn: FaChessPawn,
@@ -47,8 +47,8 @@ const fa: IconMap = {
   knight: FaChessKnight,
   bishop: FaChessBishop,
   king: FaChessKing,
-  queen: FaChessQueen
-}
+  queen: FaChessQueen,
+};
 
 const fa6reg: IconMap = {
   pawn: FaRegChessPawn,
@@ -56,11 +56,11 @@ const fa6reg: IconMap = {
   knight: FaRegChessKnight,
   bishop: FaRegChessBishop,
   king: FaRegChessKing,
-  queen: FaRegChessQueen
-}
+  queen: FaRegChessQueen,
+};
 
 export const iconMap: IconSetMap = {
   fa,
   fa6,
-  fa6reg
-}
+  fa6reg,
+};

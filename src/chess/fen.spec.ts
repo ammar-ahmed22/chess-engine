@@ -160,13 +160,15 @@ describe("parseFEN", () => {
 describe("createFEN", () => {
   const testCases = [
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b - e2 0 1"
+    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b - e2 0 1",
   ];
-  const testStates = testCases.map(test => parseFEN(test));
+  const testStates = testCases.map((test) =>
+    parseFEN(test),
+  );
   // const starting =
   //   ;
   // const startingState = parseFEN(starting);
-  
+
   it("should create the fen string correctly", () => {
     for (let i = 0; i < testStates.length; i++) {
       const state = testStates[i];

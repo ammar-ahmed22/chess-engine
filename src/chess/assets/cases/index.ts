@@ -20,7 +20,7 @@ export const CasesPieceMap: PieceMap = {
     knight: wn,
     bishop: wb,
     king: wk,
-    queen: wq
+    queen: wq,
   },
   black: {
     pawn: bp,
@@ -28,7 +28,6 @@ export const CasesPieceMap: PieceMap = {
     knight: bn,
     bishop: bb,
     king: bk,
-    queen: bq
-  }
-}
-
+    queen: bq,
+  },
+};

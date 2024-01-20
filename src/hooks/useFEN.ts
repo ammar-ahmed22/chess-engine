@@ -4,12 +4,13 @@ import { GameState } from "../chess/game";
 
 const useFEN = (fenString: string) => {
   const [fen, setFEN] = useState(fenString);
-  const [gameState, setGameState] = useState(parseFEN(fenString));
-
+  const [gameState, setGameState] = useState(
+    parseFEN(fenString),
+  );
 
   useEffect(() => {
     setGameState(parseFEN(fen));
-  }, [fen, setGameState])
+  }, [fen, setGameState]);
 
   return {
     fen,
@@ -17,8 +18,8 @@ const useFEN = (fenString: string) => {
     gameState,
     updateFEN: (gameState: GameState) => {
       setFEN(createFEN(gameState));
-    }
-  }
-}
+    },
+  };
+};
 
 export { useFEN };

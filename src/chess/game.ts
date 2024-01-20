@@ -15,11 +15,12 @@ class GameBoard {
       return this.matrix[row][col];
     },
     flattenedMatrix: (reverse: boolean = false) => {
-      if (reverse) { // Render black on the bottom
-        return this.matrix.flatMap(row => row).reverse();
+      if (reverse) {
+        // Render black on the bottom
+        return this.matrix.flatMap((row) => row).reverse();
       }
-      return this.matrix.flatMap(row => row)
-    }
+      return this.matrix.flatMap((row) => row);
+    },
   };
 }
 

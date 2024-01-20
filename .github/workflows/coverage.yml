@@ -2,10 +2,10 @@ name: Check Test Coverage
 on:
   push:
     paths:
-      - '**.ts'
-      - '**.tsx'
-      - '**.js'
-      - '**.jsx'
+      - "**.ts"
+      - "**.tsx"
+      - "**.js"
+      - "**.jsx"
     branches:
       - main
 

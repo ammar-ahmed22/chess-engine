@@ -4,20 +4,20 @@ import { NeoPieceMap } from "./neo";
 
 export type PieceMap = {
   white: {
-    [K in Chess.PieceType]: string
-  },
+    [K in Chess.PieceType]: string;
+  };
   black: {
-    [K in Chess.PieceType]: string
-  }
-}
+    [K in Chess.PieceType]: string;
+  };
+};
 
 export type PieceSetTypes = "cases" | "neo";
 
 export type PieceSets = {
-  [K in PieceSetTypes]: PieceMap
-}
+  [K in PieceSetTypes]: PieceMap;
+};
 
 export const pieceSets: PieceSets = {
   cases: CasesPieceMap,
-  neo: NeoPieceMap
-}
+  neo: NeoPieceMap,
+};

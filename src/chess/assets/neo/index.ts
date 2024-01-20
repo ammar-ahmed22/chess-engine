@@ -20,7 +20,7 @@ export const NeoPieceMap: PieceMap = {
     knight: wn,
     bishop: wb,
     king: wk,
-    queen: wq
+    queen: wq,
   },
   black: {
     pawn: bp,
@@ -28,7 +28,6 @@ export const NeoPieceMap: PieceMap = {
     knight: bn,
     bishop: bb,
     king: bk,
-    queen: bq
-  }
-}
-
+    queen: bq,
+  },
+};

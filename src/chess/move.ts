@@ -17,7 +17,9 @@ export class SquareID {
   }
 
   public equals(other: SquareID): boolean {
-    return this.rank === other.rank && this.file === other.file;
+    return (
+      this.rank === other.rank && this.file === other.file
+    );
   }
 
   get boardIdx(): [number, number] {
@@ -125,9 +127,12 @@ export class SquareID {
     return new SquareID(file, rank);
   }
 
-  static fromFlatIdx(idx: number, reversedBoard: boolean = false) {
+  static fromFlatIdx(
+    idx: number,
+    reversedBoard: boolean = false,
+  ) {
     if (idx < 0 || idx > 63) {
-      throw new RangeError("Flat index must between 0-63")
+      throw new RangeError("Flat index must between 0-63");
     }
     const row = Math.floor(idx / 8);
     const col = idx % 8;
@@ -138,7 +143,7 @@ export class SquareID {
     } else {
       const rank = row + 1;
       const file = 8 - col;
-      return new SquareID(file, rank)
+      return new SquareID(file, rank);
     }
   }
 }
