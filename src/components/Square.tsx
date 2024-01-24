@@ -5,22 +5,25 @@ import {
   Box,
   Image,
   Text,
+  BoxProps,
 } from "@chakra-ui/react";
 import Piece from "../chess/pieces";
-import { SquareID } from "../chess/move";
+import { SquareID } from "../chess/squareID";
 import { pieceSets } from "../chess/assets";
 import ChessContext from "../context/chess";
+import Move from "../chess/move";
+import { executeMove } from "../chess/fen";
 
 type SquareProps = {
   piece: Piece | undefined;
   idx: number;
-  indicateMove?: boolean;
+  move?: Move;
 };
 
 const Square: React.FC<SquareProps> = ({
   piece,
   idx,
-  indicateMove = false,
+  move,
 }) => {
   const ctx = useContext(ChessContext);
   if (!ctx) {
@@ -33,6 +36,7 @@ const Square: React.FC<SquareProps> = ({
     pieceSet,
     reversedBoard,
   } = ctx.settings;
+  const { gameState, updateFEN } = ctx;
 
   const row = Math.floor(idx / 8);
   const col = idx % 8;
@@ -49,10 +53,49 @@ const Square: React.FC<SquareProps> = ({
   const showFile = row === 7;
 
   const handleClick = () => {
+    if (move) {
+      // TODO Save the move after its executed
+      const state = executeMove(gameState, move);
+      updateFEN(state);
+      ctx.setValidMoves(undefined);
+      return;
+    }
     if (piece) {
       const moves = piece.validMoves(ctx.gameState);
-      if (moves.length) ctx.setValidMoves(moves);
+      ctx.setValidMoves(moves);
     }
+  };
+
+  const moveHintStyles = (): BoxProps => {
+    const shared: BoxProps = {
+      pos: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      zIndex: 4,
+      borderRadius: "100%",
+    };
+    let added: BoxProps = {};
+    if (move?.take) {
+      added = {
+        boxSizing: "border-box",
+        h: "10vh",
+        w: "10vh",
+        borderColor: "rgba(0, 0, 0, 0.2)",
+        borderWidth: "1vh",
+        borderStyle: "solid",
+      };
+    } else if (move) {
+      added = {
+        h: "3vh",
+        w: "3vh",
+        bg: "rgba(0, 0, 0, 0.2)",
+      };
+    }
+    return {
+      ...shared,
+      ...added,
+    };
   };
 
   return (
@@ -65,6 +108,7 @@ const Square: React.FC<SquareProps> = ({
       justifyContent="center"
       alignItems="center"
       pos="relative"
+      cursor={piece || move ? "pointer" : "default"}
       onClick={() => handleClick()}
     >
       {showRank && (
@@ -87,24 +131,13 @@ const Square: React.FC<SquareProps> = ({
           right="1"
           margin={0}
           padding={0}
-          fontSize="sm"
+          fontSize="md"
           fontWeight="bold"
         >
           {id[0]}
         </Text>
       )}
-      {indicateMove && (
-        <Box
-          h="3vh"
-          w="3vh"
-          pos="absolute"
-          top="50%"
-          left="50%"
-          borderRadius="100%"
-          bg={isWhite ? "blackAlpha.500" : "whiteAlpha.500"}
-          transform="translate(-50%, -50%)"
-        />
-      )}
+      {move && <Box {...moveHintStyles()} />}
       <Box
         h="10vh"
         w="10vh"

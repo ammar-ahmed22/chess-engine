@@ -8,10 +8,11 @@ import {
   GridItem,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { SquareID } from "../chess/move";
+import { SquareID } from "../chess/squareID";
 
 // Components
 import Square from "./Square";
+import Move from "../chess/move";
 
 const Board: React.FC = () => {
   const ctx = useContext(ChessContext);
@@ -37,11 +38,16 @@ const Board: React.FC = () => {
         {gameBoard.get
           .flattenedMatrix(settings.reversedBoard)
           .map((piece, idx) => {
-            const id = SquareID.fromFlatIdx(idx);
-            let indicateMove = false;
+            const id = SquareID.fromFlatIdx(
+              idx,
+              settings.reversedBoard,
+            );
+            let move: Move | undefined = undefined;
             if (validMoves) {
-              for (let move of validMoves) {
-                if (id.equals(move.to)) indicateMove = true;
+              for (let validMove of validMoves) {
+                if (id.equals(validMove.to)) {
+                  move = validMove;
+                }
               }
             }
             return (
@@ -49,7 +55,7 @@ const Board: React.FC = () => {
                 piece={piece}
                 idx={idx}
                 key={id.toString()}
-                indicateMove={indicateMove}
+                move={move}
               />
             );
           })}

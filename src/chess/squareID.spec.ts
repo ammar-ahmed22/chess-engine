@@ -46,6 +46,19 @@ describe("SquareID", () => {
     id.file = 1;
     expect(() => id.addFile(100)).toThrow();
   });
+
+  it("checks equality correctly", () => {
+    const test = new SquareID(1, 2);
+    const equal = new SquareID("a", 2);
+    const notEqual = new SquareID("b", 2);
+    expect(test.equals(equal)).toBe(true);
+    expect(test.equals(notEqual)).toBe(false);
+  });
+
+  it("creates fileStr correctly", () => {
+    const test = new SquareID(1, 2);
+    expect(test.fileStr).toBe("a");
+  });
 });
 
 describe("SquareID.file2str", () => {
@@ -106,5 +119,60 @@ describe("SquareID.str2id", () => {
     for (let invalid of invalidInputs) {
       expect(() => SquareID.str2id(invalid)).toThrow();
     }
+  });
+});
+
+describe("SquareID.fromFlatIdx", () => {
+  it("throws error for invalid inputs", () => {
+    const invalidInputs = [-1, 68, 100];
+    for (let invalid of invalidInputs) {
+      expect(() => SquareID.fromFlatIdx(invalid)).toThrow();
+    }
+  });
+
+  it("generates flat indices for the non-reverse order correctly", () => {
+    const inputs = [0, 7, 14];
+    const expected = ["a8", "h8", "g7"];
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      const result = expected[i];
+      expect(
+        SquareID.fromFlatIdx(input, false).toString(),
+      ).toBe(result);
+    }
+  });
+
+  it("generates flat indices for the reverse order correctly", () => {
+    const inputs = [0, 7, 14];
+    const expected = ["h1", "a1", "b2"];
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      const result = expected[i];
+      expect(
+        SquareID.fromFlatIdx(input, true).toString(),
+      ).toBe(result);
+    }
+  });
+});
+
+describe("SquareID.isValid", () => {
+  it("works as intended for string file input", () => {
+    expect(SquareID.isValid("a", 10)).toBe(false);
+    expect(SquareID.isValid("a", 2)).toBe(true);
+  });
+
+  it("works as intended for number inputs", () => {
+    expect(SquareID.isValid(10, 10)).toBe(false);
+    expect(SquareID.isValid(0, 10)).toBe(false);
+    expect(SquareID.isValid(10, 0)).toBe(false);
+    expect(SquareID.isValid(1, 2)).toBe(true);
+  });
+
+  it("warns if invalid string input", () => {
+    expect(SquareID.isValid("ab", 10)).toBe(false);
+  });
+
+  it("works as intended for float values", () => {
+    expect(SquareID.isValid(1.2, 3.3)).toBe(false);
   });
 });

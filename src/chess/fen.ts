@@ -2,7 +2,8 @@ import { GameBoard, GameState } from "./game";
 import Piece from "./pieces";
 import { Chess } from "./types";
 import { createPiece } from "./pieces/utils";
-import { SquareID } from "./move";
+import { SquareID } from "./squareID";
+import Move from "./move";
 
 const validateFEN = (fenString: string) => {
   const parts = fenString.trim().split(" ");
@@ -140,6 +141,12 @@ const validateFEN = (fenString: string) => {
   };
 };
 
+/**
+ * Parses a FEN string into GameState object
+ * @param fenString The full FEN string
+ * @param moves List of moves in order
+ * @returns GameState
+ */
 export const parseFEN = (fenString: string): GameState => {
   // Validation
   const {
@@ -157,9 +164,9 @@ export const parseFEN = (fenString: string): GameState => {
     let rank: string = board[i];
     let temp: (Piece | undefined)[] = [];
     let rankNum = 8 - i;
+    let fileNum = 1;
     for (let j = 0; j < rank.length; j++) {
       let char = rank[j];
-      let fileNum = j + 1;
       if (!isNaN(parseInt(char))) {
         const emptyCount = parseInt(char);
         fileNum += emptyCount;
@@ -170,6 +177,7 @@ export const parseFEN = (fenString: string): GameState => {
         const pos = new SquareID(fileNum, rankNum);
         const piece = createPiece(char, pos);
         temp.push(piece);
+        fileNum++;
       }
     }
     matrix.push(temp);
@@ -261,4 +269,24 @@ export const createFEN = (gameState: GameState): string => {
   }
 
   return `${rows.join("/")} ${whiteToMove ? "w" : "b"} ${castleStr} ${enPassant ? enPassant.toString() : "-"} ${halfMoveCount} ${fullMoveCount}`;
+};
+
+export const executeMove = (
+  gameState: GameState,
+  move: Move,
+): GameState => {
+  const { gameBoard } = gameState;
+  const execution = GameBoard.executeMove(gameBoard, move);
+
+  // TODO: Handle castling
+  // TODO: Handle full move count
+
+  return new GameState({
+    gameBoard: execution.gameBoard,
+    whiteToMove: !gameState.whiteToMove,
+    castling: gameState.castling,
+    halfMoveCount: gameState.halfMoveCount,
+    fullMoveCount: gameState.fullMoveCount,
+    enPassant: gameState.enPassant,
+  });
 };

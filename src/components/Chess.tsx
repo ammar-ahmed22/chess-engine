@@ -17,7 +17,7 @@ import ControlPanel from "./ControlPanel";
 
 const Chess: React.FC = () => {
   const startingFEN =
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    "rnbqkbnr/p1p1pppp/8/8/8/1p1p4/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const { fen, gameState, setFEN, updateFEN } =
     useFEN(startingFEN);
   const whiteSquare = useColorModeValue(

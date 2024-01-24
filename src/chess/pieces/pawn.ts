@@ -2,6 +2,7 @@ import Piece from "./index";
 import { GameState } from "../game";
 import Move from "../move";
 import type { Chess } from "../types";
+import { SquareID } from "../squareID";
 
 class Pawn extends Piece {
   public type: Chess.PieceType = "pawn";
@@ -13,7 +14,7 @@ class Pawn extends Piece {
       firstMove = true;
     if (this.color === "black" && this.position.rank === 7)
       firstMove = true;
-    // console.log(this.position);
+
     const moves: Move[] = [
       new Move({
         white: this.color === "white",
@@ -21,9 +22,9 @@ class Pawn extends Piece {
         to: this.position.copy().addRank(direction),
         piece: this,
       }),
-      // position.copy().addRank(this.color === "white" ? 1 : -1)
     ];
 
+    // TODO: Handle case where there is a piece in front.
     if (firstMove) {
       moves.push(
         new Move({
@@ -37,9 +38,16 @@ class Pawn extends Piece {
 
     // Takes
     const potentials = [
-      this.position.copy().addRank(direction).addFile(1),
-      this.position.copy().addRank(direction).addFile(-1),
-    ];
+      this.position.file !== 8
+        ? this.position.copy().addRank(direction).addFile(1)
+        : undefined,
+      this.position.file !== 1
+        ? this.position
+            .copy()
+            .addRank(direction)
+            .addFile(-1)
+        : undefined,
+    ].filter((p) => p) as SquareID[];
     for (let pot of potentials) {
       const potPiece = gameState.gameBoard.get.atID(pot);
       if (
@@ -64,6 +72,13 @@ class Pawn extends Piece {
 
   public get fenChar(): string {
     return this.color === "white" ? "P" : "p";
+  }
+
+  public copy() {
+    return new Pawn(
+      this.color === "white",
+      this.position.copy(),
+    );
   }
 }
 

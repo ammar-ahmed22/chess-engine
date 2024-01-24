@@ -1,4 +1,4 @@
-import { SquareID } from "../move";
+import { SquareID } from "../squareID";
 import {
   Pawn,
   Rook,

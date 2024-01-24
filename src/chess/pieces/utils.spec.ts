@@ -7,7 +7,7 @@ import {
   King,
   Queen,
 } from "./pieceMap";
-import { SquareID } from "../move";
+import { SquareID } from "../squareID";
 
 describe("createPiece", () => {
   const id = new SquareID("a", 1);

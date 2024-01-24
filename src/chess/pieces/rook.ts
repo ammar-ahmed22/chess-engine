@@ -5,16 +5,21 @@ import type { Chess } from "../types";
 
 class Rook extends Piece {
   public type: Chess.PieceType = "rook";
-  // constructor(white: boolean = true) {
-  //   super(white);
-  // }
 
   public validMoves(gameState: GameState): Move[] {
+    // TODO valid moves
     return [];
   }
 
   public get fenChar(): string {
     return this.color === "white" ? "R" : "r";
+  }
+
+  public copy() {
+    return new Rook(
+      this.color === "white",
+      this.position.copy(),
+    );
   }
 }
 

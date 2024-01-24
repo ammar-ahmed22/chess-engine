@@ -1,5 +1,6 @@
 import { GameState } from "../game";
-import Move, { SquareID } from "../move";
+import Move from "../move";
+import { SquareID } from "../squareID";
 import type { Chess } from "../types";
 
 abstract class Piece {
@@ -14,6 +15,8 @@ abstract class Piece {
   get color(): "white" | "black" {
     return this.isWhite ? "white" : "black";
   }
+
+  public abstract copy(): Piece;
 
   public abstract validMoves(gameState: GameState): Move[];
   public abstract get fenChar(): string;

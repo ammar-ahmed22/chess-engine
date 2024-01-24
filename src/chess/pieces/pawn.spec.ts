@@ -1,5 +1,5 @@
 import { parseFEN } from "../fen";
-import { SquareID } from "../move";
+import { SquareID } from "../squareID";
 import Pawn from "./pawn";
 
 describe("Pawn", () => {
