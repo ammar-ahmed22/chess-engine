@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import {
   GridItem,
-  useColorModeValue,
   Box,
   Image,
   Text,

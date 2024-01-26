@@ -1,7 +1,6 @@
 import { parseFEN } from "../fen";
 import Bishop from "./bishop";
 import { SquareID } from "../squareID";
-import Move from "../move";
 
 describe("Bishop", () => {
   // This fen has the bishop in a position where it can take pieces as well as puts the king in check
