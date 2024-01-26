@@ -7,8 +7,7 @@ class Bishop extends Piece {
   public type: Chess.PieceType = "bishop";
 
   public validMoves(gameState: GameState): Move[] {
-    // TODO valid moves
-    return [];
+    return this.getDiagonalMoves(gameState);
   }
 
   public get fenChar(): string {

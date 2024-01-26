@@ -16,8 +16,20 @@ class Pawn extends Piece {
       firstMove = true;
 
     const moves: Move[] = [];
-    // 1 rank above and 2 ranks above
-    for (let i = 0; i < 2; i++) {
+    let N = 2;
+
+    // TODO: Piece promotion!!
+    if (direction === -1 && this.position.rank === 2)
+      return [];
+    if (direction === 1 && this.position.rank === 7)
+      return [];
+    if (direction === -1 && this.position.rank === 1)
+      return [];
+    if (direction === 1 && this.position.rank === 8)
+      return [];
+
+    // 1 rank above and 2 ranks forward
+    for (let i = 0; i < N; i++) {
       const pos = this.position
         .copy()
         .addRank(direction * (i + 1));

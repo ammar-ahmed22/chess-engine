@@ -8,7 +8,12 @@ class Queen extends Piece {
 
   public validMoves(gameState: GameState): Move[] {
     // TODO valid moves
-    return [];
+    const moves: Move[] = [
+      ...this.getDiagonalMoves(gameState),
+      ...this.getOrthogonalMoves(gameState),
+    ];
+
+    return moves;
   }
 
   public get fenChar(): string {

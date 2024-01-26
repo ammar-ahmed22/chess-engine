@@ -7,8 +7,7 @@ class Rook extends Piece {
   public type: Chess.PieceType = "rook";
 
   public validMoves(gameState: GameState): Move[] {
-    // TODO valid moves
-    return [];
+    return this.getOrthogonalMoves(gameState);
   }
 
   public get fenChar(): string {
