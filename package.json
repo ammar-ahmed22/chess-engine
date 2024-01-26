@@ -30,7 +30,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest --watch",
+    "test": "jest --coverage",
     "eject": "react-scripts eject",
     "format": "prettier . --write --log-level silent",
     "json-coverage": "jest --coverage --coverageReporters=\"json-summary\"",

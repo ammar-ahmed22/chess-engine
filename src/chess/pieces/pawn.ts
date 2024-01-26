@@ -15,25 +15,28 @@ class Pawn extends Piece {
     if (this.color === "black" && this.position.rank === 7)
       firstMove = true;
 
-    const moves: Move[] = [
-      new Move({
+    const moves: Move[] = [];
+    // 1 rank above and 2 ranks above
+    for (let i = 0; i < 2; i++) {
+      const pos = this.position
+        .copy()
+        .addRank(direction * (i + 1));
+      const move = new Move({
         white: this.color === "white",
         from: this.position,
-        to: this.position.copy().addRank(direction),
+        to: pos,
         piece: this,
-      }),
-    ];
-
-    // TODO: Handle case where there is a piece in front.
-    if (firstMove) {
-      moves.push(
-        new Move({
-          white: this.color === "white",
-          from: this.position.copy(),
-          to: this.position.copy().addRank(2 * direction),
-          piece: this,
-        }),
-      );
+      });
+      if (!gameState.gameBoard.get.atID(pos)) {
+        // Square must be empty
+        if (i === 0) {
+          // 1 rank above always available
+          moves.push(move);
+        } else if (i === 1 && firstMove) {
+          // 2 ranks only available when first move
+          moves.push(move);
+        }
+      }
     }
 
     // Takes
