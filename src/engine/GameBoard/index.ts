@@ -8,8 +8,7 @@ class GameBoard {
   }
 
   static createMatrix(fen: string): MatrixType[][] {
-
-    return []
+    return [];
   }
 }
 

@@ -30,12 +30,9 @@ class SquareID {
    * @returns
    */
   public equals(other: SquareID): boolean {
-    return (
-      this.rank === other.rank && this.file === other.file
-    );
+    return this.rank === other.rank && this.file === other.file;
   }
 
-  
   /**
    * Gets the corresponding indices in the matrix
    *
@@ -53,7 +50,7 @@ class SquareID {
   }
 
   get algebraic() {
-    return this.fileStr + this.rank.toString()
+    return this.fileStr + this.rank.toString();
   }
 
   /**
@@ -64,19 +61,13 @@ class SquareID {
       !Number.isInteger(this.rank) ||
       !Number.isInteger(this.file)
     ) {
-      throw new TypeError(
-        "File and rank must be integers!",
-      );
+      throw new TypeError("File and rank must be integers!");
     }
     if (this.file < 1 || this.file > 8) {
-      throw new RangeError(
-        `File = '${this.file}' is out of range!`,
-      );
+      throw new RangeError(`File = '${this.file}' is out of range!`);
     }
     if (this.rank < 1 || this.rank > 8) {
-      throw new RangeError(
-        `Rank = '${this.rank}' is out of range!`,
-      );
+      throw new RangeError(`Rank = '${this.rank}' is out of range!`);
     }
   }
 
@@ -175,10 +166,7 @@ class SquareID {
    * @param reversedBoard True if the flattened board matrix is in reverse order
    * @returns
    */
-  static fromFlatIdx(
-    idx: number,
-    reversedBoard: boolean = false,
-  ) {
+  static fromFlatIdx(idx: number, reversedBoard: boolean = false) {
     if (idx < 0 || idx > 63) {
       throw new RangeError("Flat index must between 0-63");
     }
@@ -248,6 +236,5 @@ class SquareID {
     }
   }
 }
-
 
 export default SquareID;

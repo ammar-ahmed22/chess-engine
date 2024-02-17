@@ -12,4 +12,4 @@ export type Move = {
   check?: boolean;
 };
 
-export type MatrixType = (Piece | undefined)
+export type MatrixType = Piece | undefined;

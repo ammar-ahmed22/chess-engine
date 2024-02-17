@@ -1,9 +1,7 @@
 import React from "react";
 
 const ChessBoard: React.FC = () => {
-  return (
-    <></>
-  )
-}
+  return <></>;
+};
 
 export default ChessBoard;

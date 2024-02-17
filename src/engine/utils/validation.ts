@@ -5,11 +5,11 @@ import { ValueError } from "./error";
  * @param fen FEN string
  */
 export const validateFEN = (fen: string): boolean => {
-  const ranks = fen.split("/").filter(s => s);
+  const ranks = fen.split("/").filter((s) => s);
   if (ranks.length !== 8) {
     throw new ValueError(
       `FEN string does not have the correct number of ranks OR there is an invalid separator!`,
-      fen
+      fen,
     );
   }
 
@@ -21,7 +21,7 @@ export const validateFEN = (fen: string): boolean => {
         if (!allowedRegex.test(char)) {
           throw new ValueError(
             `FEN ranks contain invalid character: '${char}'!`,
-            fen
+            fen,
           );
         }
       }
@@ -29,4 +29,4 @@ export const validateFEN = (fen: string): boolean => {
   }
 
   return true;
-}
+};

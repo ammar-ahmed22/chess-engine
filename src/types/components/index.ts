@@ -1,3 +1,1 @@
-export type ChessBoardProps = {
-  
-}
+export type ChessBoardProps = {};

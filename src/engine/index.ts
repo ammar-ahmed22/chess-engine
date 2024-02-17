@@ -1,3 +1,3 @@
 import Chess from "./Chess";
 
-export { Chess }
+export { Chess };

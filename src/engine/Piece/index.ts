@@ -1,7 +1,3 @@
-
-
-abstract class Piece {
-
-}
+abstract class Piece {}
 
 export default Piece;

@@ -3,14 +3,15 @@ import { validateFEN } from "../utils/validation";
 
 class Chess {
   private moves: string[] = [];
-  private currentFen: string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+  private currentFen: string =
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
   private castling: {
-   [K in Color]: [boolean, boolean]
+    [K in Color]: [boolean, boolean];
   } = {
     white: [true, true],
-    black: [true, true]
-  }
-  
+    black: [true, true],
+  };
+
   // =============== Setters ===============
   /**
    * Sets the current position of the game
@@ -28,7 +29,6 @@ class Chess {
    */
   public setMoves(moves: string[]): void {
     // TODO validate the moves (possibly add a strict argument which validates if every move was actually a valid move)
-
   }
 
   // =============== Getters ===============
@@ -36,7 +36,11 @@ class Chess {
    * Returns the color to move
    */
   public colorToMove(): Color {
-    return this.moves.length === 0 ? "white" : this.moves.length % 2 === 0 ? "black" : "white"
+    return this.moves.length === 0
+      ? "white"
+      : this.moves.length % 2 === 0
+        ? "black"
+        : "white";
   }
 
   /**
@@ -64,14 +68,12 @@ class Chess {
     // TODO update the moves
   }
 
-
   /**
-   * 
+   *
    * @returns All the valid moves for the current position and state of the game in algebraic notation
    */
   public validMoves(): string[] {
-
-    return []
+    return [];
   }
 }
 
