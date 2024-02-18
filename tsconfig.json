@@ -11,9 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@engine-types": ["./src/types/engine/index"],
-      "@engine/*": ["./src/engine/*"]
     },
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts"],
-  "exclude": ["node_modules", "dist", "old_project"]
+  "exclude": ["node_modules", "dist", "src/**/*.spec.ts"]
 }

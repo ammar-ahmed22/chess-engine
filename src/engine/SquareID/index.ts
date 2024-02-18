@@ -1,4 +1,5 @@
-import { ValueError } from "@engine/utils/error";
+import { ValueError } from "../utils/error";
+import { SquareIDType } from "../../types";
 
 class SquareID {
   public rank: number;
@@ -233,6 +234,18 @@ class SquareID {
       )
         return false;
       return true;
+    }
+  }
+
+  static fromSquareIDType(id: SquareIDType): SquareID {
+    if (typeof id === "string") {
+      return new SquareID(id);
+    } else {
+      if (typeof id.file === "string") {
+        return new SquareID(id.file, id.rank);
+      } else {
+        return new SquareID(id.file, id.rank);
+      }
     }
   }
 }

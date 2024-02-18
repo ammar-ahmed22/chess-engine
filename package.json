@@ -22,8 +22,12 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "yarn clean && tsc",
     "test": "jest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "clean": "rimraf ./dist"
+  },
+  "dependencies": {
+    "rimraf": "^5.0.5"
   }
 }
