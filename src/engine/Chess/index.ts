@@ -85,42 +85,24 @@ class Chess {
    */
   public execute(move: MoveType): HalfMove | null {
     // COMPLETE validate the move before executing it (move execution handles this)
-    // COMPLETE execute the move and update the FEN 
+    // COMPLETE execute the move and update the FEN
     // COMPLETE update the moves
     // COMPLETE something is wonky here, I think you can possibly execute a black piece as the first move (FIXED)
     const board = new GameBoard(this.currentFen);
     const halfMove = board.execute(move);
     if (!halfMove) return null;
     const idx = this.moves.length - 1;
-    const lastFull = this.moves.at(-1); // if no last full, means first move
-    if (lastFull) {
-      // Handle case where its complete move (i.e. a new move)
-      if (lastFull.white && lastFull.black) {
-        // Ensure it s a white move
-        if (halfMove.color === "black") {
-          console.warn("Cannot move black piece on white's turn!")
-          return null;
-        }
-        this.moves.push({
-          white: halfMove
-        })
-      } else if (lastFull.white && !lastFull.black) { // Handle case where it's a half move (white has moved, black turn)
-        // Ensure it's a black move.
-        if (halfMove.color === "white") {
-          console.warn("Cannot move black piece on black's turn!")
-          return null;
-        }
-        this.moves[idx].black = halfMove;
-      }
-
-    } else {
-      if (halfMove.color === "black") {
-        console.warn("Cannot move black piece as first move!")
-        return null;
-      }
+    const colorToMove = this.colorToMove();
+    if (colorToMove !== halfMove.color) {
+      console.warn(`Cannot move ${halfMove.color} on ${colorToMove}'s turn!`)
+      return null;
+    }
+    if (halfMove.color === "white") {
       this.moves.push({
         white: halfMove
       })
+    } else {
+      this.moves[idx].black = halfMove;
     }
     this.currentFen = board.fen();
     return halfMove
