@@ -51,5 +51,20 @@ describe("Chess", () => {
   
     expect(result).toBeNull();
     expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+    expect(chess.history()).toHaveLength(0);
+  })
+
+  it("returns null when executing a move on the wrong turn", () => {
+    // moving black piece on white's turn
+    const chess = new Chess();
+    const result = chess.execute({
+      from: "e7",
+      to: "e5"
+    })
+
+    expect(result).toBeNull();
+    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+    expect(chess.history()).toHaveLength(0);
+
   })
 });
