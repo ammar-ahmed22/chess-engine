@@ -1,7 +1,7 @@
 import Piece from "../../Piece";
 import GameBoard from "../../GameBoard";
 import Move from "../../Move";
-import { PieceType, GameState } from "../../../types";
+import { PieceType, GameState, HalfMove } from "../../../types";
 
 class Bishop extends Piece {
   public type: PieceType = "bishop";
@@ -10,7 +10,7 @@ class Bishop extends Piece {
     return this.color === "white" ? "B" : "b"
   }
 
-  public validMoves(board: GameBoard, state: GameState): Move[] {
+  public validMoves(board: GameBoard, state: GameState): HalfMove[] {
     return []
   }
 }

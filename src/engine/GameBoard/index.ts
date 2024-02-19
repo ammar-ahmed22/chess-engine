@@ -88,6 +88,7 @@ class GameBoard {
         from: move.from,
         to: move.to,
         color: fromPiece.color,
+        piece: fromPiece.type,
         castle: move.castle,
       };
     }
@@ -105,6 +106,7 @@ class GameBoard {
       from: move.from,
       to: move.to,
       color: fromPiece.color,
+      piece: fromPiece.type,
       take: toPiece?.type,
       castle: move.castle,
     };

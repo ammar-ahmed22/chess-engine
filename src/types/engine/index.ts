@@ -18,6 +18,7 @@ export type HalfMove = {
   from: SquareIDType,
   to: SquareIDType,
   color: Color,
+  piece: PieceType,
   take?: PieceType,
   castle?: string,
   enPassant?: boolean,

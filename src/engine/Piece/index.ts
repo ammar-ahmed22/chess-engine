@@ -1,5 +1,5 @@
 import SquareID from "../SquareID";
-import { Color, GameState, PieceType } from "@engine-types";
+import { Color, GameState, PieceType, HalfMove } from "@engine-types";
 import Move from "../Move";
 import GameBoard from "../GameBoard";
 
@@ -14,7 +14,7 @@ abstract class Piece {
   }
 
   public abstract type: PieceType;
-  public abstract validMoves(board: GameBoard, state: GameState): Move[];
+  public abstract validMoves(board: GameBoard, state: GameState): HalfMove[];
   public abstract get fenChar(): string;
 }
 

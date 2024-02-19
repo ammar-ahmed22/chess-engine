@@ -83,11 +83,16 @@ class Chess {
    * Executes a move and updates the game state
    * @param move Move object
    */
-  public execute(move: MoveType): HalfMove | null {
+  public execute(move: MoveType, validate?: boolean): HalfMove | null {
     // COMPLETE validate the move before executing it (move execution handles this)
     // COMPLETE execute the move and update the FEN
     // COMPLETE update the moves
     // COMPLETE something is wonky here, I think you can possibly execute a black piece as the first move (FIXED)
+    if (validate) {
+      // check if the passed move is in the valid moves.
+      const validMoves = this.validMoves();
+      // do the check, return null if not found.
+    }
     const board = new GameBoard(this.currentFen);
     const halfMove = board.execute(move);
     if (!halfMove) return null;
