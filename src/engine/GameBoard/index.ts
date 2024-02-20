@@ -82,7 +82,25 @@ class GameBoard {
     }
 
     if (move.castle) {
-      // TODO handle castling
+      // handle castling
+      // castling, move.to -> spot the king moves to
+      if (fromPiece.type !== "king") {
+        console.warn("Cannot castle a non-king piece!")
+        return null;
+      }
+      const initialRank = fromPiece.color === "white" ? 1 : 8;
+      const rookFile = move.castle === "king" ? 8 : 1;
+      const rookFromPos = new SquareID(rookFile, initialRank);
+      const rook = this.atID(new SquareID(rookFile, initialRank));
+      if (!rook || rook.type !== "rook") {
+        console.warn(`Cannot castle ${move.castle}side, rook is not on the \`${move.castle === "king" ? "h" : "a"}\` file!`)
+        return null;
+      }
+      let rookToPos = to.copy().addFile(move.castle === "king" ? -1 : 1);
+      this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
+      this.matrix[to.matrixID[0]][to.matrixID[1]] = fromPiece;
+      this.matrix[rookFromPos.matrixID[0]][rookFromPos.matrixID[1]] = undefined;
+      this.matrix[rookToPos.matrixID[0]][rookToPos.matrixID[1]] = rook;
       return {
         from: move.from,
         to: move.to,

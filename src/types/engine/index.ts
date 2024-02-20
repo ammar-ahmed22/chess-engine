@@ -11,7 +11,7 @@ export type SquareIDType = string | {
 export type MoveType = {
   from: SquareIDType;
   to: SquareIDType;
-  castle?: string
+  castle?: CastleType
 };
 
 export type HalfMove = {
@@ -20,7 +20,7 @@ export type HalfMove = {
   color: Color,
   piece: PieceType,
   take?: PieceType,
-  castle?: string,
+  castle?: CastleType,
   enPassant?: boolean,
   check?: boolean
 }
@@ -29,12 +29,16 @@ export type FullMove = {
   [K in Color]?: HalfMove
 }
 
+export type CastleType = "queen" | "king";
+
 export type MatrixType = Piece | undefined;
 
 export type PieceType = "pawn" | "king" | "queen" | "bishop" | "rook" | "knight";
 
 export type CastlingAbility = {
-  [K in Color]: [boolean, boolean]
+  [K in Color]: {
+    [J in CastleType]?: boolean
+  }
 }
 
 export type GameState = {

@@ -88,4 +88,32 @@ describe("Chess", () => {
     moves = chess.validMoves();
     expect(moves).toHaveLength(31);
   })
+
+  it("executes kingside castling correctly", () => {
+    const chess = new Chess();
+    // white can castle kingside
+    chess.setPosition("rnbqkbnr/pppppppp/8/8/4PP2/3B1N2/PPPP2PP/RNBQK2R");
+    const result = chess.execute({
+      from: "e1",
+      to: "g1",
+      castle: "king"
+    })
+    
+    expect(result).not.toBeNull();
+    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/4PP2/3B1N2/PPPP2PP/RNBQ1RK1")
+  })
+
+  it("executes queenside castling correctly", () => {
+    const chess = new Chess();
+    // white can castle queenside
+    chess.setPosition("rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/R3KBNR")
+    const result = chess.execute({
+      from: "e1",
+      to: "c1",
+      castle: "queen"
+    })
+
+    expect(result).not.toBeNull();
+    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/2KR1BNR")
+  })
 });
