@@ -17,6 +17,11 @@ abstract class Piece {
   public abstract validMoves(board: GameBoard, state: GameState): HalfMove[];
   public abstract get fenChar(): string;
 
+  /**
+   * Returns moves for all 4 diagonals
+   * @param board GameBoard
+   * @returns 
+   */
   protected diagonalMoves(board: GameBoard): HalfMove[] {
     const moves: HalfMove[] = [];
 
@@ -52,6 +57,41 @@ abstract class Piece {
       }
     }
 
+    return moves;
+  }
+
+  protected orthogonalMoves(board: GameBoard): HalfMove[] {
+    const moves: HalfMove[] = [];
+
+    // horizontal direction -> dir = 0, vertical direction -> dir = 1
+    for (let d = 0; d < 2; d++) {
+      // left/right, up/down
+      let dir: "file" | "rank" = d === 0 ? "file" : "rank"
+      for (let i = -1; i <= 1; i += 2) {
+        // At most 8 moves in each direction
+        for (let j = 1; j <= 8; j++) {
+          if (this.position[dir] + (i * j) < 1 || this.position[dir] + (i * j) > 8) break;
+          const pos = this.position.copy();
+          if (dir === "file") {
+            pos.addFile(i * j)
+          } else {
+            pos.addRank(i * j)
+          }
+          const piece = board.atID(pos);
+          if (piece && (piece.color === this.color || piece.type === "king")) break;
+          moves.push({
+            color: this.color,
+            from: this.position.algebraic,
+            to: pos.algebraic,
+            piece: this.type,
+            take: piece && piece.type
+          })
+          if (piece) break;
+        }
+      }
+    }
+    
+    
     return moves;
   }
 }

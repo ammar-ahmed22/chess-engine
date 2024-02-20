@@ -11,7 +11,7 @@ class Rook extends Piece {
   }
 
   public validMoves(board: GameBoard, state: GameState): HalfMove[] {
-    return []
+    return this.orthogonalMoves(board);
   }
 }
 
