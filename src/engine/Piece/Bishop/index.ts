@@ -11,7 +11,7 @@ class Bishop extends Piece {
   }
 
   public validMoves(board: GameBoard, state: GameState): HalfMove[] {
-    return []
+    return this.diagonalMoves(board);
   }
 }
 
