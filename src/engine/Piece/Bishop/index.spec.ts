@@ -6,8 +6,8 @@ import SquareID from "../../SquareID";
 describe("Bishop", () => {
   it("generates valid moves correctly", () => {
     const chess = new Chess();
-    // bishop on c4, can take pawn on b5, can take pawn on f7, 8 valid moves
-    const fen = "rnbqkbnr/p1pppppp/8/1p6/2B1P3/8/PPPP1PPP/RNBQK1NR"
+    // bishop on c4, can take pawn on f7, 9 valid moves
+    const fen = "rnbqkbnr/pppppppp/8/8/2B1P3/8/PPPP1PPP/RNBQK1NR"
     const board = new GameBoard(fen);
     const pos = new SquareID("c4");
     const bishop = board.atID(pos) as Bishop;
@@ -18,7 +18,7 @@ describe("Bishop", () => {
       if (move.take) takes++;
     }
 
-    expect(takes).toBe(2);
-    expect(moves).toHaveLength(8);
+    expect(takes).toBe(1);
+    expect(moves).toHaveLength(9);
   })
 })

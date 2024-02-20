@@ -33,13 +33,7 @@ abstract class Piece {
         // at most 8 diagonal moves (I think maybe 7 but it's ok)
         for (let i = 1; i <= 8; i++) {
           // out of bounds
-          if (
-            this.position.rank + (v * i) > 8 ||
-            this.position.rank + (v * i) < 1 ||
-            this.position.file + (h * i) > 8 ||
-            this.position.file + (h * i) < 1
-            ) break; // breaks out of moves loop
-          
+          if (!SquareID.isValid(this.position.file + (h * i), this.position.rank + (v * i))) break;  
           const pos = this.position.copy().addFile(h * i).addRank(v * i);
           const piece = board.atID(pos);
           // Once a piece of same color hit, stop the diagonal

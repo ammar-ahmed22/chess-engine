@@ -11,7 +11,10 @@ class Queen extends Piece {
   }
 
   public validMoves(board: GameBoard, state: GameState): HalfMove[] {
-    return []
+    return [
+      ...this.diagonalMoves(board),
+      ...this.orthogonalMoves(board)
+    ]
   }
 }
 
