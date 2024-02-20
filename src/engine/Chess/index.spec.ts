@@ -67,4 +67,25 @@ describe("Chess", () => {
     expect(chess.history()).toHaveLength(0);
 
   })
+
+  it("creates all valid moves correctly", () => {
+    const chess = new Chess();
+    let moves = chess.validMoves();
+    expect(moves).toHaveLength(20);
+    let result = chess.execute({
+      from: "e2",
+      to: "e4"
+    });
+    expect(result).not.toBeNull();
+    moves = chess.validMoves();
+    expect(moves).toHaveLength(20);
+
+    result = chess.execute({
+      from: "d7",
+      to: "d5"
+    });
+    expect(result).not.toBeNull();
+    moves = chess.validMoves();
+    expect(moves).toHaveLength(30);
+  })
 });

@@ -82,7 +82,7 @@ class Chess {
    * Executes a move and updates the game state
    * @param move Move object
    */
-  public execute(move: MoveType, validate?: boolean): HalfMove | null {
+  public execute(move: MoveType | HalfMove, validate?: boolean): HalfMove | null {
     // COMPLETE validate the move before executing it (move execution handles this)
     // COMPLETE execute the move and update the FEN
     // COMPLETE update the moves
