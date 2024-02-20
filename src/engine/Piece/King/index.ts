@@ -10,7 +10,10 @@ class King extends Piece {
   }
 
   public validMoves(board: GameBoard, state: GameState): HalfMove[] {
-    return []
+    return [
+      ...this.diagonalMoves(board, 1),
+      ...this.orthogonalMoves(board, 1)
+    ]
   }
 }
 

@@ -21,7 +21,7 @@ abstract class Piece {
    * @param board GameBoard
    * @returns 
    */
-  protected diagonalMoves(board: GameBoard): HalfMove[] {
+  protected diagonalMoves(board: GameBoard, cap: number = 8): HalfMove[] {
     const moves: HalfMove[] = [];
 
     // Iterating over all 4 directions
@@ -30,7 +30,7 @@ abstract class Piece {
       // v = -1 or 1
       for (let v = -1; v <= 1; v+=2) {
         // at most 8 diagonal moves (I think maybe 7 but it's ok)
-        for (let i = 1; i <= 8; i++) {
+        for (let i = 1; i <= cap; i++) {
           // out of bounds
           if (!SquareID.isValid(this.position.file + (h * i), this.position.rank + (v * i))) break;  
           const pos = this.position.copy().addFile(h * i).addRank(v * i);
@@ -53,7 +53,7 @@ abstract class Piece {
     return moves;
   }
 
-  protected orthogonalMoves(board: GameBoard): HalfMove[] {
+  protected orthogonalMoves(board: GameBoard, cap: number = 8): HalfMove[] {
     const moves: HalfMove[] = [];
 
     // horizontal direction -> dir = 0, vertical direction -> dir = 1
@@ -61,8 +61,8 @@ abstract class Piece {
       // left/right, up/down
       let dir: "file" | "rank" = d === 0 ? "file" : "rank"
       for (let i = -1; i <= 1; i += 2) {
-        // At most 8 moves in each direction
-        for (let j = 1; j <= 8; j++) {
+        // At most 8 moves (or cap) in each direction
+        for (let j = 1; j <= cap; j++) {
           if (this.position[dir] + (i * j) < 1 || this.position[dir] + (i * j) > 8) break;
           const pos = this.position.copy();
           if (dir === "file") {

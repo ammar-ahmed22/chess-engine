@@ -86,6 +86,6 @@ describe("Chess", () => {
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
-    expect(moves).toHaveLength(30);
+    expect(moves).toHaveLength(31);
   })
 });
