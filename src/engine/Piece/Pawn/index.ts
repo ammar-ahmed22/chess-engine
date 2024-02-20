@@ -47,7 +47,7 @@ class Pawn extends Piece {
 
     for (let potential of potentialTakes) {
       const potentialPiece = board.atID(potential)
-      if (potentialPiece && potentialPiece.color !== this.color && potentialPiece.type !== "king") {
+      if (potentialPiece && potentialPiece.color !== this.color) {
         moves.push({
           from: this.position.algebraic,
           to: potential.algebraic,
@@ -56,6 +56,10 @@ class Pawn extends Piece {
           take: potentialPiece.type,
         })
       }
+    }
+
+    if (state.inCheck) {
+      // TODO filter the moves to only those moves that remove from check
     }
 
     return moves;

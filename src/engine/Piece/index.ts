@@ -36,8 +36,8 @@ abstract class Piece {
           const pos = this.position.copy().addFile(h * i).addRank(v * i);
           const piece = board.atID(pos);
           // Once a piece of same color hit, stop the diagonal
-          // TODO potentially include kings for check
-          if (piece && (piece.color === this.color || piece.type === "king")) break; 
+          // included kings for check
+          if (piece && piece.color === this.color) break; 
           moves.push({
             from: this.position.algebraic,
             to: pos.algebraic,
@@ -71,7 +71,7 @@ abstract class Piece {
             pos.addRank(i * j)
           }
           const piece = board.atID(pos);
-          if (piece && (piece.color === this.color || piece.type === "king")) break;
+          if (piece && piece.color === this.color) break;
           moves.push({
             color: this.color,
             from: this.position.algebraic,

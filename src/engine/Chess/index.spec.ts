@@ -86,7 +86,41 @@ describe("Chess", () => {
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
+    
     expect(moves).toHaveLength(31);
+  })
+
+  it("calculates checks correctly", () => {
+    const chess = new Chess();
+    let moves = chess.validMoves();
+    expect(moves).toHaveLength(20);
+    let result = chess.execute({
+      from: "e2",
+      to: "e4"
+    });
+    expect(result).not.toBeNull();
+    moves = chess.validMoves();
+    expect(moves).toHaveLength(20);
+
+    result = chess.execute({
+      from: "d7",
+      to: "d5"
+    });
+    expect(result).not.toBeNull();
+    moves = chess.validMoves();
+    
+    expect(moves).toHaveLength(31);
+
+    result = chess.execute({
+      from: "f1",
+      to: "b5"
+    });
+    expect(result).not.toBeNull();
+    if (result) {
+      expect(result.check).toBe(true);
+      expect(chess.state().inCheck).toBe(true);
+    }
+    
   })
 
   it("executes kingside castling correctly", () => {

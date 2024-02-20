@@ -59,6 +59,15 @@ class Chess {
         king: true
       }
     };
+    let inCheck: boolean = false;
+    let lastFull = this.moves.at(-1);
+    if (lastFull) {
+      if (lastFull.black && lastFull.white) {
+        if (lastFull.black.check) inCheck = true;
+      } else if (lastFull.white) {
+        if (lastFull.white.check) inCheck = true;
+      }
+    }
     for (let fullMove of this.moves) {
       const whiteMove = fullMove.white;
       const blackMove = fullMove.black;
@@ -72,7 +81,8 @@ class Chess {
     }
     return {
       colorToMove: this.colorToMove(),
-      castling
+      castling,
+      inCheck
     }
   }
 
@@ -99,7 +109,7 @@ class Chess {
       // do the check, return null if not found.
     }
     const board = new GameBoard(this.currentFen);
-    const halfMove = board.execute(move);
+    const halfMove = board.execute(move, this.state());
     if (!halfMove) return null;
     const idx = this.moves.length - 1;
     const colorToMove = this.colorToMove();

@@ -16,13 +16,37 @@ class GameBoard {
     }
   }
 
-  
+  /**
+   * Iterates over the matrix 
+   * @param callbackfn 
+   */
   private iter(callbackfn: (piece: MatrixType, id: [number, number], matrix: MatrixType[][]) => void) {
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[i].length; j++) {
         callbackfn(this.matrix[i][j], [i, j], this.matrix);
       }
     }
+  }
+
+  /**
+   * Checks if the move executed puts the opponent in check
+   * 
+   * Should be called after the move is executed (i.e. matrix is updated)
+   * @param state GameState
+   * @returns 
+   */
+  private checkForCheck(state: GameState): boolean {
+    const board = new GameBoard(this.fen());
+    const allValidMoves = board.allValidMoves(state, true);
+    let check = false;
+    for (let move of allValidMoves) {
+      if (move.take && move.take === "king") {
+        check = true;
+        break;
+      }
+    }
+
+    return check;
   }
 
   /**
@@ -70,7 +94,7 @@ class GameBoard {
    * @param move A move object
    * @mutating
    */
-  public execute(move: MoveType): HalfMove | null {
+  public execute(move: MoveType, state: GameState): HalfMove | null {
     
     let from: SquareID = SquareID.fromSquareIDType(move.from);
     let to: SquareID = SquareID.fromSquareIDType(move.to);
@@ -101,12 +125,16 @@ class GameBoard {
       this.matrix[to.matrixID[0]][to.matrixID[1]] = fromPiece;
       this.matrix[rookFromPos.matrixID[0]][rookFromPos.matrixID[1]] = undefined;
       this.matrix[rookToPos.matrixID[0]][rookToPos.matrixID[1]] = rook;
+
+      const check = this.checkForCheck(state);
+
       return {
         from: move.from,
         to: move.to,
         color: fromPiece.color,
         piece: fromPiece.type,
         castle: move.castle,
+        check
       };
     }
 
@@ -119,6 +147,8 @@ class GameBoard {
     this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
     this.matrix[to.matrixID[0]][to.matrixID[1]] = fromPiece;
 
+    const check = this.checkForCheck(state);
+
     return {
       from: move.from,
       to: move.to,
@@ -126,17 +156,29 @@ class GameBoard {
       piece: fromPiece.type,
       take: toPiece?.type,
       castle: move.castle,
+      check
     };
   }
 
-  public allValidMoves(state: GameState): HalfMove[] {
+  public allValidMoves(state: GameState, includeKings: boolean = false): HalfMove[] {
     const moves: HalfMove[] = [];
     this.iter((piece) => {
       if (piece && piece.color === state.colorToMove) {
         moves.push(...piece.validMoves(this, state))
       }
     })
-    return moves;
+    return moves.filter(move => {
+      if (includeKings) {
+        return true;
+      } else {
+        if (move.take && move.take === "king") {
+          return false;
+        } else {
+          return true;
+        }
+      }
+      
+    });
   }
 
 

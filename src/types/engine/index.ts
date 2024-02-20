@@ -44,5 +44,6 @@ export type CastlingAbility = {
 export type GameState = {
   colorToMove: Color,
   enPassant?: SquareID,
-  castling: CastlingAbility
+  castling: CastlingAbility,
+  inCheck?: boolean
 }

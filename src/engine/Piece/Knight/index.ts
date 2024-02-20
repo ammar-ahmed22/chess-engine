@@ -39,7 +39,7 @@ class Knight extends Piece {
 
     const moves = potentialIDs.map(id => {
       const piece = board.atID(id);
-      if (piece && (piece.color === this.color || piece.type === "king")) return undefined;
+      if (piece && piece.color === this.color) return undefined;
       return {
         color: this.color,
         from: this.position.algebraic,
