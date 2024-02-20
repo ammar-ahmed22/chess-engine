@@ -1,6 +1,5 @@
 import { Color, GameState, MoveType, FullMove, HalfMove, CastlingAbility } from "@engine-types";
 import { validateFEN } from "../utils/validation";
-import Move from "../Move";
 import GameBoard from "../GameBoard";
 
 class Chess {
@@ -117,7 +116,7 @@ class Chess {
    *
    * @returns All the valid moves for the current position
    */
-  public validMoves(): Move[] {
+  public validMoves(): HalfMove[] {
     const board = new GameBoard(this.currentFen);
     return board.allValidMoves(this.state());
   }

@@ -1,6 +1,5 @@
 import Piece from "../../Piece";
 import GameBoard from "../../GameBoard";
-import Move from "../../Move";
 import { GameState, PieceType, HalfMove } from "../../../types";
 import SquareID from "../../SquareID";
 

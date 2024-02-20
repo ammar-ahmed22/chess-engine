@@ -1,6 +1,5 @@
 import SquareID from "../SquareID";
 import { Color, GameState, PieceType, HalfMove } from "@engine-types";
-import Move from "../Move";
 import GameBoard from "../GameBoard";
 
 

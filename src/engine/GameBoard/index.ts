@@ -3,7 +3,6 @@ import { validateFEN } from "../utils/validation";
 import { Color, GameState, MatrixType, MoveType, PieceType, HalfMove } from "@engine-types";
 import SquareID from "../SquareID";
 import { fen2matrix, matrix2fen } from "../utils/transform";
-import Move from "../Move";
 
 class GameBoard {
   private matrix: MatrixType[][] = [];
@@ -112,8 +111,8 @@ class GameBoard {
     };
   }
 
-  public allValidMoves(state: GameState): Move[] {
-    const moves: Move[] = [];
+  public allValidMoves(state: GameState): HalfMove[] {
+    const moves: HalfMove[] = [];
     this.iter((piece) => {
       if (piece && piece.color === state.colorToMove) {
         moves.push(...piece.validMoves(this, state))

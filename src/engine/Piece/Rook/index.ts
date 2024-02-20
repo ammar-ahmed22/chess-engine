@@ -1,6 +1,5 @@
 import Piece from "../../Piece";
 import GameBoard from "../../GameBoard";
-import Move from "../../Move";
 import { PieceType, GameState, HalfMove } from "@engine-types";
 
 class Rook extends Piece {
