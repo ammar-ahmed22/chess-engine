@@ -16,66 +16,68 @@ class King extends Piece {
       ...this.orthogonalMoves(board, 1)
     ]
 
-    // TODO add castling moves
     const initialRank = this.color === "white" ? 1 : 8;
-    if (this.position.algebraic === `e${initialRank}`) {
-      if (state.castling[this.color].king) { // has kingside ability
-        let canCastle = true;
-        for (let i = 1; i <= 3; i++) {
-          const pos = this.position.copy().addFile(i);
-          const piece = board.atID(pos);
-          if (i === 3) {
-            // check if rook is there
-            if (!piece || piece.type !== "rook") {
-              canCastle = false;
-              break;
-            }
-          } else {
-            // check if empty
-            if (piece) {
-              canCastle = false;
-              break;
-            }
+    const kingUnmoved = this.position.algebraic === `e${initialRank}`;
+    if (state.castling[this.color].king && kingUnmoved) { // has kingside ability
+      let canCastle = true;
+      for (let i = 1; i <= 3; i++) {
+        const pos = this.position.copy().addFile(i);
+        const piece = board.atID(pos);
+        if (i === 3) {
+          // check if rook is there
+          if (!piece || piece.type !== "rook") {
+            canCastle = false;
+            break;
           }
-        }
-        if (canCastle) {
-          moves.push({
-            color: this.color,
-            from: this.position.algebraic,
-            to: `g${initialRank}`,
-            piece: this.type,
-            castle: "king"
-          })
-        }
-      } else if (state.castling[this.color].queen) { // has queenside ability
-        let canCastle = true;
-        for (let i = 1; i <= 4; i++) {
-          const pos = this.position.copy().addFile(-i);
-          const piece = board.atID(pos);
-          if (i === 4) {
-            // check if rook is there
-            if (!piece || piece.type !== "rook") {
-              canCastle = false;
-              break;
-            }
-          } else {
-            // check if empty
-            if (piece) {
-              canCastle = false;
-              break;
-            }
+        } else {
+          // check if empty
+          if (piece) {
+            canCastle = false;
+            break;
           }
-        }
-        if (canCastle) {
-          moves.push({
-            color: this.color,
-            from: this.position.algebraic,
-            to: `c${initialRank}`,
-            piece: this.type,
-            castle: "queen"
-          })
         }
       }
+      if (canCastle) {
+        moves.push({
+          color: this.color,
+          from: this.position.algebraic,
+          to: `g${initialRank}`,
+          piece: this.type,
+          castle: "king"
+        })
+      }
+    } 
+    if (state.castling[this.color].queen && kingUnmoved) { // has queenside ability
+      let canCastle = true;
+      for (let i = 1; i <= 4; i++) {
+        const pos = this.position.copy().addFile(-i);
+        const piece = board.atID(pos);
+        if (i === 4) {
+          // check if rook is there
+          if (!piece || piece.type !== "rook") {
+            canCastle = false;
+            break;
+          }
+        } else {
+          // check if empty
+          if (piece) {
+            canCastle = false;
+            break;
+          }
+        }
+      }
+      if (canCastle) {
+        moves.push({
+          color: this.color,
+          from: this.position.algebraic,
+          to: `c${initialRank}`,
+          piece: this.type,
+          castle: "queen"
+        })
+      }
+    }
+    if (this.position.algebraic === `e${initialRank}`) {
+      
     }
     
 
