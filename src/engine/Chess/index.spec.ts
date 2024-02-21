@@ -135,17 +135,16 @@ describe("Chess", () => {
       to: "e4"
     });
     expect(result).not.toBeNull();
-    // moves = chess.validMoves();
-    // expect(moves).toHaveLength(20);
+    moves = chess.validMoves();
+    expect(moves).toHaveLength(20);
 
     result = chess.execute({
       from: "f7",
       to: "f5"
     });
     expect(result).not.toBeNull();
-    // moves = chess.validMoves();
-    
-    // expect(moves).toHaveLength(31);
+    moves = chess.validMoves();
+    expect(moves).toHaveLength(31);
 
     result = chess.execute({
       from: "f1",
@@ -187,5 +186,89 @@ describe("Chess", () => {
 
     expect(result).not.toBeNull();
     expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/2KR1BNR")
+  })
+
+  it("calculates castling ability correctly", () => {
+    const chess = new Chess();
+    // white kings pawn move
+    chess.execute({
+      from: "e2",
+      to: "e4"
+    })
+    // black kings pawn move
+    chess.execute({
+      from: "e7",
+      to: "e5"
+    })
+    // move white king
+    chess.execute({
+      from: "e1",
+      to: "e2"
+    })
+
+    let state = chess.state();
+    let expected = {
+      white: {
+        queen: false,
+        king: false,
+      },
+      black: {
+        queen: true,
+        king: true
+      }
+    }
+    expect(state.castling).toMatchObject(expected);
+
+    // move black knight (to make space for the king side rook)
+    chess.execute({
+      from: "g8",
+      to: "f6"
+    })
+
+    // move white king again (need to make white move)
+    chess.execute({
+      from: "e2",
+      to: "e3"
+    })
+
+    // move black kingside rook
+    chess.execute({
+      from: "h8",
+      to: "g8"
+    })
+
+    state = chess.state();
+    expected = {
+      white: {
+        queen: false,
+        king: false,
+      },
+      black: {
+        queen: true,
+        king: false
+      }
+    }
+
+    expect(state.castling).toMatchObject(expected)
+  })
+
+  it("validates moves when executing correctly", () => {
+    let chess = new Chess();
+    // This is an invalid move, bishop is blocked by the pawns
+    // It should be allowed by the engine because it only validates that the piece exists and that is the right color to move.
+    let result = chess.execute({
+      from: "f1",
+      to: "c4"
+    });
+
+    expect(result).not.toBeNull();
+
+    chess = new Chess();
+    result = chess.execute({
+      from: "f1",
+      to: "c4"
+    }, { validate: true })
+    
+    expect(result).toBeNull()
   })
 });

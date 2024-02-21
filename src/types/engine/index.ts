@@ -26,7 +26,8 @@ export type HalfMove = {
 }
 
 export type FullMove = {
-  [K in Color]?: HalfMove
+  white: HalfMove,
+  black?: HalfMove
 }
 
 export type CastleType = "queen" | "king";
@@ -50,4 +51,8 @@ export type GameState = {
 
 export type GameBoardExecuteOptions = {
   silent?: boolean
+}
+
+export type ChessExecuteOptions = GameBoardExecuteOptions & {
+  validate?: boolean
 }
