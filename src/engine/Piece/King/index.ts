@@ -16,11 +16,72 @@ class King extends Piece {
       ...this.orthogonalMoves(board, 1)
     ]
 
+    // TODO add castling moves
+    const initialRank = this.color === "white" ? 1 : 8;
+    if (this.position.algebraic === `e${initialRank}`) {
+      if (state.castling[this.color].king) { // has kingside ability
+        let canCastle = true;
+        for (let i = 1; i <= 3; i++) {
+          const pos = this.position.copy().addFile(i);
+          const piece = board.atID(pos);
+          if (i === 3) {
+            // check if rook is there
+            if (!piece || piece.type !== "rook") {
+              canCastle = false;
+              break;
+            }
+          } else {
+            // check if empty
+            if (piece) {
+              canCastle = false;
+              break;
+            }
+          }
+        }
+        if (canCastle) {
+          moves.push({
+            color: this.color,
+            from: this.position.algebraic,
+            to: `g${initialRank}`,
+            piece: this.type,
+            castle: "king"
+          })
+        }
+      } else if (state.castling[this.color].queen) { // has queenside ability
+        let canCastle = true;
+        for (let i = 1; i <= 4; i++) {
+          const pos = this.position.copy().addFile(-i);
+          const piece = board.atID(pos);
+          if (i === 4) {
+            // check if rook is there
+            if (!piece || piece.type !== "rook") {
+              canCastle = false;
+              break;
+            }
+          } else {
+            // check if empty
+            if (piece) {
+              canCastle = false;
+              break;
+            }
+          }
+        }
+        if (canCastle) {
+          moves.push({
+            color: this.color,
+            from: this.position.algebraic,
+            to: `c${initialRank}`,
+            piece: this.type,
+            castle: "queen"
+          })
+        }
+      }
+    }
+    
+
     if (state.inCheck) {
-      // TODO filter the moves to only those moves that remove from check
       const fen = board.fen();
       return moves.filter(move => {
-        // console.log(fen);
         const b = new GameBoard(fen);
         const result = b.execute(move, state, { silent: true });
         if (result) return true;
