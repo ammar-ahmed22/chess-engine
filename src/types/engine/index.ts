@@ -22,7 +22,7 @@ export type HalfMove = {
   take?: PieceType,
   castle?: CastleType,
   enPassant?: boolean,
-  check?: boolean
+  check?: Color
 }
 
 export type FullMove = {
@@ -46,4 +46,8 @@ export type GameState = {
   enPassant?: SquareID,
   castling: CastlingAbility,
   inCheck?: boolean
+}
+
+export type GameBoardExecuteOptions = {
+  silent?: boolean
 }

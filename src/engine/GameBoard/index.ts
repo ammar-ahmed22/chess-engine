@@ -1,8 +1,9 @@
 import Piece from "../Piece";
 import { validateFEN } from "../utils/validation";
-import { Color, GameState, MatrixType, MoveType, PieceType, HalfMove } from "@engine-types";
+import { Color, GameState, MatrixType, MoveType, PieceType, HalfMove, GameBoardExecuteOptions } from "@engine-types";
 import SquareID from "../SquareID";
 import { fen2matrix, matrix2fen } from "../utils/transform";
+import { nullMessage } from "../utils/error";
 
 class GameBoard {
   private matrix: MatrixType[][] = [];
@@ -35,13 +36,15 @@ class GameBoard {
    * @param state GameState
    * @returns 
    */
-  private checkForCheck(state: GameState): boolean {
+  private checkForCheck(state: GameState): Color | undefined {
+    // if (state.inCheck) return undefined;
+    let unChecked: GameState = { ...state, inCheck: false };
     const board = new GameBoard(this.fen());
-    const allValidMoves = board.allValidMoves(state, true);
-    let check = false;
+    const allValidMoves = board.allValidMoves(unChecked, true, true);
+    let check: Color | undefined = undefined;
     for (let move of allValidMoves) {
       if (move.take && move.take === "king") {
-        check = true;
+        check = move.color === "white" ? "black" : "white";
         break;
       }
     }
@@ -61,7 +64,6 @@ class GameBoard {
    * @param id The indices of the matrix [i, j]
    */
   public atID(id: [number, number]): MatrixType;
-
   public atID(id: SquareID | [number, number]): MatrixType {
     const [row, col] = Array.isArray(id) ? id : id.matrixID;
     return this.matrix[row][col];
@@ -94,31 +96,28 @@ class GameBoard {
    * @param move A move object
    * @mutating
    */
-  public execute(move: MoveType, state: GameState): HalfMove | null {
+  public execute(move: MoveType, state: GameState, opts?: GameBoardExecuteOptions): HalfMove | null {
     
     let from: SquareID = SquareID.fromSquareIDType(move.from);
     let to: SquareID = SquareID.fromSquareIDType(move.to);
 
     const fromPiece = this.atID(from);
     if (!fromPiece) {
-      console.warn("Could not find piece to move!")
-      return null;
+      return nullMessage("Could not find piece to move!", opts?.silent);
     }
 
     if (move.castle) {
       // handle castling
       // castling, move.to -> spot the king moves to
       if (fromPiece.type !== "king") {
-        console.warn("Cannot castle a non-king piece!")
-        return null;
+        return nullMessage("Cannot castle a non-king piece!", opts?.silent);
       }
       const initialRank = fromPiece.color === "white" ? 1 : 8;
       const rookFile = move.castle === "king" ? 8 : 1;
       const rookFromPos = new SquareID(rookFile, initialRank);
       const rook = this.atID(new SquareID(rookFile, initialRank));
       if (!rook || rook.type !== "rook") {
-        console.warn(`Cannot castle ${move.castle}side, rook is not on the \`${move.castle === "king" ? "h" : "a"}\` file!`)
-        return null;
+        return nullMessage(`Cannot castle ${move.castle}side, rook is not on the \`${move.castle === "king" ? "h" : "a"}\` file!`, opts?.silent);
       }
       let rookToPos = to.copy().addFile(move.castle === "king" ? -1 : 1);
       this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
@@ -140,14 +139,19 @@ class GameBoard {
 
     const toPiece = this.atID(to);
     if (toPiece && fromPiece.color === toPiece.color) {
-      console.warn("Cannot take piece of the same color")
-      return null;
+      return nullMessage("Cannot take piece of the same color", opts?.silent);
     }
 
     this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
     this.matrix[to.matrixID[0]][to.matrixID[1]] = fromPiece;
 
     const check = this.checkForCheck(state);
+
+    if (check === state.colorToMove) {
+      this.matrix[from.matrixID[0]][from.matrixID[1]] = fromPiece;
+      this.matrix[to.matrixID[0]][to.matrixID[1]] = toPiece;
+      return nullMessage("Cannot make move that puts your own king in check!", opts?.silent);
+    }
 
     return {
       from: move.from,
@@ -160,11 +164,17 @@ class GameBoard {
     };
   }
 
-  public allValidMoves(state: GameState, includeKings: boolean = false): HalfMove[] {
+  public allValidMoves(state: GameState, includeKings: boolean = false, includeOpponent: boolean = false): HalfMove[] {
     const moves: HalfMove[] = [];
     this.iter((piece) => {
-      if (piece && piece.color === state.colorToMove) {
-        moves.push(...piece.validMoves(this, state))
+      if (includeOpponent) {
+        if (piece) {
+          moves.push(...piece.validMoves(this, state))
+        }
+      } else {
+        if (piece && piece.color === state.colorToMove) {
+          moves.push(...piece.validMoves(this, state))
+        }
       }
     })
     return moves.filter(move => {

@@ -1,4 +1,10 @@
-import map from "../Piece/map";
+// import { Pawn, Rook, Knight, Bishop, King, Queen } from "../Piece/map";
+import Pawn from "../Piece/Pawn";
+import Rook from "../Piece/Rook";
+import King from "../Piece/King";
+import Knight from "../Piece/Knight";
+import Bishop from "../Piece/Bishop";
+import Queen from "../Piece/Queen";
 import { ValueError } from "./error";
 import SquareID from "../SquareID";
 import Piece from "../Piece";
@@ -10,17 +16,17 @@ export const str2piece = (char: string, pos: SquareID): Piece => {
   const color: Color = char.toLowerCase() !== char ? "white" : "black";
   switch (char.toLowerCase()) {
     case "p":
-      return new map.Pawn(color, pos)
+      return new Pawn(color, pos)
     case "r":
-      return new map.Rook(color, pos)
+      return new Rook(color, pos)
     case "n":
-      return new map.Knight(color, pos)
+      return new Knight(color, pos)
     case "b":
-      return new map.Bishop(color, pos)
+      return new Bishop(color, pos)
     case "k":
-      return new map.King(color, pos)
+      return new King(color, pos)
     case "q":
-      return new map.Queen(color, pos)
+      return new Queen(color, pos)
     default:
       throw new ValueError(`Cannot parse character: \`${char}\``, char)
   }

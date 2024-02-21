@@ -117,10 +117,48 @@ describe("Chess", () => {
     });
     expect(result).not.toBeNull();
     if (result) {
-      expect(result.check).toBe(true);
+      expect(result.check).toBe("black");
       expect(chess.state().inCheck).toBe(true);
     }
+
+    moves = chess.validMoves();
+    // only 5 valid moves that remove check
+    expect(moves).toHaveLength(5);
+  })
+
+  it("does not allow you to put your own king in check", () => {
+    const chess = new Chess();
+    let moves = chess.validMoves();
+    expect(moves).toHaveLength(20);
+    let result = chess.execute({
+      from: "e2",
+      to: "e4"
+    });
+    expect(result).not.toBeNull();
+    // moves = chess.validMoves();
+    // expect(moves).toHaveLength(20);
+
+    result = chess.execute({
+      from: "f7",
+      to: "f5"
+    });
+    expect(result).not.toBeNull();
+    // moves = chess.validMoves();
     
+    // expect(moves).toHaveLength(31);
+
+    result = chess.execute({
+      from: "f1",
+      to: "b5"
+    });
+    expect(result).not.toBeNull();
+    
+    result = chess.execute({
+      from: "d7",
+      to: "d5"
+    })
+
+    expect(result).toBeNull();
   })
 
   it("executes kingside castling correctly", () => {
