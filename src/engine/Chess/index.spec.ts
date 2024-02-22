@@ -1,4 +1,5 @@
 import Chess from ".";
+import { MoveType } from "../../types";
 
 describe("Chess", () => {
   it("executes moves correctly", () => {
@@ -270,5 +271,53 @@ describe("Chess", () => {
     }, { validate: true })
     
     expect(result).toBeNull()
+  })
+
+  it("finds checkmate correctly", () => {
+    // Play scholars mate
+    let chess = new Chess();
+    let moves: MoveType[] = [
+      // white kings pawn
+      {
+        from: "e2",
+        to: "e4"
+      },
+      // black kings pawn
+      {
+        from: "e7",
+        to: "e5"
+      },
+      // white bishop to c4
+      {
+        from: "f1",
+        to: "c4"
+      },
+      // black knight to c6
+      {
+        from: "b8",
+        to: "c6"
+      },
+      // white queen to h5
+      {
+        from: "d1",
+        to: "h5"
+      },
+      // black knight to f6
+      {
+        from: "g8",
+        to: "f6"
+      },
+      // white queen to f7, checkmate
+      {
+        from: "h5",
+        to: "f7"
+      }
+    ]
+    for (let move of moves) {
+      let result = chess.execute(move);
+      expect(result).not.toBeNull();
+    }
+    expect(chess.state().inCheck).toBe(true);
+    expect(chess.checkmate()).toBe(true);
   })
 });

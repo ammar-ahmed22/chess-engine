@@ -14,12 +14,44 @@ class Pawn extends Piece {
     const moves: HalfMove[] = [];
     let firstMove = false;
     let dir = this.color === "white" ? 1 : -1;
+    const secondLastRank = dir === -1 ? 2 : 7;
     if (this.color === "white" && this.position.rank === 2) firstMove = true;
     if (this.color === "black" && this.position.rank === 7) firstMove = true;
 
     // TODO: Piece promotion!!
-    if ((dir === -1 && this.position.rank === 2) || (dir === 1 && this.position.rank === 7) || (dir === -1 && this.position.rank === 1) || (dir === 1 && this.position.rank === 8)) {
-      return [];
+    if (this.position.rank === secondLastRank) {
+      const potentials = [
+        this.position.copy().addRank(dir), // one rank above
+        this.position.file !== 1 ? this.position.copy().addRank(dir).addFile(-1) : undefined,
+        this.position.file !== 8 ? this.position.copy().addRank(dir).addFile(1) : undefined
+      ].filter(p => p) as SquareID[];
+      for (let potential of potentials) {
+        const promotions = ["queen", "knight", "rook", "bishop"];
+        for (let promotion of promotions) {
+          if (this.position.file === potential.file) { // regular move
+            moves.push({
+              color: this.color,
+              from: this.position.algebraic,
+              to: potential.algebraic,
+              piece: this.type,
+              promotion
+            })
+          } else { // take
+            const piece = board.atID(potential);
+            if (piece && piece.color !== this.color) {
+              moves.push({
+                color: this.color,
+                from: this.position.algebraic,
+                to: potential.algebraic,
+                piece: this.type,
+                take: piece.type,
+                promotion
+              })
+            }
+          }
+        }
+      }
+      return moves;
     }
 
     // 1 rank and 2 ranks above
@@ -59,10 +91,8 @@ class Pawn extends Piece {
     }
 
     if (state.inCheck) {
-      // TODO filter the moves to only those moves that remove from check
       const fen = board.fen();
       return moves.filter(move => {
-        // console.log(fen);
         const b = new GameBoard(fen);
         const result = b.execute(move, state, { silent: true });
         if (result) return true;

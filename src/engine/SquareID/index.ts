@@ -16,7 +16,9 @@ class SquareID {
         this.file = args[0];
       }
     } else {
-      // TODO validate algebraic
+      if (args[0].length !== 2) {
+        throw TypeError("Algebraic id must be only 2 characters!");
+      }
       let file = args[0][0];
       let rank = args[0][1];
       this.file = SquareID.str2file(file);
@@ -188,8 +190,6 @@ class SquareID {
   static isValid(file: string, rank: number): boolean;
   static isValid(algebraic: string): boolean;
   static isValid(
-    // file: number | string,
-    // rank: number,
     ...args: (number | string)[]
   ): boolean {
     let file: number | string;
@@ -198,10 +198,13 @@ class SquareID {
       file = args[0];
       rank = args[1] as number;
     } else {
-      // TODO validate algebraic notation
       let alg = args[0] as string;
+      if (typeof alg !== "string" || alg.length !== 2) {
+        return false;
+      }
       file = alg[0];
       rank = parseInt(alg[0]);
+      if (isNaN(rank)) return false;
     }
 
     if (typeof file === "string") {

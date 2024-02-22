@@ -15,7 +15,6 @@ class Chess {
    * @param fen FEN string (e.g. whatever the fuck)
    */
   public setPosition(fen: string): void {
-    // TODO validate the fen before adding it
     validateFEN(fen);
     this.currentFen = fen;
   }
@@ -26,7 +25,6 @@ class Chess {
    */
   public setMoves(moves: FullMove[]): void {
     // TODO validate the moves
-    // moves should alternate black and white
     this.moves = moves;
   }
 
@@ -103,10 +101,11 @@ class Chess {
         }
       }
     }
+
     return {
       colorToMove: this.colorToMove(),
       castling,
-      inCheck
+      inCheck,
     }
   }
 
@@ -115,6 +114,10 @@ class Chess {
    */
   public history() {
     return this.moves;
+  }
+
+  public checkmate(): boolean {
+    return this.state().inCheck && this.validMoves().length === 0
   }
 
   // =============== Methods ===============

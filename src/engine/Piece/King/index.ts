@@ -17,6 +17,7 @@ class King extends Piece {
     ]
 
     const initialRank = this.color === "white" ? 1 : 8;
+    const fen = board.fen();
     const kingUnmoved = this.position.algebraic === `e${initialRank}`;
     if (state.castling[this.color].king && kingUnmoved) { // has kingside ability
       let canCastle = true;
@@ -31,7 +32,10 @@ class King extends Piece {
           }
         } else {
           // check if empty
-          if (piece) {
+          const b = new GameBoard(fen);
+          // Result will be null if move causes king to be in check
+          const result = b.execute({ from: this.position.algebraic, to: pos.algebraic }, state, { silent: true });
+          if (piece || !result) {
             canCastle = false;
             break;
           }
@@ -60,7 +64,10 @@ class King extends Piece {
           }
         } else {
           // check if empty
-          if (piece) {
+          const b = new GameBoard(fen);
+          // Result will be null if move causes king to be in check
+          const result = b.execute({ from: this.position.algebraic, to: pos.algebraic }, state, { silent: true });
+          if (piece || !result) {
             canCastle = false;
             break;
           }
@@ -75,9 +82,6 @@ class King extends Piece {
           castle: "queen"
         })
       }
-    }
-    if (this.position.algebraic === `e${initialRank}`) {
-      
     }
     
 
