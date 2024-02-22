@@ -165,6 +165,13 @@ class GameBoard {
     };
   }
 
+  /**
+   * Gets all the valid moves 
+   * @param state The state of the game
+   * @param includeKings If true, will include ability to take kings
+   * @param includeOpponent If true, will include opponent moves
+   * @returns 
+   */
   public allValidMoves(state: GameState, includeKings: boolean = false, includeOpponent: boolean = false): HalfMove[] {
     const moves: HalfMove[] = [];
     this.iter((piece) => {

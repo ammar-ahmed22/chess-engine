@@ -10,7 +10,11 @@ import SquareID from "../SquareID";
 import Piece from "../Piece";
 import { Color, MatrixType } from "@engine-types";
 
-
+/**
+ * Converts a FEN character to a piece
+ * @param char The FEN character to convert (`Q, R, N, K, B, P` for white, `q, r, n, k, b, p` for black)
+ * @param pos The position of the piece
+ */
 export function str2piece(char: string, pos: SquareID): Piece {
   if (char.length !== 1) throw new ValueError("Only single characters allowed!", char);
   const color: Color = char.toLowerCase() !== char ? "white" : "black";
@@ -32,6 +36,11 @@ export function str2piece(char: string, pos: SquareID): Piece {
   }
 }
 
+/**
+ * Converts a FEN string to a board matrix
+ * @param fen The FEN string
+ * @returns 
+ */
 export const fen2matrix = (fen: string): MatrixType[][] => {
   const result: MatrixType[][] = [];
   const board = fen.split("/");
@@ -60,6 +69,11 @@ export const fen2matrix = (fen: string): MatrixType[][] => {
   return result;
 }
 
+/**
+ * Converts a board matrix to FEN string
+ * @param matrix The board matrix
+ * @returns 
+ */
 export const matrix2fen = (matrix: MatrixType[][]): string => {
   let ranks: string[] = [];
   for (let i = 0; i < 8; i++) {
