@@ -11,7 +11,7 @@ import Piece from "../Piece";
 import { Color, MatrixType } from "@engine-types";
 
 
-export const str2piece = (char: string, pos: SquareID): Piece => {
+export function str2piece(char: string, pos: SquareID): Piece {
   if (char.length !== 1) throw new ValueError("Only single characters allowed!", char);
   const color: Color = char.toLowerCase() !== char ? "white" : "black";
   switch (char.toLowerCase()) {

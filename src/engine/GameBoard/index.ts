@@ -2,7 +2,7 @@ import Piece from "../Piece";
 import { validateFEN } from "../utils/validation";
 import { Color, GameState, MatrixType, MoveType, PieceType, HalfMove, GameBoardExecuteOptions } from "@engine-types";
 import SquareID from "../SquareID";
-import { fen2matrix, matrix2fen } from "../utils/transform";
+import { fen2matrix, matrix2fen, str2piece } from "../utils/transform";
 import { nullMessage } from "../utils/error";
 
 class GameBoard {
@@ -143,7 +143,7 @@ class GameBoard {
     }
 
     this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
-    this.matrix[to.matrixID[0]][to.matrixID[1]] = fromPiece;
+    this.matrix[to.matrixID[0]][to.matrixID[1]] = move.promotion ? str2piece(move.promotion, from) : fromPiece;
 
     const check = this.checkForCheck(state);
 
@@ -160,7 +160,8 @@ class GameBoard {
       piece: fromPiece.type,
       take: toPiece?.type,
       castle: move.castle,
-      check
+      check,
+      promotion: move.promotion
     };
   }
 

@@ -1,5 +1,5 @@
 import Chess from ".";
-import { MoveType } from "../../types";
+import { HalfMove, MoveType } from "../../types";
 
 describe("Chess", () => {
   it("executes moves correctly", () => {
@@ -319,5 +319,22 @@ describe("Chess", () => {
     }
     expect(chess.state().inCheck).toBe(true);
     expect(chess.checkmate()).toBe(true);
+  })
+
+  it("executes piece promotion correctly", () => {
+    const chess = new Chess();
+    // pawn on g7 can promote
+    chess.setPosition("rnbqkb1r/ppppn1P1/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR");
+    const moves = chess.validMoves();
+    let promotionMove;
+    for (let move of moves) {
+      if (move.from === "g7" && move.to === "g8" && move.promotion === "Q") {
+        promotionMove = move;
+      }
+    }
+    expect(promotionMove).toBeDefined();
+    const result = chess.execute(promotionMove as HalfMove);
+    expect(result).not.toBeNull();
+    expect(chess.fen()).toBe("rnbqkbQr/ppppn3/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR");
   })
 });

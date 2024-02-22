@@ -26,7 +26,10 @@ class Pawn extends Piece {
         this.position.file !== 8 ? this.position.copy().addRank(dir).addFile(1) : undefined
       ].filter(p => p) as SquareID[];
       for (let potential of potentials) {
-        const promotions = ["queen", "knight", "rook", "bishop"];
+        const promotions = ["Q", "N", "R", "B"].map(c => {
+          if (this.color === "black") return c.toLowerCase();
+          return c;
+        })
         for (let promotion of promotions) {
           if (this.position.file === potential.file) { // regular move
             moves.push({
