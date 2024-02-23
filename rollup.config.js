@@ -1,5 +1,5 @@
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import resolve from "@rollup/plugin-node-resolve";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "rollup-plugin-typescript2";
 import generatePackageJson from "rollup-plugin-generate-package-json";
@@ -7,17 +7,17 @@ import { terser } from "rollup-plugin-terser";
 const packageJson = require("./package.json");
 
 const plugins = [
-  peerDepsExternal(),
-  resolve(),
+  // peerDepsExternal(),
+  nodeResolve({ browser: true }),
   commonjs(),
   typescript({
     tsconfig: "./tsconfig.json",
     useTsconfigDeclarationDir: true,
   }),
-  terser(),
+  // terser(), -> commenting this out so I can read the build code
 ];
 
-const folders = ["components", "engine"];
+const folders = ["Chess", "GameBoard", "Piece", "SquareID", "utils"];
 const folderBuilds = folders.map((folder) => {
   return {
     input: `src/${folder}/index.ts`,
@@ -39,7 +39,7 @@ const folderBuilds = folders.map((folder) => {
         },
       }),
     ],
-    external: ["react", "react-dom"],
+    // external: ["react", "react-dom", "styled-components"],
   };
 });
 
@@ -61,7 +61,7 @@ export default [
       },
     ],
     plugins,
-    external: ["react", "react-dom"],
+    // external: ["react", "react-dom", "styled-components"],
   },
   ...folderBuilds,
 ];

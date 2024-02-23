@@ -8,7 +8,7 @@
   "files": [
     "dist"
   ],
-  "repository": "https://github.com/ammar-ahmed22/react-chess-engine.git",
+  "repository": "https://github.com/ammar-ahmed22/chess-engine.git",
   "author": "Ammar Ahmed <ammar.ahmed1@uwaterloo.ca>",
   "license": "MIT",
   "devDependencies": {
