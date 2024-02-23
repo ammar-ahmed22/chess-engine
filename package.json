@@ -1,14 +1,14 @@
 {
-  "name": "react-chess",
-  "version": "0.1.0",
-  "description": "Chess engine and Chess UI for react.",
+  "name": "react-chess-engine",
+  "version": "0.1.1",
+  "description": "Chess engine and Chess UI for react. Built as a learning exercise for myself!",
   "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "repository": "https://github.com/ammar-ahmed22/react-chess.git",
+  "repository": "https://github.com/ammar-ahmed22/react-chess-engine.git",
   "author": "Ammar Ahmed <ammar.ahmed1@uwaterloo.ca>",
   "license": "MIT",
   "devDependencies": {
@@ -64,5 +64,14 @@
     "rollup": "yarn clean && rollup -c --bundleConfigAsCjs",
     "postbuild": "node ./scripts/postBuild.js"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "styled-components": "^6.1.8"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
