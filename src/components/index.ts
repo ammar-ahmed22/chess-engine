@@ -1,3 +1,1 @@
-import ChessBoard from "./ChessBoard";
-
-export { ChessBoard };
+export * from "./ChessBoard";

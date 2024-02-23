@@ -6,9 +6,9 @@ import Knight from "../Piece/Knight";
 import Bishop from "../Piece/Bishop";
 import Queen from "../Piece/Queen";
 import { ValueError } from "./error";
-import SquareID from "../SquareID";
-import Piece from "../Piece";
-import { Color, MatrixType } from "@engine-types";
+import { SquareID } from "../SquareID";
+import { Piece } from "../Piece";
+import type { Color, MatrixType } from "../Chess";
 
 /**
  * Converts a FEN character to a piece

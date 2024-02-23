@@ -1,15 +1,5 @@
-import Chess from "./Chess";
-import GameBoard from "./GameBoard";
-// import Move from "./Move";
-// import map from "./Piece/map";
-import SquareID from "./SquareID";
-import { str2piece, matrix2fen, fen2matrix } from "./utils/transform";
-
-export { 
-  Chess, 
-  GameBoard, 
-  SquareID, 
-  str2piece, 
-  matrix2fen, 
-  fen2matrix 
-};
+export * from "./Chess";
+export * from "./GameBoard";
+export * from "./Piece";
+export * from "./SquareID";
+export * from "./utils";
