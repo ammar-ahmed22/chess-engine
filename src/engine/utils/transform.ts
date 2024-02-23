@@ -16,30 +16,35 @@ import type { Color, MatrixType } from "../Chess";
  * @param pos The position of the piece
  */
 export function str2piece(char: string, pos: SquareID): Piece {
-  if (char.length !== 1) throw new ValueError("Only single characters allowed!", char);
-  const color: Color = char.toLowerCase() !== char ? "white" : "black";
+  if (char.length !== 1)
+    throw new ValueError("Only single characters allowed!", char);
+  const color: Color =
+    char.toLowerCase() !== char ? "white" : "black";
   switch (char.toLowerCase()) {
     case "p":
-      return new Pawn(color, pos)
+      return new Pawn(color, pos);
     case "r":
-      return new Rook(color, pos)
+      return new Rook(color, pos);
     case "n":
-      return new Knight(color, pos)
+      return new Knight(color, pos);
     case "b":
-      return new Bishop(color, pos)
+      return new Bishop(color, pos);
     case "k":
-      return new King(color, pos)
+      return new King(color, pos);
     case "q":
-      return new Queen(color, pos)
+      return new Queen(color, pos);
     default:
-      throw new ValueError(`Cannot parse character: \`${char}\``, char)
+      throw new ValueError(
+        `Cannot parse character: \`${char}\``,
+        char,
+      );
   }
 }
 
 /**
  * Converts a FEN string to a board matrix
  * @param fen The FEN string
- * @returns 
+ * @returns
  */
 export const fen2matrix = (fen: string): MatrixType[][] => {
   const result: MatrixType[][] = [];
@@ -67,12 +72,12 @@ export const fen2matrix = (fen: string): MatrixType[][] => {
     result.push(temp);
   }
   return result;
-}
+};
 
 /**
  * Converts a board matrix to FEN string
  * @param matrix The board matrix
- * @returns 
+ * @returns
  */
 export const matrix2fen = (matrix: MatrixType[][]): string => {
   let ranks: string[] = [];
@@ -86,7 +91,7 @@ export const matrix2fen = (matrix: MatrixType[][]): string => {
           temp += empty;
         }
         temp += piece.fenChar;
-        empty = 0
+        empty = 0;
       } else {
         empty++;
         continue;
@@ -99,4 +104,4 @@ export const matrix2fen = (matrix: MatrixType[][]): string => {
   }
 
   return ranks.join("/");
-}
+};

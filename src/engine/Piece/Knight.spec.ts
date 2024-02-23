@@ -19,5 +19,5 @@ describe("Knight", () => {
     }
     expect(takes).toBe(2);
     expect(moves).toHaveLength(8);
-  })
-})
+  });
+});

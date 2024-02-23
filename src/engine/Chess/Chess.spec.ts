@@ -10,20 +10,24 @@ describe("Chess", () => {
     });
     let history = chess.history();
     expect(m1).not.toBeNull();
-    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR")
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR",
+    );
     expect(chess.colorToMove()).toBe("black");
     expect(history).toHaveLength(1);
     expect(history[0].white).toBeDefined();
     expect(history[0].black).not.toBeDefined();
-    
+
     const m2 = chess.execute({
       from: "e7",
-      to: "e5"
-    })
-    
+      to: "e5",
+    });
+
     history = chess.history();
     expect(m2).toBeDefined();
-    expect(chess.fen()).toBe("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR")
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR",
+    );
     expect(chess.colorToMove()).toBe("white");
     expect(history).toHaveLength(1);
     expect(history[0].white).toBeDefined();
@@ -31,12 +35,14 @@ describe("Chess", () => {
 
     const m3 = chess.execute({
       from: "g1",
-      to: "f3"
-    })
+      to: "f3",
+    });
 
     history = chess.history();
     expect(m3).toBeDefined();
-    expect(chess.fen()).toBe("rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R")
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R",
+    );
     expect(chess.colorToMove()).toBe("black");
     expect(history).toHaveLength(2);
     expect(history[1].white).toBeDefined();
@@ -47,27 +53,30 @@ describe("Chess", () => {
     const chess = new Chess();
     const result = chess.execute({
       from: "e4",
-      to: "e2"
-    })
-  
+      to: "e2",
+    });
+
     expect(result).toBeNull();
-    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    );
     expect(chess.history()).toHaveLength(0);
-  })
+  });
 
   it("returns null when executing a move on the wrong turn", () => {
     // moving black piece on white's turn
     const chess = new Chess();
     const result = chess.execute({
       from: "e7",
-      to: "e5"
-    })
+      to: "e5",
+    });
 
     expect(result).toBeNull();
-    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    );
     expect(chess.history()).toHaveLength(0);
-
-  })
+  });
 
   it("creates all valid moves correctly", () => {
     const chess = new Chess();
@@ -75,7 +84,7 @@ describe("Chess", () => {
     expect(moves).toHaveLength(20);
     let result = chess.execute({
       from: "e2",
-      to: "e4"
+      to: "e4",
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
@@ -83,13 +92,13 @@ describe("Chess", () => {
 
     result = chess.execute({
       from: "d7",
-      to: "d5"
+      to: "d5",
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
-    
+
     expect(moves).toHaveLength(31);
-  })
+  });
 
   it("calculates checks correctly", () => {
     const chess = new Chess();
@@ -97,7 +106,7 @@ describe("Chess", () => {
     expect(moves).toHaveLength(20);
     let result = chess.execute({
       from: "e2",
-      to: "e4"
+      to: "e4",
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
@@ -105,16 +114,16 @@ describe("Chess", () => {
 
     result = chess.execute({
       from: "d7",
-      to: "d5"
+      to: "d5",
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
-    
+
     expect(moves).toHaveLength(31);
 
     result = chess.execute({
       from: "f1",
-      to: "b5"
+      to: "b5",
     });
     expect(result).not.toBeNull();
     if (result) {
@@ -125,7 +134,7 @@ describe("Chess", () => {
     moves = chess.validMoves();
     // only 5 valid moves that remove check
     expect(moves).toHaveLength(5);
-  })
+  });
 
   it("does not allow you to put your own king in check", () => {
     const chess = new Chess();
@@ -133,7 +142,7 @@ describe("Chess", () => {
     expect(moves).toHaveLength(20);
     let result = chess.execute({
       from: "e2",
-      to: "e4"
+      to: "e4",
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
@@ -141,7 +150,7 @@ describe("Chess", () => {
 
     result = chess.execute({
       from: "f7",
-      to: "f5"
+      to: "f5",
     });
     expect(result).not.toBeNull();
     moves = chess.validMoves();
@@ -149,63 +158,71 @@ describe("Chess", () => {
 
     result = chess.execute({
       from: "f1",
-      to: "b5"
+      to: "b5",
     });
     expect(result).not.toBeNull();
-    
+
     result = chess.execute({
       from: "d7",
-      to: "d5"
-    })
+      to: "d5",
+    });
 
     expect(result).toBeNull();
-  })
+  });
 
   it("executes kingside castling correctly", () => {
     const chess = new Chess();
     // white can castle kingside
-    chess.setPosition("rnbqkbnr/pppppppp/8/8/4PP2/3B1N2/PPPP2PP/RNBQK2R");
+    chess.setPosition(
+      "rnbqkbnr/pppppppp/8/8/4PP2/3B1N2/PPPP2PP/RNBQK2R",
+    );
     const result = chess.execute({
       from: "e1",
       to: "g1",
-      castle: "king"
-    })
-    
+      castle: "king",
+    });
+
     expect(result).not.toBeNull();
-    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/4PP2/3B1N2/PPPP2PP/RNBQ1RK1")
-  })
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppppppp/8/8/4PP2/3B1N2/PPPP2PP/RNBQ1RK1",
+    );
+  });
 
   it("executes queenside castling correctly", () => {
     const chess = new Chess();
     // white can castle queenside
-    chess.setPosition("rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/R3KBNR")
+    chess.setPosition(
+      "rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/R3KBNR",
+    );
     const result = chess.execute({
       from: "e1",
       to: "c1",
-      castle: "queen"
-    })
+      castle: "queen",
+    });
 
     expect(result).not.toBeNull();
-    expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/2KR1BNR")
-  })
+    expect(chess.fen()).toBe(
+      "rnbqkbnr/pppppppp/8/8/5B2/2NP4/PPPQPPPP/2KR1BNR",
+    );
+  });
 
   it("calculates castling ability correctly", () => {
     const chess = new Chess();
     // white kings pawn move
     chess.execute({
       from: "e2",
-      to: "e4"
-    })
+      to: "e4",
+    });
     // black kings pawn move
     chess.execute({
       from: "e7",
-      to: "e5"
-    })
+      to: "e5",
+    });
     // move white king
     chess.execute({
       from: "e1",
-      to: "e2"
-    })
+      to: "e2",
+    });
 
     let state = chess.state();
     let expected = {
@@ -215,28 +232,28 @@ describe("Chess", () => {
       },
       black: {
         queen: true,
-        king: true
-      }
-    }
+        king: true,
+      },
+    };
     expect(state.castling).toMatchObject(expected);
 
     // move black knight (to make space for the king side rook)
     chess.execute({
       from: "g8",
-      to: "f6"
-    })
+      to: "f6",
+    });
 
     // move white king again (need to make white move)
     chess.execute({
       from: "e2",
-      to: "e3"
-    })
+      to: "e3",
+    });
 
     // move black kingside rook
     chess.execute({
       from: "h8",
-      to: "g8"
-    })
+      to: "g8",
+    });
 
     state = chess.state();
     expected = {
@@ -246,12 +263,12 @@ describe("Chess", () => {
       },
       black: {
         queen: true,
-        king: false
-      }
-    }
+        king: false,
+      },
+    };
 
-    expect(state.castling).toMatchObject(expected)
-  })
+    expect(state.castling).toMatchObject(expected);
+  });
 
   it("validates moves when executing correctly", () => {
     let chess = new Chess();
@@ -259,19 +276,22 @@ describe("Chess", () => {
     // It should be allowed by the engine because it only validates that the piece exists and that is the right color to move.
     let result = chess.execute({
       from: "f1",
-      to: "c4"
+      to: "c4",
     });
 
     expect(result).not.toBeNull();
 
     chess = new Chess();
-    result = chess.execute({
-      from: "f1",
-      to: "c4"
-    }, { validate: true })
-    
-    expect(result).toBeNull()
-  })
+    result = chess.execute(
+      {
+        from: "f1",
+        to: "c4",
+      },
+      { validate: true },
+    );
+
+    expect(result).toBeNull();
+  });
 
   it("finds checkmate correctly", () => {
     // Play scholars mate
@@ -280,61 +300,69 @@ describe("Chess", () => {
       // white kings pawn
       {
         from: "e2",
-        to: "e4"
+        to: "e4",
       },
       // black kings pawn
       {
         from: "e7",
-        to: "e5"
+        to: "e5",
       },
       // white bishop to c4
       {
         from: "f1",
-        to: "c4"
+        to: "c4",
       },
       // black knight to c6
       {
         from: "b8",
-        to: "c6"
+        to: "c6",
       },
       // white queen to h5
       {
         from: "d1",
-        to: "h5"
+        to: "h5",
       },
       // black knight to f6
       {
         from: "g8",
-        to: "f6"
+        to: "f6",
       },
       // white queen to f7, checkmate
       {
         from: "h5",
-        to: "f7"
-      }
-    ]
+        to: "f7",
+      },
+    ];
     for (let move of moves) {
       let result = chess.execute(move);
       expect(result).not.toBeNull();
     }
     expect(chess.state().inCheck).toBe(true);
     expect(chess.checkmate()).toBe(true);
-  })
+  });
 
   it("executes piece promotion correctly", () => {
     const chess = new Chess();
     // pawn on g7 can promote
-    chess.setPosition("rnbqkb1r/ppppn1P1/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR");
+    chess.setPosition(
+      "rnbqkb1r/ppppn1P1/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR",
+    );
     const moves = chess.validMoves();
     let promotionMove;
     for (let move of moves) {
-      if (move.from === "g7" && move.to === "g8" && move.promotion === "Q") {
+      if (
+        move.from === "g7" &&
+        move.to === "g8" &&
+        move.promotion === "Q"
+      ) {
         promotionMove = move;
       }
     }
     expect(promotionMove).toBeDefined();
     const result = chess.execute(promotionMove as HalfMove);
     expect(result).not.toBeNull();
-    expect(chess.fen()).toBe("rnbqkbQr/ppppn3/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR");
-  })
+    expect(chess.fen()).toBe(
+      "rnbqkbQr/ppppn3/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR",
+    );
+  });
 });

@@ -15,9 +15,9 @@ describe("Queen", () => {
     const moves = queen.validMoves(board, chess.state());
     let takes = 0;
     for (let move of moves) {
-      if (move.take) takes++
+      if (move.take) takes++;
     }
     expect(takes).toBe(2);
     expect(moves).toHaveLength(11);
-  })
-})
+  });
+});

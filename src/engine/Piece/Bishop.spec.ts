@@ -7,7 +7,7 @@ describe("Bishop", () => {
   it("generates valid moves correctly", () => {
     const chess = new Chess();
     // bishop on c4, can take pawn on f7, 9 valid moves
-    const fen = "rnbqkbnr/pppppppp/8/8/2B1P3/8/PPPP1PPP/RNBQK1NR"
+    const fen = "rnbqkbnr/pppppppp/8/8/2B1P3/8/PPPP1PPP/RNBQK1NR";
     const board = new GameBoard(fen);
     const pos = new SquareID("c4");
     const bishop = board.atID(pos) as Bishop;
@@ -20,5 +20,5 @@ describe("Bishop", () => {
 
     expect(takes).toBe(1);
     expect(moves).toHaveLength(9);
-  })
-})
+  });
+});

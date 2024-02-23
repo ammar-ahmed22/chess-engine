@@ -6,7 +6,7 @@ class Rook extends Piece {
   public type: PieceType = "rook";
 
   public get fenChar(): string {
-    return this.color === "white" ? "R" : "r"
+    return this.color === "white" ? "R" : "r";
   }
 
   public validMoves(board: GameBoard, state: GameState): HalfMove[] {
@@ -14,12 +14,12 @@ class Rook extends Piece {
 
     if (state.inCheck) {
       const fen = board.fen();
-      return moves.filter(move => {
+      return moves.filter((move) => {
         const b = new GameBoard(fen);
         const result = b.execute(move, state, { silent: true });
         if (result) return true;
         return false;
-      })
+      });
     }
 
     return moves;

@@ -1,10 +1,10 @@
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import typescript from 'rollup-plugin-typescript2';
+import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import typescript from "rollup-plugin-typescript2";
 import generatePackageJson from "rollup-plugin-generate-package-json";
-import { terser } from "rollup-plugin-terser"
-const packageJson = require('./package.json');
+import { terser } from "rollup-plugin-terser";
+const packageJson = require("./package.json");
 
 const plugins = [
   peerDepsExternal(),
@@ -18,14 +18,14 @@ const plugins = [
 ];
 
 const folders = ["components", "engine"];
-const folderBuilds = folders.map(folder => {
+const folderBuilds = folders.map((folder) => {
   return {
     input: `src/${folder}/index.ts`,
     output: {
       file: `dist/${folder}/index.js`,
       sourcemap: true,
       exports: "named",
-      format: "esm"
+      format: "esm",
     },
     plugins: [
       ...plugins,
@@ -36,12 +36,12 @@ const folderBuilds = folders.map(folder => {
           main: "../cjs/index.js", // --> points to cjs format entry point of whole library
           module: "./index.js", // --> points to esm format entry point of individual component
           types: "./index.d.ts",
-        }
-      })
+        },
+      }),
     ],
-    external: ["react", "react-dom"]
-  }
-})
+    external: ["react", "react-dom"],
+  };
+});
 
 export default [
   {
@@ -51,17 +51,17 @@ export default [
         file: packageJson.main,
         format: "cjs",
         sourcemap: true,
-        exports: "named"
+        exports: "named",
       },
       {
         file: packageJson.module,
         format: "esm",
         sourcemap: true,
-        exports: "named"
-      }
+        exports: "named",
+      },
     ],
     plugins,
-    external: ["react", "react-dom"]
+    external: ["react", "react-dom"],
   },
-  ...folderBuilds
-]
+  ...folderBuilds,
+];

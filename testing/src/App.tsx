@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import { ChessBoard } from "react-chess/components";
 
 function App() {
   return (
     <div className="App">
-      <ChessBoard size={100} position='nigger' />
+      <ChessBoard size={100} position="nigger" />
     </div>
   );
 }

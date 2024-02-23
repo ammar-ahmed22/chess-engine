@@ -11,9 +11,12 @@ export class ValueError extends Error {
  * Returns null with a warning message
  * @param message Warning message
  * @param silent If true, message will not be logged
- * @returns 
+ * @returns
  */
-export const nullMessage = (message: string, silent?: boolean): null => {
+export const nullMessage = (
+  message: string,
+  silent?: boolean,
+): null => {
   if (!silent) console.warn(message);
   return null;
-}
+};

@@ -189,9 +189,7 @@ class SquareID {
   static isValid(file: number, rank: number): boolean;
   static isValid(file: string, rank: number): boolean;
   static isValid(algebraic: string): boolean;
-  static isValid(
-    ...args: (number | string)[]
-  ): boolean {
+  static isValid(...args: (number | string)[]): boolean {
     let file: number | string;
     let rank: number;
     if (args.length === 2) {

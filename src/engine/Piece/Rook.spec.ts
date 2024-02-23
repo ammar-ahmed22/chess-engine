@@ -19,5 +19,5 @@ describe("Rook", () => {
     }
     expect(takes).toBe(2);
     expect(moves).toHaveLength(11);
-  })
-})
+  });
+});

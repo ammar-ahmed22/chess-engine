@@ -1,4 +1,12 @@
-import type { Color, GameState, MoveType, FullMove, HalfMove, CastlingAbility, ChessExecuteOptions } from ".";
+import type {
+  Color,
+  GameState,
+  MoveType,
+  FullMove,
+  HalfMove,
+  CastlingAbility,
+  ChessExecuteOptions,
+} from ".";
 import { validateFEN } from "../utils/validation";
 import { nullMessage } from "../utils/error";
 import { GameBoard } from "../GameBoard";
@@ -50,12 +58,12 @@ class Chess {
     let castling: CastlingAbility = {
       white: {
         queen: true,
-        king: true
+        king: true,
       },
       black: {
         queen: true,
-        king: true
-      }
+        king: true,
+      },
     };
     let inCheck: boolean = false;
     let lastFull = this.moves.at(-1);
@@ -106,7 +114,7 @@ class Chess {
       colorToMove: this.colorToMove(),
       castling,
       inCheck,
-    }
+    };
   }
 
   /**
@@ -117,7 +125,7 @@ class Chess {
   }
 
   public checkmate(): boolean {
-    return this.state().inCheck && this.validMoves().length === 0
+    return this.state().inCheck && this.validMoves().length === 0;
   }
 
   // =============== Methods ===============
@@ -125,7 +133,10 @@ class Chess {
    * Executes a move and updates the game state
    * @param move Move object
    */
-  public execute(move: MoveType | HalfMove, opts?: ChessExecuteOptions): HalfMove | null {
+  public execute(
+    move: MoveType | HalfMove,
+    opts?: ChessExecuteOptions,
+  ): HalfMove | null {
     if (opts?.validate) {
       // check if the passed move is in the valid moves.
       const mFrom = SquareID.fromSquareIDType(move.from);
@@ -135,32 +146,40 @@ class Chess {
       for (let validMove of validMoves) {
         const vFrom = SquareID.fromSquareIDType(validMove.from);
         const vTo = SquareID.fromSquareIDType(validMove.to);
-        if (vFrom.algebraic === mFrom.algebraic && vTo.algebraic === mTo.algebraic) {
+        if (
+          vFrom.algebraic === mFrom.algebraic &&
+          vTo.algebraic === mTo.algebraic
+        ) {
           isValid = true;
           break;
         }
       }
       if (!isValid) {
-        return nullMessage("Move is not valid!", opts?.silent)
+        return nullMessage("Move is not valid!", opts?.silent);
       }
     }
     const board = new GameBoard(this.currentFen);
-    const halfMove = board.execute(move, this.state(), { silent: opts?.silent });
+    const halfMove = board.execute(move, this.state(), {
+      silent: opts?.silent,
+    });
     if (!halfMove) return null;
     const idx = this.moves.length - 1;
     const colorToMove = this.colorToMove();
     if (colorToMove !== halfMove.color) {
-      return nullMessage(`Cannot move ${halfMove.color} on ${colorToMove}'s turn!`, opts?.silent);
+      return nullMessage(
+        `Cannot move ${halfMove.color} on ${colorToMove}'s turn!`,
+        opts?.silent,
+      );
     }
     if (halfMove.color === "white") {
       this.moves.push({
-        white: halfMove
-      })
+        white: halfMove,
+      });
     } else {
       this.moves[idx].black = halfMove;
     }
     this.currentFen = board.fen();
-    return halfMove
+    return halfMove;
   }
 
   /**

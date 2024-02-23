@@ -1,8 +1,20 @@
 import { Piece } from "../Piece";
 import { validateFEN } from "../utils/validation";
-import type { Color, GameState, MatrixType, MoveType, PieceType, HalfMove, GameBoardExecuteOptions } from "../Chess";
+import type {
+  Color,
+  GameState,
+  MatrixType,
+  MoveType,
+  PieceType,
+  HalfMove,
+  GameBoardExecuteOptions,
+} from "../Chess";
 import { SquareID } from "../SquareID";
-import { fen2matrix, matrix2fen, str2piece } from "../utils/transform";
+import {
+  fen2matrix,
+  matrix2fen,
+  str2piece,
+} from "../utils/transform";
 import { nullMessage } from "../utils/error";
 
 class GameBoard {
@@ -18,10 +30,16 @@ class GameBoard {
   }
 
   /**
-   * Iterates over the matrix 
-   * @param callbackfn 
+   * Iterates over the matrix
+   * @param callbackfn
    */
-  private iter(callbackfn: (piece: MatrixType, id: [number, number], matrix: MatrixType[][]) => void) {
+  private iter(
+    callbackfn: (
+      piece: MatrixType,
+      id: [number, number],
+      matrix: MatrixType[][],
+    ) => void,
+  ) {
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[i].length; j++) {
         callbackfn(this.matrix[i][j], [i, j], this.matrix);
@@ -31,10 +49,10 @@ class GameBoard {
 
   /**
    * Checks if the move executed puts the opponent in check
-   * 
+   *
    * Should be called after the move is executed (i.e. matrix is updated)
    * @param state GameState
-   * @returns 
+   * @returns
    */
   private checkForCheck(state: GameState): Color | undefined {
     // if (state.inCheck) return undefined;
@@ -55,9 +73,9 @@ class GameBoard {
   /**
    * Returns the piece (or undefined) at a given square
    * @param id SquareID
-   * @returns 
+   * @returns
    */
-  public atID(id: SquareID): MatrixType; 
+  public atID(id: SquareID): MatrixType;
 
   /**
    * Returns the piece (or undefined) at a given square
@@ -80,7 +98,7 @@ class GameBoard {
       if (piece && piece.type == type && piece.color === color) {
         result.push(piece);
       }
-    })
+    });
     return result.length !== 0 ? result : undefined;
   }
 
@@ -96,34 +114,50 @@ class GameBoard {
    * @param move A move object
    * @mutating
    */
-  public execute(move: MoveType, state: GameState, opts?: GameBoardExecuteOptions): HalfMove | null {
-    
+  public execute(
+    move: MoveType,
+    state: GameState,
+    opts?: GameBoardExecuteOptions,
+  ): HalfMove | null {
     let from: SquareID = SquareID.fromSquareIDType(move.from);
     let to: SquareID = SquareID.fromSquareIDType(move.to);
 
     const fromPiece = this.atID(from);
     if (!fromPiece) {
-      return nullMessage("Could not find piece to move!", opts?.silent);
+      return nullMessage(
+        "Could not find piece to move!",
+        opts?.silent,
+      );
     }
 
     if (move.castle) {
       // handle castling
       // castling, move.to -> spot the king moves to
       if (fromPiece.type !== "king") {
-        return nullMessage("Cannot castle a non-king piece!", opts?.silent);
+        return nullMessage(
+          "Cannot castle a non-king piece!",
+          opts?.silent,
+        );
       }
       const initialRank = fromPiece.color === "white" ? 1 : 8;
       const rookFile = move.castle === "king" ? 8 : 1;
       const rookFromPos = new SquareID(rookFile, initialRank);
       const rook = this.atID(new SquareID(rookFile, initialRank));
       if (!rook || rook.type !== "rook") {
-        return nullMessage(`Cannot castle ${move.castle}side, rook is not on the \`${move.castle === "king" ? "h" : "a"}\` file!`, opts?.silent);
+        return nullMessage(
+          `Cannot castle ${move.castle}side, rook is not on the \`${move.castle === "king" ? "h" : "a"}\` file!`,
+          opts?.silent,
+        );
       }
-      let rookToPos = to.copy().addFile(move.castle === "king" ? -1 : 1);
+      let rookToPos = to
+        .copy()
+        .addFile(move.castle === "king" ? -1 : 1);
       this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
       this.matrix[to.matrixID[0]][to.matrixID[1]] = fromPiece;
-      this.matrix[rookFromPos.matrixID[0]][rookFromPos.matrixID[1]] = undefined;
-      this.matrix[rookToPos.matrixID[0]][rookToPos.matrixID[1]] = rook;
+      this.matrix[rookFromPos.matrixID[0]][rookFromPos.matrixID[1]] =
+        undefined;
+      this.matrix[rookToPos.matrixID[0]][rookToPos.matrixID[1]] =
+        rook;
 
       const check = this.checkForCheck(state);
 
@@ -133,24 +167,32 @@ class GameBoard {
         color: fromPiece.color,
         piece: fromPiece.type,
         castle: move.castle,
-        check
+        check,
       };
     }
 
     const toPiece = this.atID(to);
     if (toPiece && fromPiece.color === toPiece.color) {
-      return nullMessage("Cannot take piece of the same color", opts?.silent);
+      return nullMessage(
+        "Cannot take piece of the same color",
+        opts?.silent,
+      );
     }
 
     this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
-    this.matrix[to.matrixID[0]][to.matrixID[1]] = move.promotion ? str2piece(move.promotion, from) : fromPiece;
+    this.matrix[to.matrixID[0]][to.matrixID[1]] = move.promotion
+      ? str2piece(move.promotion, from)
+      : fromPiece;
 
     const check = this.checkForCheck(state);
 
     if (check === state.colorToMove) {
       this.matrix[from.matrixID[0]][from.matrixID[1]] = fromPiece;
       this.matrix[to.matrixID[0]][to.matrixID[1]] = toPiece;
-      return nullMessage("Cannot make move that puts your own king in check!", opts?.silent);
+      return nullMessage(
+        "Cannot make move that puts your own king in check!",
+        opts?.silent,
+      );
     }
 
     return {
@@ -161,31 +203,35 @@ class GameBoard {
       take: toPiece?.type,
       castle: move.castle,
       check,
-      promotion: move.promotion
+      promotion: move.promotion,
     };
   }
 
   /**
-   * Gets all the valid moves 
+   * Gets all the valid moves
    * @param state The state of the game
    * @param includeKings If true, will include ability to take kings
    * @param includeOpponent If true, will include opponent moves
-   * @returns 
+   * @returns
    */
-  public allValidMoves(state: GameState, includeKings: boolean = false, includeOpponent: boolean = false): HalfMove[] {
+  public allValidMoves(
+    state: GameState,
+    includeKings: boolean = false,
+    includeOpponent: boolean = false,
+  ): HalfMove[] {
     const moves: HalfMove[] = [];
     this.iter((piece) => {
       if (includeOpponent) {
         if (piece) {
-          moves.push(...piece.validMoves(this, state))
+          moves.push(...piece.validMoves(this, state));
         }
       } else {
         if (piece && piece.color === state.colorToMove) {
-          moves.push(...piece.validMoves(this, state))
+          moves.push(...piece.validMoves(this, state));
         }
       }
-    })
-    return moves.filter(move => {
+    });
+    return moves.filter((move) => {
       if (includeKings) {
         return true;
       } else {
@@ -195,17 +241,13 @@ class GameBoard {
           return true;
         }
       }
-      
     });
   }
-
 
   static createMatrix(fen: string): MatrixType[][] {
     validateFEN(fen);
     return fen2matrix(fen);
   }
-
-
 }
 
 export default GameBoard;

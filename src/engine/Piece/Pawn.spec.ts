@@ -18,12 +18,12 @@ describe("Pawn", () => {
 
     expect(moves).toHaveLength(4);
     expect(takes).toBe(2);
-  })
+  });
 
   it("generates valid move for piece promotion correctly", () => {
     const chess = new Chess();
     // pawn on g7 can promote on square above, and take bishop and knight to promote as well, in total 3 * 4 valid moves
-    const fen = "rnbqkb1r/ppppn1P1/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR"
+    const fen = "rnbqkb1r/ppppn1P1/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR";
     const g7 = new SquareID("g7");
     const board = new GameBoard(fen);
     const pawn = board.atID(g7) as Pawn;
@@ -33,5 +33,5 @@ describe("Pawn", () => {
       expect(move.promotion).toBeDefined();
     }
     expect(moves).toHaveLength(12);
-  })
-})
+  });
+});
