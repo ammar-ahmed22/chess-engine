@@ -124,8 +124,28 @@ class Chess {
     return this.moves;
   }
 
+  /**
+   * Returns true if checkmate
+   */
   public checkmate(): boolean {
     return this.state().inCheck && this.validMoves().length === 0;
+  }
+
+  /**
+   * Clones the Chess object
+   */
+  public clone(): Chess {
+    const chess = new Chess();
+    chess.setPosition(this.fen());
+    chess.setMoves(this.history());
+    return chess;
+  }
+
+  /**
+   * Returns a GameBoard object with the current position
+   */
+  public board(): GameBoard {
+    return new GameBoard(this.currentFen);
   }
 
   // =============== Methods ===============
