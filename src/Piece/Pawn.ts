@@ -20,7 +20,6 @@ class Pawn extends Piece {
     if (this.color === "black" && this.position.rank === 7)
       firstMove = true;
 
-    // TODO: Piece promotion!!
     if (this.position.rank === secondLastRank) {
       const potentials = [
         this.position.copy().addRank(dir), // one rank above
@@ -37,18 +36,20 @@ class Pawn extends Piece {
           return c;
         });
         for (let promotion of promotions) {
+          const piece = board.atID(potential);
           if (this.position.file === potential.file) {
             // regular move
-            moves.push({
-              color: this.color,
-              from: this.position.algebraic,
-              to: potential.algebraic,
-              piece: this.type,
-              promotion,
-            });
+            if (!piece) {
+              moves.push({
+                color: this.color,
+                from: this.position.algebraic,
+                to: potential.algebraic,
+                piece: this.type,
+                promotion,
+              });
+            }
           } else {
             // take
-            const piece = board.atID(potential);
             if (piece && piece.color !== this.color) {
               moves.push({
                 color: this.color,

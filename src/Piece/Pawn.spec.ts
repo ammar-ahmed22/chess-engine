@@ -34,4 +34,18 @@ describe("Pawn", () => {
     }
     expect(moves).toHaveLength(12);
   });
+
+  it("does not allow for taking the king", () => {
+    const chess = new Chess();
+    // white pawn on e7 in front of king.
+    const fen = "rnbqkbnr/ppppPppp/8/8/8/8/PPPPP1PP/RNBQKBNR";
+    const e7 = new SquareID("e7");
+    const board = new GameBoard(fen);
+    const pawn = board.atID(e7) as Pawn;
+    expect(pawn.type).toBe("pawn");
+    const moves = pawn.validMoves(board, chess.state());
+    // promotion moves come as 4 moves (2 * 4 = 8)
+    expect(moves).toHaveLength(8);
+
+  })
 });
