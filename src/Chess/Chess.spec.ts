@@ -353,7 +353,7 @@ describe("Chess", () => {
       if (
         move.from === "g7" &&
         move.to === "g8" &&
-        move.promotion === "Q"
+        move.promotion === "queen"
       ) {
         promotionMove = move;
       }
