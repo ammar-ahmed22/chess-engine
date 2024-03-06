@@ -181,7 +181,7 @@ class GameBoard {
 
     this.matrix[from.matrixID[0]][from.matrixID[1]] = undefined;
     this.matrix[to.matrixID[0]][to.matrixID[1]] = move.promotion
-      ? str2piece(move.promotion, from)
+      ? str2piece(move.promotion, from, fromPiece.color)
       : fromPiece;
 
     const check = this.checkForCheck(state);

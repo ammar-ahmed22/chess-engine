@@ -31,10 +31,7 @@ class Pawn extends Piece {
           : undefined,
       ].filter((p) => p) as SquareID[];
       for (let potential of potentials) {
-        const promotions = ["Q", "N", "R", "B"].map((c) => {
-          if (this.color === "black") return c.toLowerCase();
-          return c;
-        });
+        const promotions: PieceType[] = ["queen", "knight", "rook", "bishop"];
         for (let promotion of promotions) {
           const piece = board.atID(potential);
           if (this.position.file === potential.file) {
