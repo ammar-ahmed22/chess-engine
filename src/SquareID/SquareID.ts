@@ -1,5 +1,5 @@
 import { ValueError } from "../utils/error";
-import type { SquareIDType } from "../Chess";
+import type { SquareIDType, Color } from "../Chess";
 
 class SquareID {
   public rank: number;
@@ -48,12 +48,38 @@ class SquareID {
     return [row, col];
   }
 
+  
+  /**
+   * Gets the file as a string
+   *
+   * @readonly
+   * @type {string}
+   */
   get fileStr() {
     return SquareID.file2str(this.file);
   }
 
+  
+  /**
+   * Gets the square id in algebraic notation
+   *
+   * @readonly
+   * @type {string}
+   */
   get algebraic() {
     return this.fileStr + this.rank.toString();
+  }
+
+  
+  /**
+   * Gets the color of the square
+   *
+   * @readonly
+   * @type {Color}
+   */
+  get color(): Color {
+    const sum = this.file + this.rank;
+    return (sum % 2 === 0) ? "white" : "black"
   }
 
   /**

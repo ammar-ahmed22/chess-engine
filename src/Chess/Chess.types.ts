@@ -31,9 +31,20 @@ export type HalfMove = {
 };
 
 export type FullMove = {
-  white: HalfMove;
-  black?: HalfMove;
+  state: {
+    white: FullMoveState,
+    black?: FullMoveState
+  }
+  moves: {
+    white: HalfMove;
+    black?: HalfMove;
+  }
 };
+
+export type FullMoveState = {
+  fen: string,
+  state: GameState
+}
 
 export type CastleType = "queen" | "king";
 
@@ -67,3 +78,5 @@ export type GameBoardExecuteOptions = {
 export type ChessExecuteOptions = GameBoardExecuteOptions & {
   validate?: boolean;
 };
+
+export type GameStatus = "in-progress" | "checkmate" | "stalemate" | "insufficient" | "check" | "50move" | "repetition"

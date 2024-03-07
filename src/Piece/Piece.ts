@@ -4,7 +4,7 @@ import { GameBoard } from "../GameBoard";
 
 abstract class Piece {
   public color: Color;
-  protected position: SquareID;
+  public position: SquareID;
 
   constructor(color: Color, position: SquareID) {
     this.color = color;

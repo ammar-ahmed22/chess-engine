@@ -6,11 +6,14 @@ import type {
   HalfMove,
   CastlingAbility,
   ChessExecuteOptions,
+  GameStatus
 } from ".";
 import { validateFEN } from "../utils/validation";
 import { nullMessage } from "../utils/error";
 import { GameBoard } from "../GameBoard";
 import { SquareID } from "../SquareID";
+import { fen2matrix } from "../utils";
+import { Piece } from "../Piece";
 
 class Chess {
   private moves: FullMove[] = [];
@@ -43,7 +46,7 @@ class Chess {
   public colorToMove(): Color {
     if (this.moves.length === 0) return "white";
     const lastFull = this.moves.at(-1) as FullMove;
-    if (lastFull.white && !lastFull.black) return "black";
+    if (lastFull.moves.white && !lastFull.moves.black) return "black";
     return "white";
   }
 
@@ -69,10 +72,10 @@ class Chess {
     let lastFull = this.moves.at(-1);
     let lastMove;
     if (lastFull) {
-      if (lastFull.black && lastFull.white) {
-        lastMove = lastFull.black;
-      } else if (lastFull.white) {
-        lastMove = lastFull.white;
+      if (lastFull.moves.black && lastFull.moves.white) {
+        lastMove = lastFull.moves.black;
+      } else if (lastFull.moves.white) {
+        lastMove = lastFull.moves.white;
       }
     }
     let enPassant: SquareID | undefined;
@@ -88,8 +91,8 @@ class Chess {
     }
 
     for (let fullMove of this.moves) {
-      const whiteMove = fullMove.white;
-      const blackMove = fullMove.black;
+      const whiteMove = fullMove.moves.white;
+      const blackMove = fullMove.moves.black;
       if (whiteMove && whiteMove.piece === "king") {
         castling.white.king = false;
         castling.white.queen = false;
@@ -143,6 +146,41 @@ class Chess {
    */
   public checkmate(): boolean {
     return this.state().inCheck && this.validMoves().length === 0;
+  }
+
+  /**
+   * Returns true if stalemate
+   */
+  public stalemate(): boolean {
+    return !this.state().inCheck && this.validMoves().length === 0;
+  }
+
+  /**
+   * Returns true if draw by insufficient material
+   */
+  public insufficient(): boolean {
+    const matrix = fen2matrix(this.fen());
+    const nonKing: Piece[] = matrix.flatMap(a => a).filter(piece => piece && piece.type !== "king") as Piece[];
+    
+    // if 0 length, means only 2 kings
+    if (nonKing.length === 0) return true;
+
+    // 1 knight or 1 bishop only
+    if (nonKing.length === 1 && (nonKing[0].type === "bishop" || nonKing[0].type === "knight")) return true;
+
+    // both have 1 bishop on the same color square
+    if (nonKing.length === 2 && nonKing[0].type === "bishop" && nonKing[1].type === "bishop" && nonKing[0].position.color === nonKing[1].position.color) return true;
+
+    return false;
+  }
+
+  public status(): GameStatus {
+    if (this.checkmate()) return "checkmate";
+    if (this.stalemate()) return "stalemate";
+    if (this.insufficient()) return "insufficient";
+
+    if (this.state().inCheck) return "check";
+    return "in-progress"
   }
 
   /**
@@ -207,10 +245,22 @@ class Chess {
     }
     if (halfMove.color === "white") {
       this.moves.push({
-        white: halfMove,
+        moves: {
+          white: halfMove
+        },
+        state: {
+          white: {
+            fen: board.fen(),
+            state: this.state()
+          }
+        }
       });
     } else {
-      this.moves[idx].black = halfMove;
+      this.moves[idx].moves.black = halfMove;
+      this.moves[idx].state.black = {
+        fen: board.fen(),
+        state: this.state()
+      }
     }
     this.currentFen = board.fen();
     return halfMove;
