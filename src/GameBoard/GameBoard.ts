@@ -184,6 +184,19 @@ class GameBoard {
       ? str2piece(move.promotion, from, fromPiece.color)
       : fromPiece;
 
+    if (move.enPassant) {
+      let dir = fromPiece.color === "white" ? -1 : 1;
+      try {
+        let enPassantTarget = to.copy().addRank(dir);
+        let enPassantPiece = this.atID(enPassantTarget);
+        if (!enPassantPiece) return nullMessage("Cannot find piece on en passant target square!", opts?.silent);
+        this.matrix[enPassantTarget.matrixID[0]][enPassantTarget.matrixID[1]] = undefined;
+      } catch (error) {
+        return nullMessage(`${error}`, opts?.silent)
+      }
+
+    }
+
     const check = this.checkForCheck(state);
 
     if (check === state.colorToMove) {
@@ -200,7 +213,7 @@ class GameBoard {
       to: move.to,
       color: fromPiece.color,
       piece: fromPiece.type,
-      take: toPiece?.type,
+      take: move.enPassant ? "pawn" : toPiece?.type,
       castle: move.castle,
       check,
       promotion: move.promotion,

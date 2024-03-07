@@ -73,7 +73,7 @@ class Pawn extends Piece {
         piece: this.type,
       };
       // Square must be empty to move there
-      if (board.atID(pos)) continue;
+      if (board.atID(pos)) break;
       if (i === 0) {
         moves.push(move);
       } else if (firstMove) {
@@ -92,7 +92,7 @@ class Pawn extends Piece {
 
     for (let potential of potentialTakes) {
       const potentialPiece = board.atID(potential);
-      if (potentialPiece && potentialPiece.color !== this.color) {
+      if ((potentialPiece && potentialPiece.color !== this.color)) {
         moves.push({
           from: this.position.algebraic,
           to: potential.algebraic,
@@ -100,6 +100,16 @@ class Pawn extends Piece {
           color: this.color,
           take: potentialPiece.type,
         });
+      }
+      if (state.enPassant && state.enPassant.equals(potential)) {
+        moves.push({
+          from: this.position.algebraic,
+          to: potential.algebraic,
+          piece: this.type,
+          color: this.color,
+          take: "pawn",
+          enPassant: true
+        })
       }
     }
 
