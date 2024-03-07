@@ -365,4 +365,12 @@ describe("Chess", () => {
       "rnbqkbQr/ppppn3/5p2/4p2p/8/8/PPPPP1PP/RNBQKBNR",
     );
   });
+
+  it("calculates en passant target square correctly", () => {
+    const chess = new Chess();
+    chess.execute({ from: "e2", to: "e4" });
+    const state = chess.state();
+    expect(state.enPassant).toBeDefined();
+    expect(state.enPassant?.algebraic).toBe("e3");
+  })
 });

@@ -75,8 +75,17 @@ class Chess {
         lastMove = lastFull.white;
       }
     }
-    
+    let enPassant: SquareID | undefined;
     if (lastMove && lastMove.check) inCheck = true;
+    if (lastMove && lastMove.piece === "pawn") {
+      const from = SquareID.fromSquareIDType(lastMove.from);
+      const to = SquareID.fromSquareIDType(lastMove.to);
+      const diff = Math.abs(to.rank - from.rank);
+      const dir = Math.sign(to.rank - from.rank);
+      if (diff === 2) { // moved 2 squares
+        enPassant = from.copy().addRank(dir);
+      }
+    }
 
     for (let fullMove of this.moves) {
       const whiteMove = fullMove.white;
@@ -118,6 +127,7 @@ class Chess {
       colorToMove: this.colorToMove(),
       castling,
       inCheck,
+      enPassant
     };
   }
 
