@@ -67,13 +67,17 @@ class Chess {
     };
     let inCheck: boolean = false;
     let lastFull = this.moves.at(-1);
+    let lastMove;
     if (lastFull) {
       if (lastFull.black && lastFull.white) {
-        if (lastFull.black.check) inCheck = true;
+        lastMove = lastFull.black;
       } else if (lastFull.white) {
-        if (lastFull.white.check) inCheck = true;
+        lastMove = lastFull.white;
       }
     }
+    
+    if (lastMove && lastMove.check) inCheck = true;
+
     for (let fullMove of this.moves) {
       const whiteMove = fullMove.white;
       const blackMove = fullMove.black;
