@@ -373,4 +373,29 @@ describe("Chess", () => {
     expect(state.enPassant).toBeDefined();
     expect(state.enPassant?.algebraic).toBe("e3");
   })
+
+  it("calculates and executes en passant correctly", () => {
+    const chess = new Chess();
+    const moves: MoveType[] = [
+      { from: "c2", to: "c4" },
+      { from: "b8", to: "c6" },
+      { from: "c4", to: "c5" },
+      { from: "b7", to: "b5" }
+    ]
+    for (let move of moves) {
+      expect(chess.execute(move)).not.toBeNull()
+    }
+    expect(chess.state().enPassant).toBeDefined()
+    expect(chess.state().enPassant?.algebraic).toBe("b6")
+    const validMoves = chess.validMoves();
+    const c5PawnMoves = validMoves.filter((move) => {
+      return move.from === "c5"
+    })
+    expect(c5PawnMoves).toHaveLength(1);
+    expect(c5PawnMoves[0].enPassant).toBeDefined();
+    expect(c5PawnMoves[0].to).toBe("b6");
+    const enPassantMove = c5PawnMoves[0];
+    expect(chess.execute(enPassantMove)).not.toBeNull();
+    expect(chess.fen()).toBe("r1bqkbnr/p1pppppp/1Pn5/8/8/8/PP1PPPPP/RNBQKBNR");
+  })
 });

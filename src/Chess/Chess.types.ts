@@ -15,6 +15,7 @@ export type MoveType = {
   to: SquareIDType;
   castle?: CastleType;
   promotion?: PieceType;
+  enPassant?: boolean;
 };
 
 export type HalfMove = {
