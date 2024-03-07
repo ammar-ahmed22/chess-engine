@@ -1,6 +1,6 @@
 import Pawn from "./Pawn";
 import { GameBoard } from "../GameBoard";
-import { Chess } from "../Chess";
+import { Chess, MoveType } from "../Chess";
 import { SquareID } from "../SquareID";
 
 describe("Pawn", () => {
@@ -46,6 +46,27 @@ describe("Pawn", () => {
     const moves = pawn.validMoves(board, chess.state());
     // promotion moves come as 4 moves (2 * 4 = 8)
     expect(moves).toHaveLength(8);
+  })
 
+  it("generates en passant moves correctly", () => {
+    const chess = new Chess();
+    const moves: MoveType[] = [
+      { from: "c2", to: "c4" },
+      { from: "b8", to: "c6" },
+      { from: "c4", to: "c5" },
+      { from: "b7", to: "b5" }
+    ]
+    for (let move of moves) {
+      expect(chess.execute(move)).not.toBeNull()
+    }
+    expect(chess.state().enPassant).toBeDefined()
+    expect(chess.state().enPassant?.algebraic).toBe("b6")
+    const validMoves = chess.validMoves();
+    const c5PawnMoves = validMoves.filter((move) => {
+      return move.from === "c5"
+    })
+    expect(c5PawnMoves).toHaveLength(1);
+    expect(c5PawnMoves[0].enPassant).toBeDefined();
+    expect(c5PawnMoves[0].to).toBe("b6");
   })
 });
