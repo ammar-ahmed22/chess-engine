@@ -1,4 +1,5 @@
 import { Piece } from ".";
+// import { Chess } from "../Chess";
 import { GameBoard } from "../GameBoard";
 import { SquareID } from "../SquareID";
 import type { PieceType, GameState, HalfMove } from "../Chess";
@@ -10,7 +11,7 @@ class Pawn extends Piece {
     return this.color === "white" ? "P" : "p";
   }
 
-  public validMoves(board: GameBoard, state: GameState): HalfMove[] {
+  public validMoves(board: GameBoard, state: GameState, filterSelfCheck: boolean = true): HalfMove[] {
     const moves: HalfMove[] = [];
     let firstMove = false;
     let dir = this.color === "white" ? 1 : -1;
@@ -113,14 +114,14 @@ class Pawn extends Piece {
       }
     }
 
-    if (state.inCheck) {
+    if (state.inCheck || filterSelfCheck) {
       const fen = board.fen();
-      return moves.filter((move) => {
+      return moves.filter(move => {
         const b = new GameBoard(fen);
         const result = b.execute(move, state, { silent: true });
         if (result) return true;
         return false;
-      });
+      })
     }
 
     return moves;

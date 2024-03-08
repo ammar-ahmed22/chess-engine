@@ -20,4 +20,15 @@ describe("Queen", () => {
     expect(takes).toBe(2);
     expect(moves).toHaveLength(11);
   });
+
+  it("does not calculate moves that put king in check", () => {
+    const chess = new Chess();
+    // queen on e2 is pinned, only move vertically and take the pinning piece.
+    const fen = "rnb1kb1r/pppp1ppp/8/8/3pq3/5N2/PPP1Q1PP/RNB1KB1R";
+    const board = new GameBoard(fen);
+    const e2 = new SquareID("e2");
+    const queen = board.atID(e2) as Queen;
+    expect(queen.type).toBe("queen"); 
+    expect(queen.validMoves(board, chess.state())).toHaveLength(2);
+  })
 });

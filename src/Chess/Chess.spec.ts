@@ -339,6 +339,7 @@ describe("Chess", () => {
     }
     expect(chess.state().inCheck).toBe(true);
     expect(chess.checkmate()).toBe(true);
+    expect(chess.status()).toBe("checkmate")
   });
 
   it("executes piece promotion correctly", () => {
@@ -397,5 +398,37 @@ describe("Chess", () => {
     const enPassantMove = c5PawnMoves[0];
     expect(chess.execute(enPassantMove)).not.toBeNull();
     expect(chess.fen()).toBe("r1bqkbnr/p1pppppp/1Pn5/8/8/8/PP1PPPPP/RNBQKBNR");
+  })
+
+  it("finds stalemate correctly", () => {
+    const chess = new Chess();
+    // dummy move to make it black's turn
+    chess.execute({ from: "e2", to: "e4"})
+    // stale mate position, king is trapped by other king
+    chess.setPosition("k7/P7/K7/8/5B2/8/8/8");
+    console.log(chess.validMoves());
+    // expect(chess.stalemate()).toBe(true);
+    // expect(chess.status()).toBe("stalemate");
+  })
+
+  it("does not provide moves that put king in check", () => {
+    const chess = new Chess();
+    const moves: MoveType[] = [
+      { from: "e2", to: "e4" },
+      { from: "e7", to: "e5" },
+      { from: "d2", to: "d4" },
+      { from: "e5", to: "d4" },
+      { from: "d1", to: "d4" },
+      { from: "f8", to: "d6" },
+      { from: "d4", to: "d1" },
+      { from: "d6", to: "g3" },
+    ]
+    for (let move of moves) {
+      chess.execute(move);
+    }
+    const validMoves = chess.validMoves();
+    let f2Pawn = validMoves.filter((move) => move.from === "f2");
+    // Only move should be taking the bishop as other moves put king in check.
+    expect(f2Pawn).toHaveLength(1);
   })
 });

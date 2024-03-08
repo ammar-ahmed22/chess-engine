@@ -6,7 +6,8 @@ import type {
   HalfMove,
   CastlingAbility,
   ChessExecuteOptions,
-  GameStatus
+  GameStatus,
+  CastleType
 } from ".";
 import { validateFEN } from "../utils/validation";
 import { nullMessage } from "../utils/error";
@@ -174,11 +175,49 @@ class Chess {
     return false;
   }
 
+  public repetition(): boolean {
+    const moves = this.history();
+    const genCastleString = (castling: { [K in CastleType]?: boolean }) => {
+      let res = ""
+      if (castling.king) res += "k";
+      if (castling.queen) res += "q";
+      if (res === "") res += "-";
+      return res;
+    }
+    // create an array with a "rich FEN", `${FEN} ${colorToMove} ${castling} ${en passant target}`
+    // when any of these positions repeat 3 times in a row, draw by repetition.
+    const richFENs: string[] = moves.flatMap((fullMove) => {
+      let whiteState = fullMove.state.white;
+      let blackState = fullMove.state.black;
+      const result = [];
+      let white = `${whiteState.fen} b ${genCastleString(whiteState.state.castling.white)} ${whiteState.state.enPassant ?? "-"}`
+      result.push(white);
+      if (blackState) {
+        let black = `${blackState.fen} w ${genCastleString(blackState.state.castling.black)} ${blackState.state.enPassant ?? "-"}`
+        result.push(black);
+      }
+      return result
+    })
+    const map: Record<string, number> = {};
+    for (let fen of richFENs) {
+      if (fen in map) {
+        map[fen]++
+      } else {
+        map[fen] = 1;
+      }
+    }
+
+    for (let fen in map) {
+      if (map[fen] >= 3) return true;
+    }
+    return false;
+  }
+
   public status(): GameStatus {
     if (this.checkmate()) return "checkmate";
     if (this.stalemate()) return "stalemate";
     if (this.insufficient()) return "insufficient";
-
+    if (this.repetition()) return "repetition";
     if (this.state().inCheck) return "check";
     return "in-progress"
   }

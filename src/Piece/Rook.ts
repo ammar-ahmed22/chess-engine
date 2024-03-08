@@ -9,10 +9,10 @@ class Rook extends Piece {
     return this.color === "white" ? "R" : "r";
   }
 
-  public validMoves(board: GameBoard, state: GameState): HalfMove[] {
+  public validMoves(board: GameBoard, state: GameState, filterSelfCheck: boolean = true): HalfMove[] {
     const moves = this.orthogonalMoves(board);
 
-    if (state.inCheck) {
+    if (state.inCheck || filterSelfCheck) {
       const fen = board.fen();
       return moves.filter((move) => {
         const b = new GameBoard(fen);

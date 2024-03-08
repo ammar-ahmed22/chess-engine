@@ -15,9 +15,19 @@ abstract class Piece {
   public abstract validMoves(
     board: GameBoard,
     state: GameState,
+    filterSelfCheck?: boolean
   ): HalfMove[];
   public abstract get fenChar(): string;
 
+  // protected onlyExecutable(board: GameBoard, state: GameState, moves: HalfMove[]) {
+  //   const fen = board.fen();
+  //   return moves.filter((move) => {
+  //     const b = new GameBoard(fen);
+  //     const result = b.execute(move, state, { silent: true });
+  //     if (result) return true;
+  //     return false;
+  //   })
+  // }
   /**
    * Returns moves for all 4 diagonals
    * @param board GameBoard

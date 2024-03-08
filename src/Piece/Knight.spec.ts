@@ -20,4 +20,16 @@ describe("Knight", () => {
     expect(takes).toBe(2);
     expect(moves).toHaveLength(8);
   });
+
+  it("does not calculate moves that put king in check", () => {
+    const chess = new Chess();
+    // pinned knight, no valid moves
+    const fen = "rnbqk1nr/p1pp1ppp/1p6/8/1b2P3/2Np4/PPP2PPP/RNBQKB1R"
+    const board = new GameBoard(fen);
+    const c3 = new SquareID("c3");
+    const knight = board.atID(c3) as Knight;
+    expect(knight.type).toBe("knight");
+    const moves = knight.validMoves(board, chess.state());
+    expect(moves).toHaveLength(0);
+  })
 });

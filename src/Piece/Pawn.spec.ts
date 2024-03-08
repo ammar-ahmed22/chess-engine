@@ -69,4 +69,14 @@ describe("Pawn", () => {
     expect(c5PawnMoves[0].enPassant).toBeDefined();
     expect(c5PawnMoves[0].to).toBe("b6");
   })
+
+  it("does not calculate moves that put king in check", () => {
+    const chess = new Chess();
+    const fen = "rnbqk1nr/pppp1ppp/8/8/3NP3/6b1/PPP2PPP/RNBQKB1R"
+    const board = new GameBoard(fen);
+    const f2 = new SquareID("f2");
+    const f2Pawn = board.atID(f2) as Pawn;
+    expect(f2Pawn.type).toBe("pawn");
+    expect(f2Pawn.validMoves(board, chess.state())).toHaveLength(1);
+  })
 });

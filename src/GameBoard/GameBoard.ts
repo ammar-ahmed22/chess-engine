@@ -17,6 +17,12 @@ import {
 } from "../utils/transform";
 import { nullMessage } from "../utils/error";
 
+type ValidMovesOpts = {
+  kings?: boolean,
+  opponent?: boolean,
+  noSelfCheck?: boolean
+}
+
 class GameBoard {
   private matrix: MatrixType[][] = [];
   constructor(param: MatrixType[][]);
@@ -55,10 +61,9 @@ class GameBoard {
    * @returns
    */
   private checkForCheck(state: GameState): Color | undefined {
-    // if (state.inCheck) return undefined;
     let unChecked: GameState = { ...state, inCheck: false };
     const board = new GameBoard(this.fen());
-    const allValidMoves = board.allValidMoves(unChecked, true, true);
+    const allValidMoves = board.allValidMoves(unChecked, { kings: true, opponent: true, noSelfCheck: false });
     let check: Color | undefined = undefined;
     for (let move of allValidMoves) {
       if (move.take && move.take === "king") {
@@ -229,23 +234,28 @@ class GameBoard {
    */
   public allValidMoves(
     state: GameState,
-    includeKings: boolean = false,
-    includeOpponent: boolean = false,
+    opts?: ValidMovesOpts
+    // includeKings: boolean = false,
+    // includeOpponent: boolean = false,
+    // filterChecks: boolean = true,
   ): HalfMove[] {
+    let kings = opts?.kings ?? false;
+    let opponent = opts?.opponent ?? false;
+    let noSelfCheck = opts?.noSelfCheck ?? true;
     const moves: HalfMove[] = [];
     this.iter((piece) => {
-      if (includeOpponent) {
+      if (opponent) {
         if (piece) {
-          moves.push(...piece.validMoves(this, state));
+          moves.push(...piece.validMoves(this, state, noSelfCheck));
         }
       } else {
         if (piece && piece.color === state.colorToMove) {
-          moves.push(...piece.validMoves(this, state));
+          moves.push(...piece.validMoves(this, state, noSelfCheck));
         }
       }
     });
     return moves.filter((move) => {
-      if (includeKings) {
+      if (kings) {
         return true;
       } else {
         if (move.take && move.take === "king") {
