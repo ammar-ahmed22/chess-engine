@@ -55,10 +55,10 @@ describe("King", () => {
     const chess = new Chess();
     // dummy move to make black move
     chess.execute({ from: "e2", to: "e4" });
-    const fen = "8/Pk6/K7/4B3/8/8/8/8";
+    const fen = "k7/P7/K7/4B3/8/8/8/8";
     const board = new GameBoard(fen);
-    const b7 = new SquareID("b7");
-    const king = board.atID(b7) as King;
+    const a8 = new SquareID("a8");
+    const king = board.atID(a8) as King;
     expect(king.type).toBe("king");
     expect(king.validMoves(board, chess.state(), true)).toHaveLength(0);
   })

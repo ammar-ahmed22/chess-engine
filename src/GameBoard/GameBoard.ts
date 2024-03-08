@@ -17,7 +17,7 @@ import {
 } from "../utils/transform";
 import { nullMessage } from "../utils/error";
 
-type ValidMovesOpts = {
+export type ValidMovesOpts = {
   kings?: boolean,
   opponent?: boolean,
   noSelfCheck?: boolean
@@ -60,19 +60,18 @@ class GameBoard {
    * @param state GameState
    * @returns
    */
-  private checkForCheck(state: GameState): Color | undefined {
+  private checkForCheck(state: GameState): Color[] {
     let unChecked: GameState = { ...state, inCheck: false };
     const board = new GameBoard(this.fen());
     const allValidMoves = board.allValidMoves(unChecked, { kings: true, opponent: true, noSelfCheck: false });
-    let check: Color | undefined = undefined;
+    let checks: Color[] = []
     for (let move of allValidMoves) {
       if (move.take && move.take === "king") {
-        check = move.color === "white" ? "black" : "white";
-        break;
+        checks.push(move.color === "white" ? "black" : "white");
       }
     }
 
-    return check;
+    return checks;
   }
 
   /**
@@ -164,7 +163,7 @@ class GameBoard {
       this.matrix[rookToPos.matrixID[0]][rookToPos.matrixID[1]] =
         rook;
 
-      const check = this.checkForCheck(state);
+      const check = this.checkForCheck(state).find(c => c !== fromPiece.color);
 
       return {
         from: move.from,
@@ -172,7 +171,7 @@ class GameBoard {
         color: fromPiece.color,
         piece: fromPiece.type,
         castle: move.castle,
-        check,
+        check
       };
     }
 
@@ -202,9 +201,10 @@ class GameBoard {
 
     }
 
-    const check = this.checkForCheck(state);
+    const checks = this.checkForCheck(state);
+    let check = checks.find(c => c !== state.colorToMove)
 
-    if (check === state.colorToMove) {
+    if (checks.some(c => c === state.colorToMove)) {
       this.matrix[from.matrixID[0]][from.matrixID[1]] = fromPiece;
       this.matrix[to.matrixID[0]][to.matrixID[1]] = toPiece;
       return nullMessage(

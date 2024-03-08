@@ -109,6 +109,18 @@ class SquareID {
   }
 
   /**
+   * Adds values to the SquareID
+   * @param file The number of files to add
+   * @param rank The number of ranks to add
+   */
+  public add(file: number, rank: number): SquareID {
+    this.file += file;
+    this.rank += rank;
+    this.validate();
+    return this;
+  }
+
+  /**
    * Adds a number to the file
    * @param add The value to add (can be negative)
    * @returns
@@ -128,6 +140,14 @@ class SquareID {
     this.rank += add;
     this.validate();
     return this;
+  }
+
+  /**
+   * Returns the distance from another SquareID
+   * @param id 
+   */
+  public distance(id: SquareID): number {
+    return Math.floor(Math.sqrt(Math.pow(this.file - id.file, 2) + Math.pow(this.rank - id.rank, 2)))
   }
 
   /**
