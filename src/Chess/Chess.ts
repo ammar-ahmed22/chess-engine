@@ -6,11 +6,15 @@ import type {
   HalfMove,
   CastlingAbility,
   ChessExecuteOptions,
+  GameStatus,
+  CastleType,
 } from ".";
 import { validateFEN } from "../utils/validation";
 import { nullMessage } from "../utils/error";
 import { GameBoard } from "../GameBoard";
 import { SquareID } from "../SquareID";
+import { fen2matrix } from "../utils";
+import { Piece } from "../Piece";
 
 class Chess {
   private moves: FullMove[] = [];
@@ -43,7 +47,7 @@ class Chess {
   public colorToMove(): Color {
     if (this.moves.length === 0) return "white";
     const lastFull = this.moves.at(-1) as FullMove;
-    if (lastFull.white && !lastFull.black) return "black";
+    if (lastFull.moves.white && !lastFull.moves.black) return "black";
     return "white";
   }
 
@@ -69,10 +73,10 @@ class Chess {
     let lastFull = this.moves.at(-1);
     let lastMove;
     if (lastFull) {
-      if (lastFull.black && lastFull.white) {
-        lastMove = lastFull.black;
-      } else if (lastFull.white) {
-        lastMove = lastFull.white;
+      if (lastFull.moves.black && lastFull.moves.white) {
+        lastMove = lastFull.moves.black;
+      } else if (lastFull.moves.white) {
+        lastMove = lastFull.moves.white;
       }
     }
     let enPassant: SquareID | undefined;
@@ -82,14 +86,15 @@ class Chess {
       const to = SquareID.fromSquareIDType(lastMove.to);
       const diff = Math.abs(to.rank - from.rank);
       const dir = Math.sign(to.rank - from.rank);
-      if (diff === 2) { // moved 2 squares
+      if (diff === 2) {
+        // moved 2 squares
         enPassant = from.copy().addRank(dir);
       }
     }
 
     for (let fullMove of this.moves) {
-      const whiteMove = fullMove.white;
-      const blackMove = fullMove.black;
+      const whiteMove = fullMove.moves.white;
+      const blackMove = fullMove.moves.black;
       if (whiteMove && whiteMove.piece === "king") {
         castling.white.king = false;
         castling.white.queen = false;
@@ -127,7 +132,7 @@ class Chess {
       colorToMove: this.colorToMove(),
       castling,
       inCheck,
-      enPassant
+      enPassant,
     };
   }
 
@@ -143,6 +148,110 @@ class Chess {
    */
   public checkmate(): boolean {
     return this.state().inCheck && this.validMoves().length === 0;
+  }
+
+  /**
+   * Returns true if stalemate
+   */
+  public stalemate(): boolean {
+    return !this.state().inCheck && this.validMoves().length === 0;
+  }
+
+  /**
+   * Returns true if draw by insufficient material
+   */
+  public insufficient(): boolean {
+    const matrix = fen2matrix(this.fen());
+    const nonKing: Piece[] = matrix
+      .flatMap((a) => a)
+      .filter((piece) => piece && piece.type !== "king") as Piece[];
+
+    // if 0 length, means only 2 kings
+    if (nonKing.length === 0) return true;
+
+    // 1 knight or 1 bishop only
+    if (
+      nonKing.length === 1 &&
+      (nonKing[0].type === "bishop" || nonKing[0].type === "knight")
+    )
+      return true;
+
+    // both have 1 bishop on the same color square
+    if (
+      nonKing.length === 2 &&
+      nonKing[0].type === "bishop" &&
+      nonKing[1].type === "bishop" &&
+      nonKing[0].position.color === nonKing[1].position.color
+    )
+      return true;
+
+    return false;
+  }
+
+  public repetition(): boolean {
+    const moves = this.history();
+    const genCastleString = (castling: {
+      [K in CastleType]?: boolean;
+    }) => {
+      let res = "";
+      if (castling.king) res += "k";
+      if (castling.queen) res += "q";
+      if (res === "") res += "-";
+      return res;
+    };
+    // create an array with a "rich FEN", `${FEN} ${colorToMove} ${castling} ${en passant target}`
+    // when any of these positions repeat 3 times in a row, draw by repetition.
+    const richFENs: string[] = moves.flatMap((fullMove) => {
+      let whiteState = fullMove.state.white;
+      let blackState = fullMove.state.black;
+      const result = [];
+      let white = `${whiteState.fen} b ${genCastleString(whiteState.state.castling.white)} ${whiteState.state.enPassant ?? "-"}`;
+      result.push(white);
+      if (blackState) {
+        let black = `${blackState.fen} w ${genCastleString(blackState.state.castling.black)} ${blackState.state.enPassant ?? "-"}`;
+        result.push(black);
+      }
+      return result;
+    });
+    const map: Record<string, number> = {};
+    for (let fen of richFENs) {
+      if (fen in map) {
+        map[fen]++;
+      } else {
+        map[fen] = 1;
+      }
+    }
+
+    for (let fen in map) {
+      if (map[fen] >= 3) return true;
+    }
+    return false;
+  }
+
+  public fiftymove(): boolean {
+    if (this.moves.length < 50) return false;
+    let lastFifty =
+      this.moves.length === 50 ? this.moves : this.moves.slice(-50);
+    for (let i = lastFifty.length - 1; i >= 0; i--) {
+      const curr = lastFifty[i];
+      let moves = curr.moves;
+      if (moves.white.piece === "pawn") return false;
+      if (moves.white.take) return false;
+      if (moves.black && moves.black.piece === "pawn") return false;
+      if (moves.black && moves.black.take) return false;
+    }
+
+    return true;
+  }
+
+  public status(): GameStatus {
+    if (this.checkmate()) return "checkmate";
+    if (this.stalemate()) return "stalemate";
+    if (this.insufficient()) return "insufficient";
+    if (this.repetition()) return "repetition";
+    if (this.fiftymove()) return "50move";
+    if (this.state().inCheck) return "check";
+    return "in-progress";
   }
 
   /**
@@ -207,10 +316,22 @@ class Chess {
     }
     if (halfMove.color === "white") {
       this.moves.push({
-        white: halfMove,
+        moves: {
+          white: halfMove,
+        },
+        state: {
+          white: {
+            fen: board.fen(),
+            state: this.state(),
+          },
+        },
       });
     } else {
-      this.moves[idx].black = halfMove;
+      this.moves[idx].moves.black = halfMove;
+      this.moves[idx].state.black = {
+        fen: board.fen(),
+        state: this.state(),
+      };
     }
     this.currentFen = board.fen();
     return halfMove;

@@ -1,5 +1,5 @@
 import { ValueError } from "../utils/error";
-import type { SquareIDType } from "../Chess";
+import type { SquareIDType, Color } from "../Chess";
 
 class SquareID {
   public rank: number;
@@ -48,12 +48,35 @@ class SquareID {
     return [row, col];
   }
 
+  /**
+   * Gets the file as a string
+   *
+   * @readonly
+   * @type {string}
+   */
   get fileStr() {
     return SquareID.file2str(this.file);
   }
 
+  /**
+   * Gets the square id in algebraic notation
+   *
+   * @readonly
+   * @type {string}
+   */
   get algebraic() {
     return this.fileStr + this.rank.toString();
+  }
+
+  /**
+   * Gets the color of the square
+   *
+   * @readonly
+   * @type {Color}
+   */
+  get color(): Color {
+    const sum = this.file + this.rank;
+    return sum % 2 === 0 ? "white" : "black";
   }
 
   /**
@@ -83,6 +106,18 @@ class SquareID {
   }
 
   /**
+   * Adds values to the SquareID
+   * @param file The number of files to add
+   * @param rank The number of ranks to add
+   */
+  public add(file: number, rank: number): SquareID {
+    this.file += file;
+    this.rank += rank;
+    this.validate();
+    return this;
+  }
+
+  /**
    * Adds a number to the file
    * @param add The value to add (can be negative)
    * @returns
@@ -102,6 +137,19 @@ class SquareID {
     this.rank += add;
     this.validate();
     return this;
+  }
+
+  /**
+   * Returns the distance from another SquareID
+   * @param id
+   */
+  public distance(id: SquareID): number {
+    return Math.floor(
+      Math.sqrt(
+        Math.pow(this.file - id.file, 2) +
+          Math.pow(this.rank - id.rank, 2),
+      ),
+    );
   }
 
   /**

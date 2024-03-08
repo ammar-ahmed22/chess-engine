@@ -9,7 +9,11 @@ class King extends Piece {
     return this.color === "white" ? "K" : "k";
   }
 
-  public validMoves(board: GameBoard, state: GameState): HalfMove[] {
+  public validMoves(
+    board: GameBoard,
+    state: GameState,
+    filterSelfCheck: boolean = true,
+  ): HalfMove[] {
     const moves = [
       ...this.diagonalMoves(board, 1),
       ...this.orthogonalMoves(board, 1),
@@ -93,7 +97,7 @@ class King extends Piece {
       }
     }
 
-    if (state.inCheck) {
+    if (state.inCheck || filterSelfCheck) {
       const fen = board.fen();
       return moves.filter((move) => {
         const b = new GameBoard(fen);
