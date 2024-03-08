@@ -9,7 +9,11 @@ class Bishop extends Piece {
     return this.color === "white" ? "B" : "b";
   }
 
-  public validMoves(board: GameBoard, state: GameState, filterSelfCheck: boolean = true): HalfMove[] {
+  public validMoves(
+    board: GameBoard,
+    state: GameState,
+    filterSelfCheck: boolean = true,
+  ): HalfMove[] {
     const moves = this.diagonalMoves(board);
 
     if (state.inCheck || filterSelfCheck) {

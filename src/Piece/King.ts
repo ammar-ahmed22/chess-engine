@@ -9,7 +9,11 @@ class King extends Piece {
     return this.color === "white" ? "K" : "k";
   }
 
-  public validMoves(board: GameBoard, state: GameState, filterSelfCheck: boolean = true): HalfMove[] {
+  public validMoves(
+    board: GameBoard,
+    state: GameState,
+    filterSelfCheck: boolean = true,
+  ): HalfMove[] {
     const moves = [
       ...this.diagonalMoves(board, 1),
       ...this.orthogonalMoves(board, 1),

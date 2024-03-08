@@ -339,7 +339,7 @@ describe("Chess", () => {
     }
     expect(chess.state().inCheck).toBe(true);
     expect(chess.checkmate()).toBe(true);
-    expect(chess.status()).toBe("checkmate")
+    expect(chess.status()).toBe("checkmate");
   });
 
   it("executes piece promotion correctly", () => {
@@ -373,7 +373,7 @@ describe("Chess", () => {
     const state = chess.state();
     expect(state.enPassant).toBeDefined();
     expect(state.enPassant?.algebraic).toBe("e3");
-  })
+  });
 
   it("calculates and executes en passant correctly", () => {
     const chess = new Chess();
@@ -381,34 +381,36 @@ describe("Chess", () => {
       { from: "c2", to: "c4" },
       { from: "b8", to: "c6" },
       { from: "c4", to: "c5" },
-      { from: "b7", to: "b5" }
-    ]
+      { from: "b7", to: "b5" },
+    ];
     for (let move of moves) {
-      expect(chess.execute(move)).not.toBeNull()
+      expect(chess.execute(move)).not.toBeNull();
     }
-    expect(chess.state().enPassant).toBeDefined()
-    expect(chess.state().enPassant?.algebraic).toBe("b6")
+    expect(chess.state().enPassant).toBeDefined();
+    expect(chess.state().enPassant?.algebraic).toBe("b6");
     const validMoves = chess.validMoves();
     const c5PawnMoves = validMoves.filter((move) => {
-      return move.from === "c5"
-    })
+      return move.from === "c5";
+    });
     expect(c5PawnMoves).toHaveLength(1);
     expect(c5PawnMoves[0].enPassant).toBeDefined();
     expect(c5PawnMoves[0].to).toBe("b6");
     const enPassantMove = c5PawnMoves[0];
     expect(chess.execute(enPassantMove)).not.toBeNull();
-    expect(chess.fen()).toBe("r1bqkbnr/p1pppppp/1Pn5/8/8/8/PP1PPPPP/RNBQKBNR");
-  })
+    expect(chess.fen()).toBe(
+      "r1bqkbnr/p1pppppp/1Pn5/8/8/8/PP1PPPPP/RNBQKBNR",
+    );
+  });
 
   it("finds stalemate correctly", () => {
     const chess = new Chess();
     // dummy move to make it black's turn
-    chess.execute({ from: "e2", to: "e4"})
+    chess.execute({ from: "e2", to: "e4" });
     // stale mate position, king is trapped by other king
     chess.setPosition("k7/P7/K7/8/5B2/8/8/8");
     expect(chess.stalemate()).toBe(true);
     expect(chess.status()).toBe("stalemate");
-  })
+  });
 
   it("does not provide moves that put king in check", () => {
     const chess = new Chess();
@@ -421,7 +423,7 @@ describe("Chess", () => {
       { from: "f8", to: "d6" },
       { from: "d4", to: "d1" },
       { from: "d6", to: "g3" },
-    ]
+    ];
     for (let move of moves) {
       chess.execute(move);
     }
@@ -429,7 +431,7 @@ describe("Chess", () => {
     let f2Pawn = validMoves.filter((move) => move.from === "f2");
     // Only move should be taking the bishop as other moves put king in check.
     expect(f2Pawn).toHaveLength(1);
-  })
+  });
 
   it("finds draw by insufficient material correctly", () => {
     const positions = [
@@ -440,15 +442,15 @@ describe("Chess", () => {
       // king and knight vs king,
       "3k4/8/8/8/2K5/4N3/8/8",
       // king and bishop vs king and bishop. Both bishops on same color square.
-      "8/3k4/1b6/8/8/2K3B1/8/8"
-    ]
+      "8/3k4/1b6/8/8/2K3B1/8/8",
+    ];
     const chess = new Chess();
     for (let pos of positions) {
       chess.setPosition(pos);
       expect(chess.insufficient()).toBe(true);
       expect(chess.status()).toBe("insufficient");
     }
-  })
+  });
 
   it("finds draw by repetition correctly", () => {
     const chess = new Chess();
@@ -456,21 +458,21 @@ describe("Chess", () => {
       { from: "g1", to: "f3" },
       { from: "g8", to: "f6" },
       { from: "f3", to: "g1" },
-      { from: "f6", to: "g8" }
-    ]
+      { from: "f6", to: "g8" },
+    ];
 
     for (let i = 0; i < 3; i++) {
       for (let move of moves) {
         if (i !== 2 && move.from !== "f6") {
           expect(chess.repetition()).toBe(false);
           expect(chess.status()).toBe("in-progress");
-        } 
+        }
         chess.execute(move);
       }
     }
     expect(chess.repetition()).toBe(true);
     expect(chess.status()).toBe("repetition");
-  })
+  });
 
   it("finds draw by 50move rule correctly", () => {
     const chess = new Chess();
@@ -486,25 +488,27 @@ describe("Chess", () => {
       { from: "f1", to: "d3" },
       { from: "e8", to: "g8", castle: "king" },
       { from: "e1", to: "g1", castle: "king" },
-      { from: "d7", to: "d5" }
+      { from: "d7", to: "d5" },
     ];
-    
+
     for (let move of developingMoves) {
       chess.execute(move);
     }
-    
+
     for (let i = 0; i < 100; i++) {
-      const moves = chess.validMoves().filter(move => {
+      const moves = chess.validMoves().filter((move) => {
         if (move.piece === "pawn" || move.take) return false;
         return true;
-      })
+      });
       expect(moves.length).toBeGreaterThan(0);
       if (moves.length > 0) {
         const percentage = i / 99;
-        chess.execute(moves[Math.floor(percentage * (moves.length - 1))]);
+        chess.execute(
+          moves[Math.floor(percentage * (moves.length - 1))],
+        );
       }
     }
     expect(chess.fiftymove()).toBe(true);
     expect(chess.status()).toBe("50move");
-  })
+  });
 });

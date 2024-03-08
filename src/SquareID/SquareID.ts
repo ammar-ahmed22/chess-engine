@@ -48,7 +48,6 @@ class SquareID {
     return [row, col];
   }
 
-  
   /**
    * Gets the file as a string
    *
@@ -59,7 +58,6 @@ class SquareID {
     return SquareID.file2str(this.file);
   }
 
-  
   /**
    * Gets the square id in algebraic notation
    *
@@ -70,7 +68,6 @@ class SquareID {
     return this.fileStr + this.rank.toString();
   }
 
-  
   /**
    * Gets the color of the square
    *
@@ -79,7 +76,7 @@ class SquareID {
    */
   get color(): Color {
     const sum = this.file + this.rank;
-    return (sum % 2 === 0) ? "white" : "black"
+    return sum % 2 === 0 ? "white" : "black";
   }
 
   /**
@@ -144,10 +141,15 @@ class SquareID {
 
   /**
    * Returns the distance from another SquareID
-   * @param id 
+   * @param id
    */
   public distance(id: SquareID): number {
-    return Math.floor(Math.sqrt(Math.pow(this.file - id.file, 2) + Math.pow(this.rank - id.rank, 2)))
+    return Math.floor(
+      Math.sqrt(
+        Math.pow(this.file - id.file, 2) +
+          Math.pow(this.rank - id.rank, 2),
+      ),
+    );
   }
 
   /**

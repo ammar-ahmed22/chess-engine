@@ -18,10 +18,10 @@ import {
 import { nullMessage } from "../utils/error";
 
 export type ValidMovesOpts = {
-  kings?: boolean,
-  opponent?: boolean,
-  noSelfCheck?: boolean
-}
+  kings?: boolean;
+  opponent?: boolean;
+  noSelfCheck?: boolean;
+};
 
 class GameBoard {
   private matrix: MatrixType[][] = [];
@@ -63,8 +63,12 @@ class GameBoard {
   private checkForCheck(state: GameState): Color[] {
     let unChecked: GameState = { ...state, inCheck: false };
     const board = new GameBoard(this.fen());
-    const allValidMoves = board.allValidMoves(unChecked, { kings: true, opponent: true, noSelfCheck: false });
-    let checks: Color[] = []
+    const allValidMoves = board.allValidMoves(unChecked, {
+      kings: true,
+      opponent: true,
+      noSelfCheck: false,
+    });
+    let checks: Color[] = [];
     for (let move of allValidMoves) {
       if (move.take && move.take === "king") {
         checks.push(move.color === "white" ? "black" : "white");
@@ -163,7 +167,9 @@ class GameBoard {
       this.matrix[rookToPos.matrixID[0]][rookToPos.matrixID[1]] =
         rook;
 
-      const check = this.checkForCheck(state).find(c => c !== fromPiece.color);
+      const check = this.checkForCheck(state).find(
+        (c) => c !== fromPiece.color,
+      );
 
       return {
         from: move.from,
@@ -171,7 +177,7 @@ class GameBoard {
         color: fromPiece.color,
         piece: fromPiece.type,
         castle: move.castle,
-        check
+        check,
       };
     }
 
@@ -193,18 +199,23 @@ class GameBoard {
       try {
         let enPassantTarget = to.copy().addRank(dir);
         let enPassantPiece = this.atID(enPassantTarget);
-        if (!enPassantPiece) return nullMessage("Cannot find piece on en passant target square!", opts?.silent);
-        this.matrix[enPassantTarget.matrixID[0]][enPassantTarget.matrixID[1]] = undefined;
+        if (!enPassantPiece)
+          return nullMessage(
+            "Cannot find piece on en passant target square!",
+            opts?.silent,
+          );
+        this.matrix[enPassantTarget.matrixID[0]][
+          enPassantTarget.matrixID[1]
+        ] = undefined;
       } catch (error) {
-        return nullMessage(`${error}`, opts?.silent)
+        return nullMessage(`${error}`, opts?.silent);
       }
-
     }
 
     const checks = this.checkForCheck(state);
-    let check = checks.find(c => c !== state.colorToMove)
+    let check = checks.find((c) => c !== state.colorToMove);
 
-    if (checks.some(c => c === state.colorToMove)) {
+    if (checks.some((c) => c === state.colorToMove)) {
       this.matrix[from.matrixID[0]][from.matrixID[1]] = fromPiece;
       this.matrix[to.matrixID[0]][to.matrixID[1]] = toPiece;
       return nullMessage(
@@ -234,7 +245,7 @@ class GameBoard {
    */
   public allValidMoves(
     state: GameState,
-    opts?: ValidMovesOpts
+    opts?: ValidMovesOpts,
     // includeKings: boolean = false,
     // includeOpponent: boolean = false,
     // filterChecks: boolean = true,

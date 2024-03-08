@@ -11,7 +11,11 @@ class Pawn extends Piece {
     return this.color === "white" ? "P" : "p";
   }
 
-  public validMoves(board: GameBoard, state: GameState, filterSelfCheck: boolean = true): HalfMove[] {
+  public validMoves(
+    board: GameBoard,
+    state: GameState,
+    filterSelfCheck: boolean = true,
+  ): HalfMove[] {
     const moves: HalfMove[] = [];
     let firstMove = false;
     let dir = this.color === "white" ? 1 : -1;
@@ -32,7 +36,12 @@ class Pawn extends Piece {
           : undefined,
       ].filter((p) => p) as SquareID[];
       for (let potential of potentials) {
-        const promotions: PieceType[] = ["queen", "knight", "rook", "bishop"];
+        const promotions: PieceType[] = [
+          "queen",
+          "knight",
+          "rook",
+          "bishop",
+        ];
         for (let promotion of promotions) {
           const piece = board.atID(potential);
           if (this.position.file === potential.file) {
@@ -93,7 +102,7 @@ class Pawn extends Piece {
 
     for (let potential of potentialTakes) {
       const potentialPiece = board.atID(potential);
-      if ((potentialPiece && potentialPiece.color !== this.color)) {
+      if (potentialPiece && potentialPiece.color !== this.color) {
         moves.push({
           from: this.position.algebraic,
           to: potential.algebraic,
@@ -109,19 +118,19 @@ class Pawn extends Piece {
           piece: this.type,
           color: this.color,
           take: "pawn",
-          enPassant: true
-        })
+          enPassant: true,
+        });
       }
     }
 
     if (state.inCheck || filterSelfCheck) {
       const fen = board.fen();
-      return moves.filter(move => {
+      return moves.filter((move) => {
         const b = new GameBoard(fen);
         const result = b.execute(move, state, { silent: true });
         if (result) return true;
         return false;
-      })
+      });
     }
 
     return moves;

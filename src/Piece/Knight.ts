@@ -10,7 +10,11 @@ class Knight extends Piece {
     return this.color === "white" ? "N" : "n";
   }
 
-  public validMoves(board: GameBoard, state: GameState, filterSelfCheck: boolean = true): HalfMove[] {
+  public validMoves(
+    board: GameBoard,
+    state: GameState,
+    filterSelfCheck: boolean = true,
+  ): HalfMove[] {
     // Go in all 4 dirs, 2 squares
     const potentialIDs: SquareID[] = [];
     // Vertical dir, 2 squares
@@ -50,8 +54,7 @@ class Knight extends Piece {
         };
       })
       .filter((m) => m) as HalfMove[];
-    
-  
+
     if (state.inCheck || filterSelfCheck) {
       const fen = board.fen();
       return moves.filter((move) => {

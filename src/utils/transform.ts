@@ -16,13 +16,17 @@ import type { Color, MatrixType, PieceType } from "../Chess";
  * @param pos The position of the piece
  * @param color The color of the piece
  */
-export function str2piece(char: PieceType, pos: SquareID, color: Color): Piece
+export function str2piece(
+  char: PieceType,
+  pos: SquareID,
+  color: Color,
+): Piece;
 /**
  * Converts a FEN character to a piece
  * @param char The FEN character to convert (`Q, R, N, K, B, P` for white, `q, r, n, k, b, p` for black)
  * @param pos The position of the piece
  */
-export function str2piece(char: string, pos: SquareID): Piece 
+export function str2piece(char: string, pos: SquareID): Piece;
 
 export function str2piece(...args: any[]): Piece {
   if (args.length === 3) {
@@ -43,7 +47,10 @@ export function str2piece(...args: any[]): Piece {
       case "bishop":
         return new Bishop(color, pos);
       default:
-        throw new ValueError(`Cannot parse piece: \`${piece}\``, piece);
+        throw new ValueError(
+          `Cannot parse piece: \`${piece}\``,
+          piece,
+        );
     }
   } else {
     let char: string = args[0];

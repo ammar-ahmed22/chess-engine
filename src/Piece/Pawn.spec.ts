@@ -46,7 +46,7 @@ describe("Pawn", () => {
     const moves = pawn.validMoves(board, chess.state());
     // promotion moves come as 4 moves (2 * 4 = 8)
     expect(moves).toHaveLength(8);
-  })
+  });
 
   it("generates en passant moves correctly", () => {
     const chess = new Chess();
@@ -54,29 +54,29 @@ describe("Pawn", () => {
       { from: "c2", to: "c4" },
       { from: "b8", to: "c6" },
       { from: "c4", to: "c5" },
-      { from: "b7", to: "b5" }
-    ]
+      { from: "b7", to: "b5" },
+    ];
     for (let move of moves) {
-      expect(chess.execute(move)).not.toBeNull()
+      expect(chess.execute(move)).not.toBeNull();
     }
-    expect(chess.state().enPassant).toBeDefined()
-    expect(chess.state().enPassant?.algebraic).toBe("b6")
+    expect(chess.state().enPassant).toBeDefined();
+    expect(chess.state().enPassant?.algebraic).toBe("b6");
     const validMoves = chess.validMoves();
     const c5PawnMoves = validMoves.filter((move) => {
-      return move.from === "c5"
-    })
+      return move.from === "c5";
+    });
     expect(c5PawnMoves).toHaveLength(1);
     expect(c5PawnMoves[0].enPassant).toBeDefined();
     expect(c5PawnMoves[0].to).toBe("b6");
-  })
+  });
 
   it("does not calculate moves that put king in check", () => {
     const chess = new Chess();
-    const fen = "rnbqk1nr/pppp1ppp/8/8/3NP3/6b1/PPP2PPP/RNBQKB1R"
+    const fen = "rnbqk1nr/pppp1ppp/8/8/3NP3/6b1/PPP2PPP/RNBQKB1R";
     const board = new GameBoard(fen);
     const f2 = new SquareID("f2");
     const f2Pawn = board.atID(f2) as Pawn;
     expect(f2Pawn.type).toBe("pawn");
     expect(f2Pawn.validMoves(board, chess.state())).toHaveLength(1);
-  })
+  });
 });

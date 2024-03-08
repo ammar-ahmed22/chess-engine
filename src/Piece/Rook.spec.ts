@@ -30,5 +30,5 @@ describe("Rook", () => {
     const rook = board.atID(e5) as Rook;
     expect(rook.type).toBe("rook");
     expect(rook.validMoves(board, chess.state())).toHaveLength(5);
-  })
+  });
 });

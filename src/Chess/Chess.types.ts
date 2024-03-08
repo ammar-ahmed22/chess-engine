@@ -32,19 +32,19 @@ export type HalfMove = {
 
 export type FullMove = {
   state: {
-    white: FullMoveState,
-    black?: FullMoveState
-  }
+    white: FullMoveState;
+    black?: FullMoveState;
+  };
   moves: {
     white: HalfMove;
     black?: HalfMove;
-  }
+  };
 };
 
 export type FullMoveState = {
-  fen: string,
-  state: GameState
-}
+  fen: string;
+  state: GameState;
+};
 
 export type CastleType = "queen" | "king";
 
@@ -79,4 +79,11 @@ export type ChessExecuteOptions = GameBoardExecuteOptions & {
   validate?: boolean;
 };
 
-export type GameStatus = "in-progress" | "checkmate" | "stalemate" | "insufficient" | "check" | "50move" | "repetition"
+export type GameStatus =
+  | "in-progress"
+  | "checkmate"
+  | "stalemate"
+  | "insufficient"
+  | "check"
+  | "50move"
+  | "repetition";

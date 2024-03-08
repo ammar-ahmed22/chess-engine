@@ -49,7 +49,7 @@ describe("King", () => {
     const king = board.atID(e1) as King;
     expect(king.type).toBe("king");
     expect(king.validMoves(board, chess.state())).toHaveLength(0);
-  })
+  });
 
   it("stalemates", () => {
     const chess = new Chess();
@@ -60,6 +60,8 @@ describe("King", () => {
     const a8 = new SquareID("a8");
     const king = board.atID(a8) as King;
     expect(king.type).toBe("king");
-    expect(king.validMoves(board, chess.state(), true)).toHaveLength(0);
-  })
+    expect(king.validMoves(board, chess.state(), true)).toHaveLength(
+      0,
+    );
+  });
 });

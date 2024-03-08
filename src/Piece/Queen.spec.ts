@@ -28,7 +28,7 @@ describe("Queen", () => {
     const board = new GameBoard(fen);
     const e2 = new SquareID("e2");
     const queen = board.atID(e2) as Queen;
-    expect(queen.type).toBe("queen"); 
+    expect(queen.type).toBe("queen");
     expect(queen.validMoves(board, chess.state())).toHaveLength(2);
-  })
+  });
 });

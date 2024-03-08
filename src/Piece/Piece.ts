@@ -15,7 +15,7 @@ abstract class Piece {
   public abstract validMoves(
     board: GameBoard,
     state: GameState,
-    filterSelfCheck?: boolean
+    filterSelfCheck?: boolean,
   ): HalfMove[];
   public abstract get fenChar(): string;
 
