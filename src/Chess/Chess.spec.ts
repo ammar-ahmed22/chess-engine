@@ -406,9 +406,8 @@ describe("Chess", () => {
     chess.execute({ from: "e2", to: "e4"})
     // stale mate position, king is trapped by other king
     chess.setPosition("k7/P7/K7/8/5B2/8/8/8");
-    console.log(chess.validMoves());
-    // expect(chess.stalemate()).toBe(true);
-    // expect(chess.status()).toBe("stalemate");
+    expect(chess.stalemate()).toBe(true);
+    expect(chess.status()).toBe("stalemate");
   })
 
   it("does not provide moves that put king in check", () => {
@@ -430,5 +429,82 @@ describe("Chess", () => {
     let f2Pawn = validMoves.filter((move) => move.from === "f2");
     // Only move should be taking the bishop as other moves put king in check.
     expect(f2Pawn).toHaveLength(1);
+  })
+
+  it("finds draw by insufficient material correctly", () => {
+    const positions = [
+      // two kings only
+      "2k5/8/8/1K6/8/8/8/8",
+      // king and bishop vs king
+      "2k2b2/8/8/1K6/8/8/8/8",
+      // king and knight vs king,
+      "3k4/8/8/8/2K5/4N3/8/8",
+      // king and bishop vs king and bishop. Both bishops on same color square.
+      "8/3k4/1b6/8/8/2K3B1/8/8"
+    ]
+    const chess = new Chess();
+    for (let pos of positions) {
+      chess.setPosition(pos);
+      expect(chess.insufficient()).toBe(true);
+      expect(chess.status()).toBe("insufficient");
+    }
+  })
+
+  it("finds draw by repetition correctly", () => {
+    const chess = new Chess();
+    const moves: MoveType[] = [
+      { from: "g1", to: "f3" },
+      { from: "g8", to: "f6" },
+      { from: "f3", to: "g1" },
+      { from: "f6", to: "g8" }
+    ]
+
+    for (let i = 0; i < 3; i++) {
+      for (let move of moves) {
+        if (i !== 2 && move.from !== "f6") {
+          expect(chess.repetition()).toBe(false);
+          expect(chess.status()).toBe("in-progress");
+        } 
+        chess.execute(move);
+      }
+    }
+    expect(chess.repetition()).toBe(true);
+    expect(chess.status()).toBe("repetition");
+  })
+
+  it("finds draw by 50move rule correctly", () => {
+    const chess = new Chess();
+    const developingMoves: MoveType[] = [
+      { from: "e2", to: "e4" },
+      { from: "e7", to: "e5" },
+      { from: "g1", to: "f3" },
+      { from: "g8", to: "f6" },
+      { from: "d2", to: "d4" },
+      { from: "e5", to: "d4" },
+      { from: "d1", to: "d4" },
+      { from: "f8", to: "c5" },
+      { from: "f1", to: "d3" },
+      { from: "e8", to: "g8", castle: "king" },
+      { from: "e1", to: "g1", castle: "king" },
+      { from: "d7", to: "d5" }
+    ];
+    
+    for (let move of developingMoves) {
+      chess.execute(move);
+    }
+    
+    for (let i = 0; i < 100; i++) {
+      const moves = chess.validMoves().filter(move => {
+        if (move.piece === "pawn" || move.take) return false;
+        return true;
+      })
+      expect(moves.length).toBeGreaterThan(0);
+      if (moves.length > 0) {
+        const percentage = i / 99;
+        chess.execute(moves[Math.floor(percentage * (moves.length - 1))]);
+      }
+    }
+    expect(chess.fiftymove()).toBe(true);
+    expect(chess.status()).toBe("50move");
   })
 });

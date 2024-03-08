@@ -213,11 +213,27 @@ class Chess {
     return false;
   }
 
+  public fiftymove(): boolean {
+    if (this.moves.length < 50) return false;
+    let lastFifty = this.moves.length === 50 ? this.moves : this.moves.slice(-50);
+    for (let i = lastFifty.length - 1; i >= 0; i--) {
+      const curr = lastFifty[i];
+      let moves = curr.moves;
+      if (moves.white.piece === "pawn") return false;
+      if (moves.white.take) return false;
+      if (moves.black && moves.black.piece === "pawn") return false;
+      if (moves.black && moves.black.take) return false;
+    }
+
+    return true;
+  }
+
   public status(): GameStatus {
     if (this.checkmate()) return "checkmate";
     if (this.stalemate()) return "stalemate";
     if (this.insufficient()) return "insufficient";
     if (this.repetition()) return "repetition";
+    if (this.fiftymove()) return "50move";
     if (this.state().inCheck) return "check";
     return "in-progress"
   }
