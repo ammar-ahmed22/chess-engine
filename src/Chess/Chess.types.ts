@@ -30,20 +30,19 @@ export type HalfMove = {
   promotion?: PieceType;
 };
 
+export type CompleteHalfMove = {
+  state: HalfMoveState,
+  move: HalfMove
+}
+
 export type FullMove = {
-  state: {
-    white: FullMoveState;
-    black?: FullMoveState;
-  };
-  moves: {
-    white: HalfMove;
-    black?: HalfMove;
-  };
+  white: CompleteHalfMove,
+  black?: CompleteHalfMove
 };
 
-export type FullMoveState = {
+export type HalfMoveState = {
   fen: string;
-  state: GameState;
+  gameState: GameState;
 };
 
 export type CastleType = "queen" | "king";

@@ -47,7 +47,7 @@ class Chess {
   public colorToMove(): Color {
     if (this.moves.length === 0) return "white";
     const lastFull = this.moves.at(-1) as FullMove;
-    if (lastFull.moves.white && !lastFull.moves.black) return "black";
+    if (lastFull.white && !lastFull.black) return "black";
     return "white";
   }
 
@@ -71,12 +71,12 @@ class Chess {
     };
     let inCheck: boolean = false;
     let lastFull = this.moves.at(-1);
-    let lastMove;
+    let lastMove: HalfMove | undefined;
     if (lastFull) {
-      if (lastFull.moves.black && lastFull.moves.white) {
-        lastMove = lastFull.moves.black;
-      } else if (lastFull.moves.white) {
-        lastMove = lastFull.moves.white;
+      if (lastFull.black && lastFull.white) {
+        lastMove = lastFull.black.move;
+      } else if (lastFull.white) {
+        lastMove = lastFull.white.move;
       }
     }
     let enPassant: SquareID | undefined;
@@ -93,8 +93,8 @@ class Chess {
     }
 
     for (let fullMove of this.moves) {
-      const whiteMove = fullMove.moves.white;
-      const blackMove = fullMove.moves.black;
+      const whiteMove = fullMove.white.move;
+      const blackMove = fullMove.black?.move;
       if (whiteMove && whiteMove.piece === "king") {
         castling.white.king = false;
         castling.white.queen = false;
@@ -202,13 +202,13 @@ class Chess {
     // create an array with a "rich FEN", `${FEN} ${colorToMove} ${castling} ${en passant target}`
     // when any of these positions repeat 3 times in a row, draw by repetition.
     const richFENs: string[] = moves.flatMap((fullMove) => {
-      let whiteState = fullMove.state.white;
-      let blackState = fullMove.state.black;
+      let whiteState = fullMove.white.state;
+      let blackState = fullMove.black?.state;
       const result = [];
-      let white = `${whiteState.fen} b ${genCastleString(whiteState.state.castling.white)} ${whiteState.state.enPassant ?? "-"}`;
+      let white = `${whiteState.fen} b ${genCastleString(whiteState.gameState.castling.white)} ${whiteState.gameState.enPassant ?? "-"}`;
       result.push(white);
       if (blackState) {
-        let black = `${blackState.fen} w ${genCastleString(blackState.state.castling.black)} ${blackState.state.enPassant ?? "-"}`;
+        let black = `${blackState.fen} w ${genCastleString(blackState.gameState.castling.black)} ${blackState.gameState.enPassant ?? "-"}`;
         result.push(black);
       }
       return result;
@@ -234,11 +234,13 @@ class Chess {
       this.moves.length === 50 ? this.moves : this.moves.slice(-50);
     for (let i = lastFifty.length - 1; i >= 0; i--) {
       const curr = lastFifty[i];
-      let moves = curr.moves;
-      if (moves.white.piece === "pawn") return false;
-      if (moves.white.take) return false;
-      if (moves.black && moves.black.piece === "pawn") return false;
-      if (moves.black && moves.black.take) return false;
+      let whiteMove = curr.white.move;
+      let blackMove = curr.black?.move;
+      // let moves = curr.moves;
+      if (whiteMove.piece === "pawn") return false;
+      if (whiteMove.take) return false;
+      if (blackMove && blackMove.piece === "pawn") return false;
+      if (blackMove && blackMove.take) return false;
     }
 
     return true;
@@ -316,21 +318,21 @@ class Chess {
     }
     if (halfMove.color === "white") {
       this.moves.push({
-        moves: {
-          white: halfMove,
-        },
-        state: {
-          white: {
+        white: {
+          move: halfMove,
+          state: {
             fen: board.fen(),
-            state: this.state(),
-          },
-        },
-      });
+            gameState: this.state()
+          }
+        }
+      })
     } else {
-      this.moves[idx].moves.black = halfMove;
-      this.moves[idx].state.black = {
-        fen: board.fen(),
-        state: this.state(),
+      this.moves[idx].black = {
+        move: halfMove,
+        state: {
+          fen: board.fen(),
+          gameState: this.state()
+        }
       };
     }
     this.currentFen = board.fen();
