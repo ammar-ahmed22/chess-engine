@@ -3,24 +3,24 @@ import { SquareID } from "../SquareID";
 
 export type Color = "white" | "black";
 
-export type SquareIDType =
-  | string
-  | {
-      file: string | number;
-      rank: number;
-    };
+// export type SquareIDType =
+//   | string
+//   | {
+//       file: string | number;
+//       rank: number;
+//     };
 
 export type MoveType = {
-  from: SquareIDType;
-  to: SquareIDType;
+  from: string;
+  to: string;
   castle?: CastleType;
   promotion?: PieceType;
   enPassant?: boolean;
 };
 
 export type HalfMove = {
-  from: SquareIDType;
-  to: SquareIDType;
+  from: string;
+  to: string;
   color: Color;
   piece: PieceType;
   take?: PieceType;

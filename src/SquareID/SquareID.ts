@@ -1,5 +1,5 @@
 import { ValueError } from "../utils/error";
-import type { SquareIDType, Color } from "../Chess";
+import type { Color } from "../Chess";
 
 class SquareID {
   public rank: number;
@@ -286,16 +286,8 @@ class SquareID {
     }
   }
 
-  static fromSquareIDType(id: SquareIDType): SquareID {
-    if (typeof id === "string") {
-      return new SquareID(id);
-    } else {
-      if (typeof id.file === "string") {
-        return new SquareID(id.file, id.rank);
-      } else {
-        return new SquareID(id.file, id.rank);
-      }
-    }
+  static fromAlgebraic(id: string): SquareID {
+    return new SquareID(id);
   }
 }
 

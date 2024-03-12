@@ -82,8 +82,8 @@ class Chess {
     let enPassant: SquareID | undefined;
     if (lastMove && lastMove.check) inCheck = true;
     if (lastMove && lastMove.piece === "pawn") {
-      const from = SquareID.fromSquareIDType(lastMove.from);
-      const to = SquareID.fromSquareIDType(lastMove.to);
+      const from = SquareID.fromAlgebraic(lastMove.from);
+      const to = SquareID.fromAlgebraic(lastMove.to);
       const diff = Math.abs(to.rank - from.rank);
       const dir = Math.sign(to.rank - from.rank);
       if (diff === 2) {
@@ -102,7 +102,7 @@ class Chess {
       if (whiteMove && whiteMove.piece === "rook") {
         const h1 = new SquareID("h1");
         const a1 = new SquareID("a1");
-        const from = SquareID.fromSquareIDType(whiteMove.from);
+        const from = SquareID.fromAlgebraic(whiteMove.from);
         if (h1.algebraic === from.algebraic) {
           castling.white.king = false;
         }
@@ -118,7 +118,7 @@ class Chess {
       if (blackMove && blackMove.piece === "rook") {
         const h8 = new SquareID("h8");
         const a8 = new SquareID("a8");
-        const from = SquareID.fromSquareIDType(blackMove.from);
+        const from = SquareID.fromAlgebraic(blackMove.from);
         if (h8.algebraic === from.algebraic) {
           castling.black.king = false;
         }
@@ -284,13 +284,13 @@ class Chess {
   ): HalfMove | null {
     if (opts?.validate) {
       // check if the passed move is in the valid moves.
-      const mFrom = SquareID.fromSquareIDType(move.from);
-      const mTo = SquareID.fromSquareIDType(move.to);
+      const mFrom = SquareID.fromAlgebraic(move.from);
+      const mTo = SquareID.fromAlgebraic(move.to);
       let isValid = false;
       const validMoves = this.validMoves();
       for (let validMove of validMoves) {
-        const vFrom = SquareID.fromSquareIDType(validMove.from);
-        const vTo = SquareID.fromSquareIDType(validMove.to);
+        const vFrom = SquareID.fromAlgebraic(validMove.from);
+        const vTo = SquareID.fromAlgebraic(validMove.to);
         if (
           vFrom.algebraic === mFrom.algebraic &&
           vTo.algebraic === mTo.algebraic

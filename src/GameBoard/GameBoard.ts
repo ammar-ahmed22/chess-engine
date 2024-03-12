@@ -127,8 +127,8 @@ class GameBoard {
     state: GameState,
     opts?: GameBoardExecuteOptions,
   ): HalfMove | null {
-    let from: SquareID = SquareID.fromSquareIDType(move.from);
-    let to: SquareID = SquareID.fromSquareIDType(move.to);
+    let from: SquareID = SquareID.fromAlgebraic(move.from);
+    let to: SquareID = SquareID.fromAlgebraic(move.to);
 
     const fromPiece = this.atID(from);
     if (!fromPiece) {
