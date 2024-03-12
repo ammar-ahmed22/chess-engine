@@ -60,7 +60,7 @@ describe("Pawn", () => {
       expect(chess.execute(move)).not.toBeNull();
     }
     expect(chess.state().enPassant).toBeDefined();
-    expect(chess.state().enPassant?.algebraic).toBe("b6");
+    expect(chess.state().enPassant).toBe("b6");
     const validMoves = chess.validMoves();
     const c5PawnMoves = validMoves.filter((move) => {
       return move.from === "c5";

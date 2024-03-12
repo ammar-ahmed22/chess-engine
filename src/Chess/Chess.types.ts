@@ -1,5 +1,5 @@
 import { Piece } from "../Piece";
-import { SquareID } from "../SquareID";
+// import { SquareID } from "../SquareID";
 
 export type Color = "white" | "black";
 
@@ -65,7 +65,7 @@ export type CastlingAbility = {
 
 export type GameState = {
   colorToMove: Color;
-  enPassant?: SquareID;
+  enPassant?: string;
   castling: CastlingAbility;
   inCheck: boolean;
 };

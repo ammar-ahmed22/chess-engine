@@ -111,7 +111,7 @@ class Pawn extends Piece {
           take: potentialPiece.type,
         });
       }
-      if (state.enPassant && state.enPassant.equals(potential)) {
+      if (state.enPassant && state.enPassant === potential.algebraic) {
         moves.push({
           from: this.position.algebraic,
           to: potential.algebraic,

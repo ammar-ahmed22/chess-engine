@@ -132,7 +132,7 @@ class Chess {
       colorToMove: this.colorToMove(),
       castling,
       inCheck,
-      enPassant,
+      enPassant: enPassant?.algebraic,
     };
   }
 

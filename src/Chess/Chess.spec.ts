@@ -372,7 +372,7 @@ describe("Chess", () => {
     chess.execute({ from: "e2", to: "e4" });
     const state = chess.state();
     expect(state.enPassant).toBeDefined();
-    expect(state.enPassant?.algebraic).toBe("e3");
+    expect(state.enPassant).toBe("e3");
   });
 
   it("calculates and executes en passant correctly", () => {
@@ -387,7 +387,7 @@ describe("Chess", () => {
       expect(chess.execute(move)).not.toBeNull();
     }
     expect(chess.state().enPassant).toBeDefined();
-    expect(chess.state().enPassant?.algebraic).toBe("b6");
+    expect(chess.state().enPassant).toBe("b6");
     const validMoves = chess.validMoves();
     const c5PawnMoves = validMoves.filter((move) => {
       return move.from === "c5";
