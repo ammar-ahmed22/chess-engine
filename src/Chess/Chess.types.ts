@@ -31,13 +31,13 @@ export type HalfMove = {
 };
 
 export type CompleteHalfMove = {
-  state: HalfMoveState,
-  move: HalfMove
-}
+  state: HalfMoveState;
+  move: HalfMove;
+};
 
 export type FullMove = {
-  white: CompleteHalfMove,
-  black?: CompleteHalfMove
+  white: CompleteHalfMove;
+  black?: CompleteHalfMove;
 };
 
 export type HalfMoveState = {

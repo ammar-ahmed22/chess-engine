@@ -322,17 +322,17 @@ class Chess {
           move: halfMove,
           state: {
             fen: board.fen(),
-            gameState: this.state()
-          }
-        }
-      })
+            gameState: this.state(),
+          },
+        },
+      });
     } else {
       this.moves[idx].black = {
         move: halfMove,
         state: {
           fen: board.fen(),
-          gameState: this.state()
-        }
+          gameState: this.state(),
+        },
       };
     }
     this.currentFen = board.fen();
