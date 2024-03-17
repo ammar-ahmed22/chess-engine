@@ -6,7 +6,7 @@ import type { FullMove } from "../Chess";
  * @param history The game history
  */
 export const allPositions = (history: FullMove[]) => {
-  const positions: string[] = [];
+  const positions: string[] = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"];
   for (let full of history) {
     positions.push(full.white.state.fen);
     if (full.black) {
