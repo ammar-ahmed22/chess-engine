@@ -15,8 +15,7 @@ describe("Chess", () => {
     );
     expect(chess.colorToMove()).toBe("black");
     expect(history).toHaveLength(1);
-    expect(history[0].white.move).toBeDefined();
-    expect(history[0].black?.move).not.toBeDefined();
+    expect(history[0].move).toBeDefined();
 
     const m2 = chess.execute({
       from: "e7",
@@ -29,9 +28,9 @@ describe("Chess", () => {
       "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR",
     );
     expect(chess.colorToMove()).toBe("white");
-    expect(history).toHaveLength(1);
-    expect(history[0].white.move).toBeDefined();
-    expect(history[0].black?.move).toBeDefined();
+    expect(history).toHaveLength(2);
+    expect(history[0].move).toBeDefined();
+    expect(history[1].move).toBeDefined();
 
     const m3 = chess.execute({
       from: "g1",
@@ -44,9 +43,10 @@ describe("Chess", () => {
       "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R",
     );
     expect(chess.colorToMove()).toBe("black");
-    expect(history).toHaveLength(2);
-    expect(history[1].white.move).toBeDefined();
-    expect(history[1].black?.move).not.toBeDefined();
+    expect(history).toHaveLength(3);
+    expect(history[0].move).toBeDefined();
+    expect(history[1].move).toBeDefined();
+    expect(history[2].move).toBeDefined();
   });
 
   it("returns null when executing an incorrect move", () => {

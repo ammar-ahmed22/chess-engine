@@ -35,10 +35,10 @@ export type CompleteHalfMove = {
   move: HalfMove;
 };
 
-export type FullMove = {
-  white: CompleteHalfMove;
-  black?: CompleteHalfMove;
-};
+// export type FullMove = {
+//   white: CompleteHalfMove;
+//   black?: CompleteHalfMove;
+// };
 
 export type HalfMoveState = {
   fen: string;

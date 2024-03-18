@@ -2,7 +2,8 @@ import type {
   Color,
   GameState,
   MoveType,
-  FullMove,
+  CompleteHalfMove,
+  // FullMove,
   HalfMove,
   CastlingAbility,
   ChessExecuteOptions,
@@ -17,7 +18,7 @@ import { fen2matrix } from "../utils";
 import { Piece } from "../Piece";
 
 class Chess {
-  private moves: FullMove[] = [];
+  private moves: CompleteHalfMove[] = [];
   private currentFen: string =
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
@@ -35,7 +36,7 @@ class Chess {
    * Sets the moves of the game
    * @param moves An array of Move objects.
    */
-  public setMoves(moves: FullMove[]): void {
+  public setMoves(moves: CompleteHalfMove[]): void {
     // TODO validate the moves
     this.moves = moves;
   }
@@ -46,9 +47,8 @@ class Chess {
    */
   public colorToMove(): Color {
     if (this.moves.length === 0) return "white";
-    const lastFull = this.moves.at(-1) as FullMove;
-    if (lastFull.white && !lastFull.black) return "black";
-    return "white";
+    const lastMove = this.moves.at(-1) as CompleteHalfMove;
+    return lastMove.move.color === "white" ? "black" : "white";
   }
 
   /**
@@ -70,15 +70,15 @@ class Chess {
       },
     };
     let inCheck: boolean = false;
-    let lastFull = this.moves.at(-1);
-    let lastMove: HalfMove | undefined;
-    if (lastFull) {
-      if (lastFull.black && lastFull.white) {
-        lastMove = lastFull.black.move;
-      } else if (lastFull.white) {
-        lastMove = lastFull.white.move;
-      }
-    }
+    // let lastFull = this.moves.at(-1);
+    let lastMove: HalfMove | undefined = this.moves.at(-1)?.move;
+    // if (lastFull) {
+    //   if (lastFull.black && lastFull.white) {
+    //     lastMove = lastFull.black.move;
+    //   } else if (lastFull.white) {
+    //     lastMove = lastFull.white.move;
+    //   }
+    // }
     let enPassant: SquareID | undefined;
     if (lastMove && lastMove.check) inCheck = true;
     if (lastMove && lastMove.piece === "pawn") {
@@ -92,38 +92,22 @@ class Chess {
       }
     }
 
-    for (let fullMove of this.moves) {
-      const whiteMove = fullMove.white.move;
-      const blackMove = fullMove.black?.move;
-      if (whiteMove && whiteMove.piece === "king") {
-        castling.white.king = false;
-        castling.white.queen = false;
+    for (let completeMove of this.moves) {
+      const color = completeMove.move.color;
+      if (completeMove.move.piece === "king") {
+        castling[color].king = false;
+        castling[color].queen = false;
       }
-      if (whiteMove && whiteMove.piece === "rook") {
-        const h1 = new SquareID("h1");
-        const a1 = new SquareID("a1");
-        const from = SquareID.fromAlgebraic(whiteMove.from);
-        if (h1.algebraic === from.algebraic) {
-          castling.white.king = false;
+      if (completeMove.move.piece === "rook") {
+        const kingside = new SquareID("h", color === "white" ? 1 : 8);
+        const queenside = new SquareID("a", color === "white" ? 1 : 8);
+        const from = new SquareID(completeMove.move.from);
+        if (kingside.equals(from)) {
+          castling[color].king = false;
         }
-        if (a1.algebraic === from.algebraic) {
-          castling.white.queen = false;
-        }
-      }
 
-      if (blackMove && blackMove.piece === "king") {
-        castling.black.king = false;
-        castling.black.queen = false;
-      }
-      if (blackMove && blackMove.piece === "rook") {
-        const h8 = new SquareID("h8");
-        const a8 = new SquareID("a8");
-        const from = SquareID.fromAlgebraic(blackMove.from);
-        if (h8.algebraic === from.algebraic) {
-          castling.black.king = false;
-        }
-        if (a8.algebraic === from.algebraic) {
-          castling.black.queen = false;
+        if (queenside.equals(from)) {
+          castling[color].queen = false;
         }
       }
     }
@@ -201,17 +185,10 @@ class Chess {
     };
     // create an array with a "rich FEN", `${FEN} ${colorToMove} ${castling} ${en passant target}`
     // when any of these positions repeat 3 times in a row, draw by repetition.
-    const richFENs: string[] = moves.flatMap((fullMove) => {
-      let whiteState = fullMove.white.state;
-      let blackState = fullMove.black?.state;
-      const result = [];
-      let white = `${whiteState.fen} b ${genCastleString(whiteState.gameState.castling.white)} ${whiteState.gameState.enPassant ?? "-"}`;
-      result.push(white);
-      if (blackState) {
-        let black = `${blackState.fen} w ${genCastleString(blackState.gameState.castling.black)} ${blackState.gameState.enPassant ?? "-"}`;
-        result.push(black);
-      }
-      return result;
+    const richFENs: string[] = moves.map((complete) => {
+      let color = complete.move.color;
+      let richFEN = `${complete.state.fen} ${color === "white" ? "b" : "w"} ${genCastleString(complete.state.gameState.castling[color])} ${complete.state.gameState.enPassant ?? "-"}`;
+      return richFEN;
     });
     const map: Record<string, number> = {};
     for (let fen of richFENs) {
@@ -229,18 +206,13 @@ class Chess {
   }
 
   public fiftymove(): boolean {
-    if (this.moves.length < 50) return false;
+    if (this.moves.length < 100) return false;
     let lastFifty =
-      this.moves.length === 50 ? this.moves : this.moves.slice(-50);
+      this.moves.length === 100 ? this.moves : this.moves.slice(-100);
     for (let i = lastFifty.length - 1; i >= 0; i--) {
       const curr = lastFifty[i];
-      let whiteMove = curr.white.move;
-      let blackMove = curr.black?.move;
-      // let moves = curr.moves;
-      if (whiteMove.piece === "pawn") return false;
-      if (whiteMove.take) return false;
-      if (blackMove && blackMove.piece === "pawn") return false;
-      if (blackMove && blackMove.take) return false;
+      if (curr.move.piece === "pawn") return false;
+      if (curr.move.take) return false;
     }
 
     return true;
@@ -308,7 +280,6 @@ class Chess {
       silent: opts?.silent,
     });
     if (!halfMove) return null;
-    const idx = this.moves.length - 1;
     const colorToMove = this.colorToMove();
     if (colorToMove !== halfMove.color) {
       return nullMessage(
@@ -316,25 +287,13 @@ class Chess {
         opts?.silent,
       );
     }
-    if (halfMove.color === "white") {
-      this.moves.push({
-        white: {
-          move: halfMove,
-          state: {
-            fen: board.fen(),
-            gameState: this.state(),
-          },
-        },
-      });
-    } else {
-      this.moves[idx].black = {
-        move: halfMove,
-        state: {
-          fen: board.fen(),
-          gameState: this.state(),
-        },
-      };
-    }
+    this.moves.push({
+      move: halfMove,
+      state: {
+        fen: board.fen(),
+        gameState: this.state()
+      }
+    })
     this.currentFen = board.fen();
     return halfMove;
   }
