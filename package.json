@@ -1,6 +1,6 @@
 {
   "name": "@ammar-ahmed22/chess-engine",
-  "version": "0.4.3",
+  "version": "1.0.0",
   "description": "Custom built Chess engine built as a learning exercise for myself!",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
