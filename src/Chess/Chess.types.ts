@@ -33,6 +33,7 @@ export type HalfMove = {
 export type CompleteHalfMove = {
   state: HalfMoveState;
   move: HalfMove;
+  algebraic: string;
 };
 
 // export type FullMove = {

@@ -16,6 +16,7 @@ import { GameBoard } from "../GameBoard";
 import { SquareID } from "../SquareID";
 import { fen2matrix } from "../utils";
 import { Piece } from "../Piece";
+import { algebraicMove } from "../utils/helpers";
 
 class Chess {
   private moves: CompleteHalfMove[] = [];
@@ -287,12 +288,14 @@ class Chess {
         opts?.silent,
       );
     }
+    
     this.moves.push({
       move: halfMove,
       state: {
         fen: board.fen(),
         gameState: this.state()
-      }
+      },
+      algebraic: algebraicMove(halfMove, this.validMoves())
     })
     this.currentFen = board.fen();
     return halfMove;
